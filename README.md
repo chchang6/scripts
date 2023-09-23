@@ -1,2 +1,2 @@
 # scripts
-Utility scripts and programs
+Various scripts, programs, and notebooks
