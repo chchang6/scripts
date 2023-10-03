@@ -1,0 +1,14 @@
+mol new
+mol addfile 0-1.0ns.dcd waitfor all
+mol addfile nowaterions.psf
+set outfile [open test.txt w]
+puts $outfile " Step  Distance"
+for {set x 0} {$x < 1000} {incr x} {
+   set temp1 [atomselect top "segname HYDD and name S1" frame $x]
+   set temp2 [atomselect top "resname CYS and resid 200 and name SG" frame $x]
+   set a [measure center $temp1 weight mass]
+   set b [measure center $temp2 weight mass]
+   puts $outfile [format %5i%10.5f $x [vecdist $a $b]]
+}
+close $outfile
+

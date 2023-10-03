@@ -1,0 +1,103 @@
+# TCL script for NAMD to heat system to 1000 K in 50K increments,
+# run dynamics for 1000 steps at each point, then cool down
+# in 50 K increments to 0K.
+# Adapted from http://www.ks.uiuc.edu/Research/namd/mailing_list/
+# namd-l/1075.html and 
+
+source ../scripts/namdinclude.tcl
+
+#######################################################
+#     Change these parameters between simulations     #
+#######################################################
+
+set inputname	anneal3_in
+set outputname  anneal3d_out
+
+#WES 031210
+margin 5
+
+#######################################################
+#######################################################
+
+set checkpointFreq 5000 ;# every 5ps
+
+# INPUT FILES
+
+paraTypeCharmm	  on
+parameters        ../common/CHARMM_22prot_27lip.par
+parameters        ../common/Crclusters2.par 
+structure         ./Complex1.psf
+coordinates       ./$inputname.pdb
+bincoordinates    ./$inputname.coor
+temperature       50
+
+# PERIODIC BOUNDARY CONDITIONS
+# EITHER set periodic system directly (the first time ever),
+# OR read in box sizes from another sim
+
+#cellBasisVector1	90.35    0.      0.
+#cellBasisVector2	0.      88.4     0.
+#cellBasisVector3	0.       0.     94.8
+#cellOrigin             -0.38    -1.80   -8.04    ;# should center coords in PDB...
+
+extendedSystem	$inputname.xsc
+wrapAll           on
+wrapWater         on
+
+# FIXED ATOMS
+# create a fixed-constraint files in which Beta column is 0 or 1
+fixedAtoms	    off
+#fixedAtomsFile	./fixed-protein.pdb
+#fixedAtomsCol	  B
+
+# FORCE-FIELD PARAMS
+exclude                 scaled1-4
+1-4scaling              1.0
+cutoff                  12
+switching               yes
+switchdist              10
+pairlistdist            14
+
+# INTEGRATOR PARAMS
+rigidBonds              all
+timestep                1.0
+nonbondedFreq           1
+fullElectFrequency      2  
+stepspercycle           10
+
+#PME ELECTROSTATICS
+PME                     yes
+PMEGridSizeX            94
+PMEGridSizeY            97
+PMEGridSizeZ            90
+
+# TEMPERATURE CONTROL
+langevin                on     ;# do langevin dynamics
+#langevinDamping         20     ;# initial equilibration
+langevinDamping           5     ;# damping coefficient (gamma) of 5/ps
+langevinHydrogen        off    ;# don't couple langevin bath to hydrogens
+
+# OUTPUT
+firsttimestep   $startingtime
+restartname     $outputname.restart
+outputName      $outputname
+dcdfile         $outputname.dcd
+xstFile         $outputname.xst
+
+xstFreq         $checkpointFreq
+restartfreq     $checkpointFreq
+outputEnergies  $checkpointFreq
+outputPressure  $checkpointFreq
+dcdfreq         50000
+
+# RUN SCRIPT
+
+for {set TEMP 50} {$TEMP < 1001} {incr TEMP 50} {
+   langevinTemp $TEMP
+   run 1000
+}
+for {set TEMP 1000} {$TEMP > 0} {incr TEMP -50} {
+   langevinTemp $TEMP
+   run 8000
+}
+minimize 2000

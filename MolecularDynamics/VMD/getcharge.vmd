@@ -1,0 +1,11 @@
+mol new test.pdb
+mol addfile test.psf
+set temp [atomselect top "resid 579 93 106 97 100"]
+proc get_charge {temp} {
+   set sum 0
+   foreach charge [$temp get charge] {
+      set sum [expr {$sum + $charge}]
+   }
+   return $sum
+}
+get_charge $temp

@@ -1,0 +1,31 @@
+#! /bin/bash --login
+
+#PBS -N DIMB_
+#PBS -q Std
+#PBS -l nodes=1:ppn=1
+#PBS -m abe
+#PBS -M user.name@domain.name
+#PBS -o pbs.charmm.out
+#PBS -e pbs.charmm.err
+
+#Because charmm uses shared libraries, add charmm to your default
+#module list before running by typing the following:
+
+#module initadd charmm/31b1
+
+cd $PBS_O_WORKDIR
+
+# example: run an MPI job
+cat > stream.inp << EOF
+* Title Vibrational analysis of vacuum-minimized _HS structure
+* First DIMB run for initial basis set generation (N-3 modes).
+*
+stream @stream
+stop
+EOF
+
+export input="stream=INITBASIS.INP"
+
+which charmm.mpi.xxlarge
+mpicmd charmm.mpi.xxlarge $input < stream.inp > dimb1.out
+

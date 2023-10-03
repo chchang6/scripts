@@ -1,0 +1,11 @@
+# TCL script to output atom numbers (1-indexed) of a VMD atom selection.
+# Useful for e.g. CHARMM covariance matrix processing and analysis.
+# CHC 050406.
+mol new 16hsd_dowsed_charmm.psf
+animate read dcd quasi_1-30000.dcd beg 0 end 0
+set temp [atomselect top "(segname FERR FRC1) and not hydrogen"
+set b 0;
+foreach a [$temp get index] {
+   set b [expr "$b + 1"]
+}
+puts $b;

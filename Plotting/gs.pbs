@@ -1,0 +1,14 @@
+#!/bin/bash --login
+
+#PBS -N Ghostscript
+#PBS -q Std
+#PBS -l nodes=1:ppn=2
+#PBS -l walltime=24:00:00
+#PBS -m abe
+#PBS -M christopher_chang@nrel.gov
+#PBS -e ./AIM.err.pbs
+#PBS -o ./AIM.out.pbs
+
+cd $PBS_O_WORKDIR
+
+gs - -sDEVICE=png16 -sOutputfile=test.png test.ps

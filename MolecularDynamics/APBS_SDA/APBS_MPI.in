@@ -1,0 +1,32 @@
+read
+    mol pqr APBSin_ferrHSD.pqr
+end
+elec
+    mg-para
+    ofrac 0.12
+    pdime 2 2 2
+    dime 49 65 65
+    cglen 47.4130 53.3103 56.8497
+    fglen 47.4130 51.3590 53.4410
+    cgcent mol 1
+    fgcent mol 1
+    mol 1
+    npbe
+    bcfl mdh
+    ion 1 0.200 2.0
+    ion -1 0.200 2.0
+    pdie 1.0
+    sdie 78.54
+    sdens 40.0
+    srfm smol
+    chgm spl2
+    srad 1.4
+    swin 0.3
+    temp 303.00
+    gamma 0.105
+    calcenergy no
+    calcforce no
+    write pot dx ferrHSD_ESP
+end
+
+quit

@@ -1,0 +1,32 @@
+! Input deck for extracting interatomic distances along a trajectory.
+* Hydrogenase Cys366 - ferredoxin Cys69 distance profile.
+* CHC, 8/17/06
+*
+BOMlev -2
+
+! read in topologies
+open unit 11 read card name ../CHARMM_22PROT+HYDFERR.RTF
+read rtf card unit 11
+close unit 11
+
+! read in parameters
+open unit 12 read card name ../CHARMM_22PROT+HYDFERR.PRM
+read para card unit 12
+close unit 12
+
+! Load in PSF file data, all atoms
+OPEN UNIT 17 NAME hydferr16hsd_charmm.psf READ FORM
+READ PSF CARD UNIT 17
+CLOSE UNIT 17
+
+! Open all-atom DCD file to read, and file to write CHARMM
+! timeseries
+OPEN UNIT 18 NAME quasi_1-30000.dcd READ UNFORM
+OPEN UNIT 10 NAME CYS366-CYS69_fluc.txt WRITE FORM
+CORREL MAXTimesteps 30000 MAXSERIES 1
+ENTER SE01 BONDS FERR 69 SG HYDR 366 SG GEOM
+TRAJ FIRST 18 NUNIT 1 BEGIN 0 STOP 29999 SKIP 1
+CLOSE UNIT 18
+WRITE SE01 UNIT 10 DUMB
+CLOSE UNIT 10
+stop

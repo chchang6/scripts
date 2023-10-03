@@ -1,0 +1,99 @@
+! Input deck to build CpI hydrogenase from PDB segment fragment files.
+!
+* Title Build of CHARMM coordinate file from all-atom PDB output from
+* NAMD calculations.
+bomblev -2
+
+! read in topology
+open unit 10 name "../common/CHARMM_22PROT+HYDFERR.RTF" READ FORM
+read rtf unit 10 card
+close unit 10
+
+! Read in parameters
+open unit 11 name "../common/CHARMM_22PROT+HYDFERR.PRM" READ FORM
+read param unit 11 card
+close unit 11
+
+! Set up hydrogenase segment
+open unit 12 name "HYDR.pdb" READ FORM
+read sequ PDB unit 12
+gener HYDR setup
+read COOR PDB UNIT 12
+close unit 12
+
+! Set up H-cluster segment
+open unit 13 name "HYDH.pdb" READ FORM
+read sequ PDB unit 13
+gener HYDH FIRST none LAST none setup
+READ COOR PDB OFFS -5 UNIT 13
+close unit 13
+
+! Set up cluster A segment
+open unit 14 name "HYDA.pdb" READ FORM
+read sequ PDB unit 14
+gener HYDA FIRST none LAST none setup
+READ COOR PDB OFFS -5 UNIT 14
+close unit 14
+
+! Set up cluster B segment
+open unit 15 name "HYDB.pdb" READ FORM
+read sequ PDB unit 15
+gener HYDB FIRST none LAST none setup
+READ COOR PDB OFFS -5 UNIT 15
+close unit 15
+
+! Set up cluster C segment
+open unit 15 name "HYDC.pdb" READ FORM
+read sequ PDB unit 15
+gener HYDC FIRST none LAST none setup
+READ COOR PDB OFFS -5 UNIT 15
+close unit 15
+
+! Set up cluster D segment
+open unit 15 name "HYDD.pdb" READ FORM
+read sequ PDB unit 15
+gener HYDD FIRST none LAST none setup
+READ COOR PDB OFFS -5 UNIT 15
+close unit 15
+
+! Set up cluster E segment
+open unit 15 name "HYDE.pdb" READ FORM
+read sequ PDB unit 15
+gener HYDE FIRST none LAST none setup
+READ COOR PDB OFFS -5 UNIT 15
+close unit 15
+
+! Establish cysteine-cluster bonding
+patch F4-1R HYDA 581 HYDR 355
+patch F4-2R HYDA 581 HYDR 499
+patch F4-3R HYDA 581 HYDR 503
+patch F4-4R HYDA 581 HYDR 300
+patch HCB  HYDH 580 HYDR 503
+patch F4-1R HYDB 582 HYDR 193
+patch F4-2R HYDB 582 HYDR 157
+patch F4-3R HYDB 582 HYDR 190
+patch F4-4R HYDB 582 HYDR 196
+patch F4-1R HYDC 583 HYDR 200
+patch F4-2R HYDC 583 HYDR 150
+patch F4-3R HYDC 583 HYDR 153
+patch F4-4R HYDC 583 HYDR 147
+patch FHR-1H HYDD 584 HYDR 94
+patch FHR-2C HYDD 584 HYDR 107
+patch FHR-3C HYDD 584 HYDR 98
+patch FHR-4C HYDD 584 HYDR 101
+patch F2-1R HYDE 585 HYDR 49
+patch F2-1R HYDE 585 HYDR 62
+patch F2-2R HYDE 585 HYDR 34
+patch F2-2R HYDE 585 HYDR 46
+
+print coor
+
+! write out PSF and CRD files
+open unit 61 name 1FEH_RRRRRR.psf WRIT FORM
+write psf CARD unit 61
+close unit 61
+
+open unit 62 name 1FEH_RRRRRR.crd WRIT FORM
+write coor card unit 62
+
+stop

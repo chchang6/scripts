@@ -1,0 +1,19 @@
+#!/bin/bash --login
+
+#PBS -N APBS_ferrHSD
+#PBS -q Std
+#PBS -l nodes=4:ppn=2
+#PBS -l walltime=00:30:00
+#PBS -m abe
+#PBS -M user.name@domain.name
+#PBS -e ./apbs.err.pbs
+#PBS -o ./apbs.out.pbs
+
+module load mpich.pgi
+module load apbs/0.4.0
+
+cd $PBS_O_WORKDIR
+
+#mpirun -machinefile $PBS_NODEFILE -np $PBS_NPROCS apbs APBS.go > 64-bit_test_4proc.log
+mpicmd apbs APBS_MPI.in > ferrHSD_Asilomar.log
+

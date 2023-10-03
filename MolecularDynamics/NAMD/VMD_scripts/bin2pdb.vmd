@@ -1,0 +1,3 @@
+mol load psf 1HFE_RROO.psf namdbin alleq_in.coor
+[atomselect top all] writepdb alleq_in.pdb
+exit

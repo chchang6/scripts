@@ -1,0 +1,175 @@
+# Script to calculate pitch, roll, and yaw angles of
+# diphosphine complexes given coordinates of metal,
+# phosphines on ligand 1 (P1 & P2), and phosphines on
+# ligand 2 (P3 & P4). CHC 1/24/07.
+set Pi 3.141592653589793238462643383
+# Routine to calculate theta for input vector
+proc calc_theta {a} {
+   global Pi
+   set vector [lindex $a 0]
+   return [expr atan2([lindex $vector 1],[lindex $vector 0]) * 180 / $Pi]
+}
+# Routine to calculate phi for input vector
+proc calc_phi {a} {
+   global Pi
+   set vector [lindex $a 0]
+   set temp [expr sqrt(pow([lindex $vector 0],2) + pow([lindex $vector 1],2))]
+   return [expr ($Pi/2 - atan2($temp,[lindex $vector 2])) * 180 / $Pi]
+}
+# Routine to calculate spherical parameters
+# Takes four atom indices as input
+proc calc_sphere {listatoms} {
+   set a [measure center [atomselect top "index [lindex $listatoms 0]"]]
+   set ax [lindex $a 0]
+   set ay [lindex $a 1]
+   set az [lindex $a 2]
+   set b [measure center [atomselect top "index [lindex $listatoms 1]"]]
+   set bx [lindex $b 0]
+   set by [lindex $b 1]
+   set bz [lindex $b 2]
+   set c [measure center [atomselect top "index [lindex $listatoms 2]"]]
+   set cx [lindex $c 0]
+   set cy [lindex $c 1]
+   set cz [lindex $c 2]
+   set d [measure center [atomselect top "index [lindex $listatoms 3]"]]
+   set dx [lindex $d 0]
+   set dy [lindex $d 1]
+   set dz [lindex $d 2]
+   set alpha [vecadd [vecscale [expr pow([vecdist $d $a],2)] [veccross [vecsub $b $a] [vecsub $c $a]]] \
+                     [vecscale [expr pow([vecdist $c $a],2)] [veccross [vecsub $d $a] [vecsub $b $a]]] \
+                     [vecscale [expr pow([vecdist $b $a],2)] [veccross [vecsub $c $a] [vecsub $d $a]]]]
+   set D [expr 2 * ( ($bx - $ax)*(($cy - $ay)*($dz - $az) - ($dy - $ay)*($cz - $az)) - \
+                     ($by - $ay)*(($cx - $ax)*($dz - $az) - ($dx - $ax)*($cz - $az)) + \
+                     ($bz - $az)*(($cx - $ax)*($dy - $ay) - ($dx - $ax)*($cy - $ay)) ) ]
+   set r [expr [veclength $alpha] / $D]
+   set m [vecadd $a [vecscale [expr 1 / $D] $alpha]]
+   return $m
+}
+# Set up useful atom sets.
+mol new ca_cluster1.pdb
+set iron [atomselect top "element Fe"]
+set FE1 [atomselect top "name FE1"]
+set FE2 [atomselect top "name FE3"]
+set sulfide [atomselect top "resname FS4 and element S"]
+set ligands [atomselect top "not resname FS4"]
+set complex [atomselect top all]
+# Move complex to origin at Fe circumsphere
+$complex moveby [vecinvert [calc_sphere [$iron list]]]
+# Move Fe1 to positive x axis
+$complex move [transvecinv [lindex [$FE1 get {x y z}] 0]]
+# Move Center-Fe2 vector into xy plane
+set FE2z [$FE2 get z]
+set FE2y [$FE2 get y]
+set temp [expr -1*atan2($FE2z, $FE2y)]
+$complex move [transaxis x $temp rad]
+unset temp FE2z FE2y FE1 FE2
+# Write PDB file
+$complex writepdb FeCC.pdb
+# Write XYZ file
+$complex writexyz FeCC.xyz
+# Dump out iron Cartesian coordinates to logfile
+set outfile [open logfile w]
+puts $outfile "Fe atom coordinates (Cartesian)"
+foreach x [$iron list] {
+   set temp [atomselect top "index $x"]
+   puts -nonewline $outfile [$temp get name]
+   puts -nonewline $outfile "      "
+   puts -nonewline $outfile [format "%2.3f" [$temp get x]]
+   puts -nonewline $outfile "      "
+   puts -nonewline $outfile [format "%2.3f" [$temp get y]]
+   puts -nonewline $outfile "      "
+   puts $outfile [format "%2.3f" [$temp get z]]
+}
+unset temp
+puts $outfile ""
+# Dump out sulfide Cartesian coordinates
+puts $outfile "Sulfide atom coordinates (Cartesian)"
+foreach x [$sulfide list] {
+   set temp [atomselect top "index $x"]
+   puts -nonewline $outfile [$temp get name]
+   puts -nonewline $outfile "	"
+   puts -nonewline $outfile [format "%2.3f" [$temp get x]]
+   puts -nonewline $outfile "      "
+   puts -nonewline $outfile [format "%2.3f" [$temp get y]]
+   puts -nonewline $outfile "      "
+   puts $outfile [format "%2.3f" [$temp get z]]
+}
+unset temp
+puts $outfile ""
+# Dump out ligand Cartesian coordinates
+puts $outfile "Ligand atom coordinates (Cartesian)"
+foreach x [$ligands list] {
+   set temp [atomselect top "index $x"]
+   puts -nonewline $outfile [$temp get name]
+   puts -nonewline $outfile "   "
+   puts -nonewline $outfile [format "%2.3f" [$temp get x]]
+   puts -nonewline $outfile "      "
+   puts -nonewline $outfile [format "%2.3f" [$temp get y]]
+   puts -nonewline $outfile "      "
+   puts $outfile [format "%2.3f" [$temp get z]]
+}
+unset temp
+puts $outfile ""
+# Iron geocenter coordinates
+puts -nonewline $outfile "Iron circumcenter: "
+set m [calc_sphere [$iron list]]
+puts $outfile [vecsub $m {0 0 0}]
+puts $outfile ""
+puts $outfile "Iron geocentric coordinates"
+puts $outfile "R     theta    phi"
+foreach x [$iron list] {
+   set temp [atomselect top "index $x"]
+   set temp2 [$temp get {x y z}]
+   puts -nonewline $outfile [format "%1.3f" [veclength [lindex $temp2 0]]]
+   puts -nonewline $outfile "	"
+   puts -nonewline $outfile [format "%3.3f" [calc_theta $temp2]]
+   puts -nonewline $outfile "	"
+   puts $outfile [format "%3.3f" [calc_phi $temp2]]
+}
+puts $outfile ""
+# Sulfide geocentric coordinates
+puts -nonewline $outfile "Sulfide circumcenter:      "
+set SCC [calc_sphere [$sulfide list]]
+puts $outfile $SCC
+puts -nonewline $outfile "dist(SCC, FeCC) ="
+puts $outfile [format " %1.3f Angstroms" [vecdist $SCC {0 0 0}]]
+puts $outfile ""
+# Dump out sulfide geocentric coordinates relative to sulfide centroid
+puts $outfile "Sulfide geocentric coordinates"
+puts $outfile "R        theta   phi"
+# Temporarily move complex to match origin with SCC
+$complex moveby [vecinvert $SCC]
+foreach x [$sulfide list] {
+   set temp [atomselect top "index $x"]
+   set temp2 [$temp get {x y z}]
+   puts -nonewline $outfile [format "%1.3f" [veclength [lindex $temp2 0]]]
+   puts -nonewline $outfile "   "
+   puts -nonewline $outfile [format "%3.3f" [calc_theta $temp2]]
+   puts -nonewline $outfile "   "
+   puts $outfile [format "%3.3f" [calc_phi $temp2]]
+}
+puts $outfile ""
+# Move back
+$complex moveby $SCC
+# Ligand geocentric coordinates
+puts -nonewline $outfile "Ligands circumcenter:      "
+set LCC [calc_sphere [$ligands list]]
+puts $outfile $LCC
+puts -nonewline $outfile "dist(LCC, FeCC) ="
+puts $outfile [format " %1.3f Angstroms" [vecdist $LCC {0 0 0}]]
+puts $outfile ""
+# Dump out ligand geocentric coordinates relative to ligand centroid
+puts $outfile "Ligand geocentric coordinates"
+puts $outfile "R        theta   phi"
+# Temporarily move complex to match origin with LCC
+$complex moveby [vecinvert $LCC]
+foreach x [$ligands list] {
+   set temp [atomselect top "index $x"]
+   set temp2 [$temp get {x y z}]
+   puts -nonewline $outfile [format "%1.3f" [veclength [lindex $temp2 0]]]
+   puts -nonewline $outfile "   "
+   puts -nonewline $outfile [format "%3.3f" [calc_theta $temp2]]
+   puts -nonewline $outfile "   "
+   puts $outfile [format "%3.3f" [calc_phi $temp2]]
+}
+close $outfile

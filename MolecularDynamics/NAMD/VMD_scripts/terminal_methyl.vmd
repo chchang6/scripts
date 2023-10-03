@@ -1,0 +1,60 @@
+package require psfgen
+
+# STEP 1: Build Protein
+
+# Script to split 1HFE into nine PDB files: one for each unique chain,
+# one for H-cluster (including coupled [4Fe-4S]), and one for each [4Fe-4S] cluster.
+
+# Load the PDB file
+mol load pdb centered.pdb
+
+# Set subsets
+set chain [atomselect top "resid 94 98 101 107"]
+set cluster [atomselect top "resid 584"]
+
+# Write these atoms to separate pdb files
+$chain writepdb built/chain.pdb
+$cluster writepdb built/cluster.pdb
+ 
+# Use the specified CHARMM27 topology file.
+topology ./terminal_methyl.top
+topology ../NAMD/common/Caclusters.top
+
+# Build nine segments, one for each chain or cluster
+# Ferredoxin polypeptide
+segment CHAI {
+  first NONE
+  last NONE
+  pdb built/chain.pdb
+}
+
+# ferredoxin cluster
+segment CLUS {
+  first NONE
+  last NONE
+  pdb built/cluster.pdb
+}
+
+# Patch to set up cluster ligation
+patch FE1H CLUS:584 CHAI:94
+patch FE2C CLUS:584 CHAI:107
+patch FE3C CLUS:584 CHAI:98
+patch FE4C CLUS:584 CHAI:101
+patch AMINOX CHAI:98
+patch AMINOX CHAI:101
+patch AMINOX CHAI:107
+
+# Load the coordinates for each segment.
+coordpdb built/chain.pdb CHAI
+coordpdb built/cluster.pdb CLUS
+
+# Guess the positions of missing atoms.  As long as all the heavy
+# atoms are present, psfgen usually does a very good job of this.
+# However, the clusters will probably have very poor protonation.
+# Edit these manually.
+
+guesscoord
+
+# Write output coordinates
+writepdb built/test.pdb
+writepsf built/test.psf

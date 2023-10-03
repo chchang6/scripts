@@ -1,0 +1,25 @@
+package require psfgen
+
+# STEP 1: Build Protein
+
+# Script to split HydA2 model into two pdb files: one for polypeptide, and
+# one for H-cluster (including coupled [4Fe-4S]).
+
+# Load the PDB file
+resetpsf
+readpsf input.psf
+coordpdb input.pdb
+mol load psf input.psf pdb input.pdb
+
+# Select target
+set target [atomselect top "segname ION or resname TIP3"]
+
+# Delete solvent atoms
+foreach segid [$target get segid] resid [$target get resid] {
+  delatom $segid $resid
+}
+
+# Write output files
+writepsf test.psf
+writepdb test.pdb
+

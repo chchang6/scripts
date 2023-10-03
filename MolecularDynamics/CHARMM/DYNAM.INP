@@ -1,0 +1,47 @@
+! Input deck to gather statistics using Langevin dynamics and SHAKE
+* Title Production run of CrferrHSD in vacuum
+* CHC, 6/06/05
+*
+
+! read in topologies
+open unit 11 read card name ../CHARMM_22PROT+HYDFERR.RTF
+read rtf card unit 11
+close unit 11
+
+! read in parameters
+open unit 12 read card name ../CHARMM_22PROT+HYDFERR.PRM
+read para card unit 12
+close unit 12
+
+! read in psf and coordinate files
+open unit 10 read card name "Crferr_HSP.psf"
+read psf card unit 10
+close unit 10
+
+! Dynamics with cutoffs for non-bonded interactions.
+! Production run starting from previous equilibration using Langevin dynamics
+
+OPEN UNIT 10 NAME restart READ FORM
+OPEN UNIT 20 NAME restart2 WRIT FORM
+OPEN UNIT 50 NAME CrferrHSD.dcd WRIT UNFORM
+OPEN UNIT 70 NAME energies2 WRIT FORM
+
+SCALAR FBETA SET 50
+
+SHAKE  BONH FAST
+DYNA   LEAP LANGEVIN REST NSTEp 50000 -
+       IPRFRQ 1000 IHTFRQ 0 IEQFRQ 0 NTRFRQ 0 -
+       IUNR 10 IUNW 20 IUNCRD 50 IUNVEL -1 KUNIT 70 -
+       NPRINT 100 NSAVC 500 NSAVV 0 IHBFRQ 0 INBFRQ 25 -
+       ILBFRQ 1000 RBUFFER 0.0 -
+       ELEC ATOM FSWITCH CDIE -
+       VDW VATOM VSWITCHED -
+       CUTNB 12 CTOFNB 11 CTONNB 10 WMIN 1.5 EPS 1.0 -
+       FIRSTT 300. FINALT 300. TBATH 300.0 -
+       IASORS 0 IASVEL 1 ISCVEL 0 ICHECW 0 TWINDH 0.0 TWINDL 0.0
+CLOSE UNIT 10
+CLOSE UNIT 20
+CLOSE UNIT 50
+CLOSE UNIT 70
+
+stop

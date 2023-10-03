@@ -1,0 +1,125 @@
+# visual_mdenergy - Atom based Visualization of Energies calculated with MDENERGY
+# -------------------------------------------------------------------------
+
+# Vizualizes the atom based energy values. You must use the mdenergy option 
+# -a <filename> to dump the atom energies to a file that can be read by 
+# visual_mdenergy.
+# The atom energies are filled into the user data field in VMD and colored 
+# according to this value. By default VMD uses the min/max values of the current 
+# frame to set the color scale, here we use the min/max over all frames
+# of the trajectory.
+# You can change the color scaling in the Graphics->Color menu or using
+# mol scaleminmax molecule_number rep_number [min max | auto]
+
+# Sample usage:
+# source ~/vmd/tcl/visual_mdenergy.tcl
+# visual_mdenergy energyperatom.dat top
+# mol scaleminmax 0 0 0.1 2.0
+
+
+proc visual_mdenergy { filename {molid top}} {
+   global vmd_frame
+   
+   set molid [molinfo $molid get id]
+   set fd [open $filename r]
+   set nframes 0
+   # Read header
+   set energy_type [lindex [gets $fd] 1]
+   set natoms      [lindex [gets $fd] 1]
+   set avgwin      [lindex [gets $fd] 1]
+   set selfonly    [lindex [gets $fd] 1]
+   set seltext     [lrange [gets $fd] 1 end]
+   set indexlist   [lrange [gets $fd] 1 end]
+   
+   puts "current frame  : $vmd_frame($molid)"
+   puts "energy type    : $energy_type"
+   puts "natoms         : $natoms"
+   puts "selection text : [string trimleft $seltext]"
+   #puts "index list     :"
+   #puts $indexlist
+   
+   set rep 0
+   set selection [atomselect $molid "$seltext"]
+   # add a representation for the selected atoms
+   mol selection "$seltext"
+   mol addrep $molid
+   set rep [expr [molinfo $molid get numreps]-1]
+   mol modcolor $rep $molid User 
+   mol colupdate $rep $molid 1
+   color scale method BGR
+   # Don't show other representations
+   for {set i 0} {$i<$rep} {incr i} {
+      catch "mol showrep $molid $i off"
+   }
+   #display resetview
+
+   # read the Elist
+   set Eatoms_list ""
+   set Emin_i ""
+   set Emax_i ""
+   set Emin_v ""
+   set Emax_v ""
+   while {![eof $fd]} {
+      set frame    [lindex [gets $fd] 1]
+      set minmax_i [lrange [gets $fd] 2 end]
+      set minmax_v [lrange [gets $fd] 2 end]
+      set Eatoms [gets $fd]
+      if {[llength $Eatoms]>0} {
+	 lappend Emin_i [lindex $minmax_i 0] 
+	 lappend Emax_i [lindex $minmax_i 1]
+	 lappend Emin_v [lindex $minmax_v 0] 
+	 lappend Emax_v [lindex $minmax_v 1]
+	 lappend Eatoms_list $Eatoms
+	 incr nframes
+      }
+   }
+   puts "nframes        : $nframes"
+   puts "Added representation $rep"
+
+   # Find smallest and largest value of the trajectory to set min/max 
+   # for color scaling
+   set allmin [min_index $Emin_v]
+   set allmax [max_index $Emax_v]
+   set indlo [lindex $allmin 0]
+   set indhi [lindex $allmax 0] 
+   set lo [lindex $allmin 1]
+   set hi [lindex $allmax 1] 
+   puts "min energy = $lo in frame $indlo, atom [lindex $Emin_i $indlo]"
+   puts "max energy = $hi in frame $indhi, atom [lindex $Emax_i $indhi]"
+   # Change the color scale
+   mol scaleminmax $molid $rep $lo $hi
+   
+   for {set i 0} {$i<$nframes} {incr i} { 
+      $selection frame $i
+      $selection set user [lindex $Eatoms_list $i]
+   }
+}
+
+proc min_index { myList } {
+    set smallest [lindex $myList 0]
+    set isma 0
+    set j 0
+    foreach i $myList {
+        if {$i < $smallest} {
+            set smallest $i
+            set isma $j
+        }
+        incr j
+    }
+    return [list $isma $smallest]
+}
+
+proc max_index { myList } {
+    set largest  [lindex $myList 0]
+    set ilar 0
+    set j 0
+    foreach i $myList {
+        if {$i > $largest} {
+            set largest $i
+            set ilar $j
+        }
+        incr j
+    }
+    return [list $ilar $largest]
+}
+

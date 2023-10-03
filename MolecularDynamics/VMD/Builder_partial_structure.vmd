@@ -1,0 +1,86 @@
+package require psfgen
+
+# STEP 1: Build Protein
+
+# Script to split 1HFE into nine PDB files: one for each unique chain,
+# one for H-cluster (including coupled [4Fe-4S]), and one for each [4Fe-4S] cluster.
+
+# Load the PDB file
+mol load pdb input.pdb
+
+# Set subsets
+set chain [atomselect top "segname HYDL"]
+set clusterA [atomselect top "segname HYDA"]
+set clusterH [atomselect top "segname HYDH"]
+set xtalwater [atomselect top "segname XWAT"]
+
+# Write these atoms to separate pdb files
+$chain writepdb built/chain.pdb
+$clusterA writepdb built/clusterA.pdb
+$clusterH writepdb built/clusterH.pdb
+$xtalwater writepdb built/xtalwater.pdb
+ 
+# Use the specified CHARMM27 topology file.
+topology ../common/CHARMM_22prot_27lip.top
+topology ../common/clusters_new.top
+
+# Build nine segments, one for each chain or cluster
+# polypeptide
+segment PROT {
+  first none
+  last none
+  pdb built/chain.pdb
+}
+
+# proximal (bridged) cluster
+segment HYDA {
+  first NONE
+  last NONE
+  pdb built/clusterA.pdb
+}
+
+# H-cluster
+segment HYDH {
+  first NONE
+  last NONE
+  pdb built/clusterH.pdb
+}
+
+# Crystallographic water within 5 A of protein
+segment XWAT {
+  first none
+  last none
+  pdb built/xtalwater.pdb
+}
+
+# Patch to set up cluster ligation
+patch F4-1O HYDA:488 PROT:266
+patch F4-2O HYDA:488 PROT:469
+patch F4-4O HYDA:488 PROT:321
+patch HCB HYDH:489 PROT:469
+
+# Load the coordinates for each segment.
+coordpdb built/chain.pdb PROT
+coordpdb built/clusterA.pdb HYDA
+coordpdb built/clusterH.pdb HYDH
+coordpdb built/xtalwater.pdb XWAT
+
+# Guess the positions of missing atoms.  As long as all the heavy
+# atoms are present, psfgen usually does a very good job of this.
+# However, the clusters will probably have very poor protonation.
+# Edit these manually.
+
+# Write output files with dummy coordinates
+writepsf built/test.psf
+writepdb built/test.pdb
+# Get rid of VMD-generated atoms not present in input structure
+resetpsf
+readpsf built/test.psf
+coordpdb built/test.pdb
+mol load psf built/test.psf pdb built/test.pdb
+set badatoms [atomselect top "(x=0 and y=0 and z=0)"]
+foreach a [$badatoms get segid] b [$badatoms get resid] c [$badatoms get name] {
+   delatom $a $b $c
+}
+writepsf built/test2.psf
+writepdb built/test2.pdb

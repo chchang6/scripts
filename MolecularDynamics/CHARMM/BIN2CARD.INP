@@ -1,0 +1,33 @@
+! Input deck to convert CHARMM binary coordinates to card format
+* CHC, 8/22/05
+*
+BOMlev -2
+
+! read in topologies
+open unit 11 read card name ../CHARMM_22PROT+HYDFERR.RTF
+read rtf card unit 11
+close unit 11
+
+! read in parameters
+open unit 12 read card name ../CHARMM_22PROT+HYDFERR.PRM
+read para card unit 12
+close unit 12
+
+! Load in PSF file data, all atoms
+OPEN UNIT 17 NAME "crferrhsd_charmm.psf" READ FORM
+READ PSF CARD UNIT 17
+CLOSE UNIT 17
+
+! Open all-atom NAMD trajectory to read, and file to write CHARMM
+! trajectory with hydrogens and transrot modes removed
+OPEN UNIT 18 NAME quasi_1-15000bin.crd READ UNFORM
+OPEN UNIT 62 NAME quasi_1-15000.crd WRIT FORM
+READ COOR FILE SELE ALL END UNIT 18
+COOR WRIT CARD SELE ALL END UNIT 62
+* Average CrferrHSD structure over first 1.5 ns of simulation
+* Explicit solvated dynamics run in NAMD, CHC 08/22/05
+*
+CLOSE UNIT 62
+CLOSE UNIT 18
+
+stop

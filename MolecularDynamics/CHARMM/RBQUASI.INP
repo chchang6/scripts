@@ -1,0 +1,64 @@
+! Input deck for reduced basis quasiharmonic analysis from NAMD-generated trajectory
+* RBQuasi of NAMD 16HSD_dowsed trajectory, including only heavy backbone atoms, and
+* associated dihedral angles in basis.
+* CHC, 1/20/06
+*
+BOMlev -2
+
+! read in topologies
+open unit 11 read card name ../CHARMM_22PROT+HYDFERR.RTF
+read rtf card unit 11
+close unit 11
+
+! read in parameters
+open unit 12 read card name ../CHARMM_22PROT+HYDFERR.PRM
+read para card unit 12
+close unit 12
+
+! Load in PSF file data, all atoms
+OPEN UNIT 17 NAME 16hsd_dowsed_charmm.psf READ FORM
+READ PSF CARD UNIT 17
+CLOSE UNIT 17
+
+! Open all-atom NAMD trajectory to read, and file to write CHARMM
+! trajectory with hydrogens and transrot modes removed
+OPEN UNIT 18 NAME quasi_1-2000.dcd READ UNFORM
+!OPEN UNIT 19 NAME quasi_ .dcd READ UNFORM
+OPEN UNIT 62 NAME merged.dcd WRIT UNFORM
+MERGE COOR FIRStu 18 NUNIt 1 SKIP 1 OUTPUTU 62 BEGIN 0 SKIP 1 STOP 1999 -
+    SELE ALL END ORIE MASS SELE ALL END
+!CLOSE UNIT 19
+CLOSE UNIT 18
+
+! Open new trajectory and create comparison coordinate set corresponding
+! to average structure
+OPEN UNIT 19 NAME merged.dcd READ UNFORM
+COOR DYNA SELE ALL END FIRSt 19 NUNIts 1 BEGIN 0 SKIP 1 STOP 1999 -
+   NOPR ORIENT MASS SELE .NOT. HYDR END
+COOR COPY COMP
+
+! Run thermodynamic analysis and print result to file "entropy.out"
+OPEN UNIT 20 NAME nohydrdihe.bas READ UNFORM
+VIBRAN ELEC ATOM FSWITCH CDIE -
+      VDW VATOM VSWITCHED -
+      CUTNB 12 CTOFNB 11 CTONNB 10 WMIN 1.5 EPS 1.0 -
+      NMODe 2782
+  RBQUASI IUNBas 20 NUNIts 1 FIRStunit 19 NSKIp 1 BEGIN 0 STOP 1999 -
+      TEMP 303
+
+  THERMO TEMP 303
+  set stot ?stot
+
+CLOSE UNIT 19
+CLOSE UNIT 20
+END
+
+CALC TDS = 303 * @stot
+
+OPEN WRIT UNIT 52 FORM NAME entropy.out
+WRITE TITLE UNIT 52
+* Quasiharmonics entropy output for 16HSD_dowsed
+* Entropic energy = TdelS = @TDS
+*
+
+stop

@@ -1,0 +1,67 @@
+! Input deck to calculate Generalized Born solvation energy of protein
+! by the method outlined in Noskov & Lim, Biophys J. 81: 737-750 (2001).
+! GB parameters
+* Title Build of CHARMM coordinate file from all-atom PDB output from
+* NAMD calculations.
+bomblev -2
+
+! read in topology
+open unit 10 name "../CHARMM_22PROT+HYDFERR.RTF" READ FORM
+read rtf unit 10 card
+close unit 10
+
+! Read in parameters
+open unit 11 name "../CHARMM_22PROT+HYDFERR.PRM" READ FORM
+read param unit 11 card
+close unit 11
+
+! Set up ferredoxin segment
+!open unit 12 name "FERR.pdb" READ FORM
+!read sequ PDB unit 12
+!gener FERR setup
+!read COOR PDB UNIT 12 OFFS -30
+!close unit 12
+
+! Set up [2Fe-2S] cluster segment
+!open unit 13 name "FRC1.pdb" READ FORM
+!read sequ PDB unit 13
+!gener FRC1 FIRST none LAST none NODI setup
+!READ COOR PDB UNIT 13 OFFS -30
+!close unit 13
+
+! Set up HydA2 segment
+open unit 14 name "HYDR.pdb" READ FORM
+read sequ PDB unit 14
+gener HYDR setup
+READ COOR PDB UNIT 14
+close unit 14
+
+! Set up H-cluster segment
+open unit 15 name "HYDH.pdb" READ FORM
+read sequ PDB unit 15
+gener HYDH FIRST none LAST none NODI setup
+READ COOR PDB UNIT 15
+close unit 15
+
+! Establish cysteine-cluster bonding
+patch FE1C HYDH 438 HYDR 111
+patch FE2C HYDH 438 HYDR 166
+patch FE3C HYDH 438 HYDR 366
+patch FE4C HYDH 438 HYDR 370
+patch FEX  HYDH 437 HYDR 370
+!patch FE1C FRC1 127 FERR  69
+!patch FE1C FRC1 127 FERR  74
+!patch FE2C FRC1 127 FERR  77
+!patch FE2C FRC1 127 FERR 107
+
+print coor
+
+! write out PSF and CRD files
+open unit 61 name hyd16HSD_GBMV.psf WRIT FORM
+write psf CARD unit 61
+close unit 61
+
+!open unit 62 name NAMD_final.crd WRIT FORM
+!write coor card unit 62
+
+stop

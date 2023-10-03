@@ -1,0 +1,20 @@
+set outfile [open rmsd.dat w];                                             
+set nf [molinfo top get numframes]
+# Reference for solvent equilibration
+#set frame0 [atomselect top "water and ions" frame 0]
+# Reference for sidechain equilibration
+#set frame0 [atomselect top "(protein and sidechain and noh) or resname HC1 FS4" frame 0]
+# Reference for all-atom equilibration"
+set frame0 [atomselect top "(protein and noh) or resname HC1 FS4" frame 0]
+# rmsd calculation loop
+for {set i 1 } {$i < $nf } { incr i } {
+# Selection for solvent equilibration
+#    set sel [atomselect top "water and ions and noh" frame $i]
+# Selection for sidechain equilibration
+#    set sel [atomselect top "(protein and sidechain and noh) or resname HC1 FS4" frame $i]
+# Selection for all-atom equilibration
+    set sel [atomselect top "(protein and noh) or resname HC1 FS4" frame $i]
+    $sel move [measure fit $sel $frame0]
+    puts $outfile "$i [measure rmsd $sel $frame0]"
+}
+close $outfile

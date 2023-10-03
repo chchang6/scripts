@@ -1,0 +1,19 @@
+# VMD script to transform coordinates, solvate, and autoionize based on
+# values from minwater process. Assume input files from build, "test".pxx.
+# CHC 11/09/05.
+set a 160
+set b 30
+set c 23
+mol load pdb built.pdb
+mol addfile built.psf
+set temp [atomselect top all]
+$temp moveby [vecinvert [measure center $temp]]
+$temp move [transaxis z $a]
+$temp move [transaxis x $b]
+$temp move [transaxis z $c]
+$temp writepdb built.pdb
+package require solvate
+solvate built.psf built.pdb -t 12.5
+package require autoionize
+autoionize -psf solvate.psf -pdb solvate.pdb -is 0.20
+unset a b c temp

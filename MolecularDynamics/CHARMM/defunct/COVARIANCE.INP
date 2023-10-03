@@ -1,0 +1,30 @@
+! Input deck to analyze covariance of trajectory and extract configurational entropy--see CHARMM corman.doc, search "ENTR"
+* Title Covariance analysis of HydA2HSD NAMD solvated trajectory
+* Protein only, send covariance matrix to /dev/null
+* CHC, 7/22/05
+
+! read in topologies
+open unit 11 read card name ../../CHARMM/CHARMM_22PROT+HYDFERR.RTF
+read rtf card unit 11
+close unit 11
+
+! read in parameters
+open unit 12 read card name ../../CHARMM/CHARMM_22PROT+HYDFERR.PRM
+read para card unit 12
+close unit 12
+
+! read in psf and coordinate files
+open unit 10 read card name "HydA2_HSD.psf"
+read psf card unit 10
+close unit 10
+
+! Configurational entropy estimate of heavy atoms only. Matrix sent to /dev/null
+! Approximation of Andricioaei & Karplus (JCP 115: 6289 (2001)).
+
+OPEN UNIT 51 NAME quasi_1-3617.dcd READ UNFORM
+OPEN UNIT 52 NAME /dev/null WRITe FORM
+COOR COVAriance FIRSTU 51 NUNIts 1 SELE .NOT. HYDR END SELE .NOT. HYDR END -
+  UNIT 52 ENTR TEMP 303.
+CLOSE UNIT 51
+CLOSE UNIT 52
+stop

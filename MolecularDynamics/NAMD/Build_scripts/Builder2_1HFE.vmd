@@ -1,0 +1,224 @@
+package require psfgen
+
+# STEP 1: Build Protein
+
+# Script to split solvated 1HFE into PDB files, rebuild clusters from
+# new topology file, and keep all coordinates for subsequent dynamics.
+
+# Load the PDB file
+mol load pdb dyn_200ps_in.pdb
+
+# Set subsets
+set chainS [atomselect top "segname HYDS"]
+set chainL [atomselect top "segname HYDL"]
+set Zn [atomselect top "segname ZN"]
+set clusterC [atomselect top "segname HYDC"]
+set clusterB [atomselect top "segname HYDB"]
+set clusterA [atomselect top "segname HYDA"]
+set clusterH [atomselect top "segname HYDH"]
+set freecys [atomselect top "segname FCYS"]
+set xtalwater [atomselect top "segname XWAT"]
+set solvent1 [atomselect top "segname WT1"]
+set solvent2 [atomselect top "segname WT2"]
+set solvent3 [atomselect top "segname WT3"]
+set solvent4 [atomselect top "segname WT4"]
+set solvent5 [atomselect top "segname WT5"]
+set solvent6 [atomselect top "segname WT6"]
+set solvent7 [atomselect top "segname WT7"]
+set solvent8 [atomselect top "segname WT8"]
+set ion [atomselect top "segname ION"]
+
+# Write these atoms to separate pdb files
+$chainS writepdb built/chainS.pdb
+$chainL writepdb built/chainL.pdb
+$Zn writepdb built/Zn.pdb
+$clusterC writepdb built/clusterC.pdb
+$clusterB writepdb built/clusterB.pdb
+$clusterA writepdb built/clusterA.pdb
+$clusterH writepdb built/clusterH.pdb
+$freecys writepdb built/freecys.pdb
+$xtalwater writepdb built/xtalwater.pdb
+$solvent1 writepdb built/solvent1.pdb
+$solvent2 writepdb built/solvent2.pdb
+$solvent3 writepdb built/solvent3.pdb
+$solvent4 writepdb built/solvent4.pdb
+$solvent5 writepdb built/solvent5.pdb
+$solvent6 writepdb built/solvent6.pdb
+$solvent7 writepdb built/solvent7.pdb
+$solvent8 writepdb built/solvent8.pdb
+$ion writepdb built/ion.pdb
+ 
+# Use the specified CHARMM27 topology file.
+topology ../common/CHARMM_22prot_27lip.top
+topology ../common/clusters_new.top
+
+# Alias standard residues
+pdbalias residue HIS HSD
+pdbalias atom ILE CD1 CD
+pdbalias residue HOH TIP3
+pdbalias atom TIP3 O OH2
+pdbalias residue FCY CYS
+pdbalias residue ZN ZN2
+
+# Build nine segments, one for each chain or cluster
+# Hydrogenase small chain
+segment HYDS {
+  first NTER
+  last CTER
+  pdb built/chainS.pdb
+}
+
+# Hydrogenase large chain
+segment HYDL {
+  first NTER
+  last CTER
+  pdb built/chainL.pdb
+}
+
+# Zinc ion
+segment ZN {
+  first none
+  last NONE
+  pdb built/Zn.pdb
+}
+
+# distal cluster
+segment HYDC {
+  auto none
+  first NONE
+  last NONE
+  pdb built/clusterC.pdb
+}
+
+# medial cluster
+segment HYDB {
+  auto none
+  first NONE
+  last NONE
+  pdb built/clusterB.pdb
+}
+
+# proximal (bridged) cluster
+segment HYDA {
+  auto none
+  first NONE
+  last NONE
+  pdb built/clusterA.pdb
+}
+
+# H-cluster
+segment HYDH {
+  auto none
+  first NONE
+  last NONE
+  pdb built/clusterH.pdb
+}
+
+# free cysteine
+segment FCYS {
+  first NTER
+  last CTER
+  pdb built/freecys.pdb
+}
+
+# Crystallographic water within 5 A of protein
+segment XWAT {
+  first none
+  last none
+  pdb built/xtalwater.pdb
+}
+
+# Solvent and ions
+segment WT1 {
+  first none
+  last none
+  pdb built/solvent1.pdb
+}
+
+segment WT2 {
+  first none
+  last none
+  pdb built/solvent2.pdb
+}
+
+segment WT3 {
+  first none
+  last none
+  pdb built/solvent3.pdb
+}
+
+segment WT4 {
+  first none
+  last none
+  pdb built/solvent4.pdb
+}
+
+segment WT5 {
+  first none
+  last none
+  pdb built/solvent5.pdb
+}
+
+segment WT6 {
+  first none
+  last none
+  pdb built/solvent6.pdb
+}
+
+segment WT7 {
+  first none
+  last none
+  pdb built/solvent7.pdb
+}
+
+segment WT8 {
+  first none
+  last none
+  pdb built/solvent8.pdb
+}
+
+segment ION {
+  first none
+  last none
+  pdb built/ion.pdb
+}
+
+# Patch to set up cluster ligation
+patch F4-1R HYDA:488 HYDL:266
+patch F4-2R HYDA:488 HYDL:469
+patch F4-3R HYDA:488 HYDL:465
+patch F4-4R HYDA:488 HYDL:321
+patch HCB  HYDH:489 HYDL:469
+patch F4-1R HYDB:487 HYDL:132
+patch F4-2R HYDB:487 HYDL:153
+patch F4-3R HYDB:487 HYDL:156
+patch F4-4R HYDB:487 HYDL:159
+patch F4-1R HYDC:486 HYDL:128
+patch F4-2R HYDC:486 HYDL:125
+patch F4-3R HYDC:486 HYDL:122
+patch F4-4R HYDC:486 HYDL:163
+
+# Load the coordinates for each segment.
+coordpdb built/chainS.pdb HYDS
+coordpdb built/chainL.pdb HYDL
+coordpdb built/Zn.pdb ZN
+coordpdb built/clusterC.pdb HYDC
+coordpdb built/clusterB.pdb HYDB
+coordpdb built/clusterA.pdb HYDA
+coordpdb built/clusterH.pdb HYDH
+coordpdb built/freecys.pdb FCYS
+coordpdb built/xtalwater.pdb XWAT
+coordpdb built/solvent1.pdb WT1
+coordpdb built/solvent2.pdb WT2
+coordpdb built/solvent3.pdb WT3
+coordpdb built/solvent4.pdb WT4
+coordpdb built/solvent5.pdb WT5
+coordpdb built/solvent6.pdb WT6
+coordpdb built/solvent7.pdb WT7
+coordpdb built/solvent8.pdb WT8
+coordpdb built/ion.pdb ION
+
+# Write output files
+writepsf built/test.psf
+writepdb built/test.pdb
+

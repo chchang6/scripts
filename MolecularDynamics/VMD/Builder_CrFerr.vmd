@@ -1,0 +1,65 @@
+package require psfgen
+
+# STEP 1: Build Protein
+
+# Script to split 1HFE into nine PDB files: one for each unique chain,
+# one for H-cluster (including coupled [4Fe-4S]), and one for each [4Fe-4S] cluster.
+
+# Load the PDB file
+mol load pdb input.pdb
+
+# Set subsets
+set chainF [atomselect top "resid 31 to 126"]
+set clusterF [atomselect top "resid 127"]
+
+# Write these atoms to separate pdb files
+$chainF writepdb built/chainF.pdb
+$clusterF writepdb built/clusterF.pdb
+ 
+# Use the specified CHARMM27 topology file.
+topology ../common/CHARMM_22prot_27lip.top
+topology ../common/Crclusters.top
+
+# Alias standard residues
+pdbalias residue HIS HSP
+pdbalias atom ILE CD1 CD
+
+# Build nine segments, one for each chain or cluster
+# Ferredoxin polypeptide
+segment FERR {
+  first NONE
+  last NONE
+  pdb built/chainF.pdb
+}
+
+# ferredoxin cluster
+segment FRC1 {
+  first NONE
+  last NONE
+  pdb built/clusterF.pdb
+}
+
+# Patch to set up cluster ligation
+patch FE1C FRC1:127 FERR:69
+patch FE1C FRC1:127 FERR:74
+patch FE2C FRC1:127 FERR:77
+patch FE2C FRC1:127 FERR:107
+
+# Load the coordinates for each segment.
+coordpdb built/chainF.pdb FERR
+coordpdb built/clusterF.pdb FRC1
+
+# Guess the positions of missing atoms.  As long as all the heavy
+# atoms are present, psfgen usually does a very good job of this.
+# However, the clusters will probably have very poor protonation.
+# Edit these manually.
+
+# Generate angles for clusters
+regenerate angles
+
+guesscoord
+
+# Write output files
+writepsf built/test.psf
+writepdb built/test.pdb
+

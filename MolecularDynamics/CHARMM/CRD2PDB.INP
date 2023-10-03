@@ -1,0 +1,33 @@
+! Input deck to convert CHARMM card coordinates to PDB format
+* CHC
+*
+BOMlev -2
+
+! read in topologies
+open unit 11 read card name ../../CHARMM_22PROT+HYDFERR.RTF
+read rtf card unit 11
+close unit 11
+
+! read in parameters
+open unit 12 read card name ../../CHARMM_22PROT+HYDFERR.PRM
+read para card unit 12
+close unit 12
+
+! Load in PSF file data, all atoms
+OPEN UNIT 17 NAME "hyda2hsp_gbmin.psf" READ FORM
+READ PSF CARD UNIT 17
+CLOSE UNIT 17
+
+! Open all-atom NAMD trajectory to read, and file to write CHARMM
+! trajectory with hydrogens and transrot modes removed
+OPEN UNIT 18 NAME gbmin_out.crd READ FORM
+OPEN UNIT 62 NAME gbmin_out.pdb WRIT FORM
+READ COOR CARD SELE ALL END UNIT 18
+COOR WRIT PDB SELE ALL END UNIT 62
+* Generalized Born-minimized CrferrHSD structure
+* CHC 09/29/05
+*
+CLOSE UNIT 62
+CLOSE UNIT 18
+
+stop

@@ -1,0 +1,30 @@
+#!/usr/bin/perl
+# PERL script to renumber PDB file to make consecutive
+# atom and residue numbers. File must be only ATOM records,
+# contain no alternate locations, and comprise only one
+# chain--no chain identifier can be present, as this will
+# mess up the parsing of the fields. CHC 1/6/05.
+
+$atmidx = 0
+$residx = 1
+$linidx = 1
+while (defined($line = <>)) {
+    chomp($line);
+    @fields=split /\s+/, $line;
+    if (fields[0]=="END") {
+          last
+       } else {
+       if ($linidx==1) {
+           $resref = fields[4];
+           }
+       $atmidx += 1;
+       $restest = fields[4];
+       if ($restest!=$resref) {
+           $residx =+ 1;
+           }
+       printf "%-6s%5d%2s%-3s%1s%-5s%4d%4s%8.3f%8.3f%8.3f%6.2f%6.2f",
+          'ATOM', $atmidx,, fields[2],, fields[3], $residx,,
+          fields[5], fields[6], fields[7], fields[8], fields[9];
+    $linidx =+ 1
+    }
+    

@@ -1,0 +1,7 @@
+mol new minimize_in.pdb
+set temp [atomselect top all]
+puts "Center coordinates are:"
+measure center $temp
+puts "Bounding box dimensions are:"
+vecsub [lindex [measure minmax $temp] 1] [lindex [measure minmax $temp] 0]
+exit

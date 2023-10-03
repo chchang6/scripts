@@ -1,0 +1,6 @@
+mol new sideeq_in.coor
+mol addfile .psf
+set temp [atomselect top backbone]
+$temp set beta 1
+[atomselect top all] writepdb sideeq_in.pdb
+exit

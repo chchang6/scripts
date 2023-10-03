@@ -1,0 +1,41 @@
+READ
+mol pqr HydA2.pqr
+parm flat ../....
+END
+ELEC
+name HydA2
+type mg-auto
+	dime       #Number of grid points for grid discretization, {nx ny nz}
+	cglen      #Coarse grid domain lengths, {xlen ylen zlen}
+	fglen      #Fine grid domain lengths, should enclose region of interest, {xlen ylen zlen}
+	cgcent     #Coarse grid center, {mol id|xcent ycent zcent}
+	fgcent     #Fine grid center, {mol id|xcent ycent zcent}
+	mol        # ID# of molecule for which PBE is solved. Depends on order of READ mol statements, starting from 1.
+	lpbe or npbe   #Linearized or non-linearized PB
+	bcfl    #Boundary condition type: zero, sdh, mdh, focus
+	ion     #Mobile ion species in system; multiple types possible, but only largest radius used for accessibility
+                # {charge} {conc} {radius}
+	pdie    #Dielectric constant of biomolecule between 2 and 20.
+	sdie    #Dielectric constant of solvent
+	chgm       #How atom charges mapped onto grid. spl0 or spl2
+	usemap   # Pre-calculated coefficient map to use in PB calc, {type} {id}
+                 # where type = {diel, kappa, charge} and id = map number from "read map" statements,
+                 # starting with 1.
+	srad     #Radius of solvent molecules, in Angstroms. Water usually 1.4
+	swin     #Size of support for spline-based surface definitions (eg surface accessibility),
+                 #usually 0.3 Angstrom
+	temp     # Temperature, degrees Kelvin
+	gamma         #Surface tension for SASA models of apolar forces, kJ/mol/Angstrom
+	calcenergy    #Optional, control energy output: no, total, comps
+	calcforce     #Optional, control force output: no, total, comps
+	write        # {type} {format} {stem}
+                     # type = charge, pot, smol, sspl, vdw, ivdw, lap, edens, ndens, qdens, dielx, diely, dielz,
+                     #        kappa
+                     # format = dx, avs, uhbd
+	writemat     # {type=poisson, pot} {stem}
+END
+PRINT
+        energy # {id op id op id...}; linear combinations of energies
+        force #  {id op id op id...}; linear combinations of forces
+END
+QUIT

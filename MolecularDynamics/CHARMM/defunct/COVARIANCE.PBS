@@ -1,0 +1,35 @@
+#! /bin/bash --login
+
+#PBS -N COVAR_HydA2_HSD
+#PBS -q Std
+#PBS -l nodes=2:ppn=2
+#PBS -l walltime=08:00:00
+#PBS -m abe
+#PBS -M user.name@domain.name
+#PBS -o pbs.charmm.out
+#PBS -e pbs.charmm.err
+
+#Because charmm uses shared libraries, add charmm to your default
+#module list before running by typing the following:
+
+#module initadd charmm/31b1
+
+cd $PBS_O_WORKDIR
+
+#simple serial charmm job
+# charmm < QUASI.INP > quasitest.out
+
+# example: run an MPI job
+cat > stream.inp << EOF
+* Title Vibrational analysis of vacuum-minimized HydA2_HSD structure
+* Covariance with Andricioaei & Karplus approximation.
+* CHC 7/25/05
+stream @stream
+stop
+EOF
+
+export input="stream=COVARIANCE.INP"
+
+which charmm.mpi.xxlarge
+mpicmd charmm.mpi.xxlarge $input < stream.inp > covariance.out
+

@@ -1,0 +1,53 @@
+! Input deck to calculate energy of protein over QH trajectory.
+! GB parameters from Lee et al., J. Comput. Chem. 24: 1348 (2003)
+* Title Calculation of internal energies from dynamics trajectory
+*
+
+! read in topologies
+open unit 11 read card name ../CHARMM_22PROT+HYDFERR.RTF
+read rtf card unit 11
+close unit 11
+
+! read in parameters
+open unit 12 read card name ../CHARMM_22PROT+HYDFERR.PRM
+read para card unit 12
+close unit 12
+
+! read in psf file
+open unit 10 name hydferr42hsp_charmm.psf READ FORM
+read psf CARD unit 10
+close unit 10
+
+! Set up trajectory file. start = first frame number
+open unit 10 NAME quasi_18001-20000.dcd READ UNFORM
+SET start = 18000
+SET numframes 2000
+
+! Read in first structure for GBMV grid setup
+TRAJ FIRST 10 NUNIT 1 BEGIN @start STOP @start
+TRAJ READ
+
+! GBMV Setup
+GBMV GEOM BETA -20 EPSILON 78.5 DN 1.0 WATR 1.4 LAMBDA1 0.5 TOL 1.0E8 -
+   BUFR 0.5 MEM 10 CUTA 20 HSX1 -0.125 HSX2 0.25 ONX 1.9 OFFX 2.1 -
+   ALFRQ 1 EMP 0.25 P1 0.45 P2 1.25 P3 0.7 P6 8.0 -
+   SA 0.025 SB 0.0 KAPPA 0.103 WTYP 2 NPHI 38 CORR 1 SHIFT -0.102 -
+   SLOPE 0.9085
+UPDATE ELEC ATOM CDIE FSWITCH -
+     VDW VATOM VSWITCHED -
+     CUTNB 100 CTOFNB 99 CTONNB 97 EPS 1.0 -
+     INBFRQ 1 IHBFRQ 1
+GETE PRIN
+
+SET I 1 ! Set to 2 because first frame already read in
+LABEL LOOP
+   CALC FRAME = @start + @I 
+   TRAJ FIRST 10 NUNIT 1 SKIP 1 BEGIN @FRAME STOP @FRAME
+   TRAJ READ
+   GETE PRIN
+   INCR I
+   IF I LT @numframes GOTO LOOP
+GBMV Clear
+CLOSE UNIT 10
+
+stop

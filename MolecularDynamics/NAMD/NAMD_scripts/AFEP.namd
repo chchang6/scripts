@@ -1,0 +1,110 @@
+#source ./namdinclude.tcl
+source ~/NAMD/common/namdinclude.tcl
+
+#######################################################
+#     Change these parameters between simulations     #
+#######################################################
+
+set inputname	./AFEP3b_in.restart
+set outputname  ./AFEP3b
+set runtype     cont
+
+#WES 031210
+margin 5
+
+#######################################################
+#######################################################
+
+set checkpointFreq 11000 ;# every 11 ps
+
+# INPUT FILES
+
+paraTypeCharmm	  on
+parameters        ../common/CHARMM_22prot_27lip.par
+parameters        ../common/Crclusters2.par 
+structure         ./16HSD_dowsed_NAMD.psf
+coordinates       ./$inputname.pdb
+bincoordinates    ./$inputname.coor
+binvelocities     ./$inputname.vel
+
+# if runtype is "first", start at timestep 0, otherwise read step from prev sim
+if {"$runtype" == "first"} {
+  set startingtime 0
+} elseif {"$runtype" == "cont"} {
+  set startingtime [gettimestep]
+} 
+
+
+# PERIODIC BOUNDARY CONDITIONS
+
+extendedSystem    $inputname.xsc
+wrapAll           on
+wrapWater         on
+
+# FIXED ATOMS
+fixedAtoms	    on
+fixedAtomsFile     $inputname.pdb
+fixedAtomsCol       B
+
+# FORCE-FIELD PARAMS
+exclude                 scaled1-4
+1-4scaling              1.0
+cutoff                  12
+switching               yes
+switchdist              10
+pairlistdist            14
+
+# INTEGRATOR PARAMS
+rigidBonds              all
+useSettle               on
+timestep                1.0
+nonbondedFreq           1
+fullElectFrequency      2  
+stepspercycle           10
+
+#PME ELECTROSTATICS
+PME                     yes
+PMEGridSizeX            81
+PMEGridSizeY            72
+PMEGridSizeZ           100
+
+# TEMPERATURE CONTROL
+langevin                on     ;# do langevin dynamics
+langevinDamping          5     ;# damping coefficient (gamma) of 5/ps
+langevinTemp            303.00 ;# bath temperature
+langevinHydrogen        off    ;# don't couple langevin bath to hydrogens
+
+# CONSTRAINTS
+#contraints              on
+#consexp                  2
+#consref       $inputname.pdb
+#conskfile     $inputname.pdb
+#conskcol                 B
+
+# ALCHEMICAL FEP CONTROL
+fep                     on
+fepEquilSteps         1000
+fepFile     $inputname.pdb
+fepCol                   O
+   
+# OUTPUT
+firsttimestep   $startingtime
+restartname     $outputname.restart
+outputName      $outputname
+dcdfile         $outputname.dcd
+xstFile         $outputname.xst
+
+xstFreq         $checkpointFreq
+restartfreq     $checkpointFreq
+outputEnergies  $checkpointFreq
+outputPressure  $checkpointFreq
+dcdfreq         $checkpointFreq
+
+# RUN SCRIPT
+set x 0.525
+while {$x < 1.0} {
+   lambda               $x
+   set x [expr {$x + 0.025}]
+   lambda2              $x
+   run 11000 ;# 10 ps + 1.0 ps equilibration
+}

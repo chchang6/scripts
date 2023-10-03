@@ -1,0 +1,22 @@
+! Script extracts one of two protein partners in a complex for
+! quasiharmonic analysis in CHARMM. Renumbers cluster atoms
+! to end up the same as CHARMM will create in eventual PSF file
+! build (CHARMM does not use NAMD PSF files). CHC 08/09/05.
+set firstatom X  ! First atom of existing H-cluster numbering
+set lastatom Y   ! Last atom of existing H-cluster numbering
+set offset Z     ! Number to add or subtract from existing numbers
+                 ! to get new numbers
+mol new XXX.psf  ! This is the NAMD PSF file for the full solvated system
+for {set i 1} {$i < 8000} {incr i} {
+   animate read dcd XXX.dcd beg $i end $i waitfor 1 top
+   set target [atomselect top "segname FERR FRC1"]
+   foreach segid [$target get segid] resid [$target get resid] {
+      delatom $segid $resid
+   }
+   set HCluster [atomselect top "segname HYDH"]
+   foreach atom [$HCluster get index] {
+      set newindex [expr {$atom + $offset}]
+      set index $newindex
+   }
+   animate write dcd quasiHYD1-8000.dcd beg 0 end 0 waitfor 1
+}

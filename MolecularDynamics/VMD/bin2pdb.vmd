@@ -1,0 +1,2 @@
+mol load psf Complex5.psf namdbin minimize_out.coor
+[atomselect top all] writepdb anneal_in.pdb

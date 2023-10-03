@@ -1,0 +1,13 @@
+mol load cor gbmin_out.crd
+mol addfile crferrhsd_gbmin.psf
+package require Orient
+namespace import Orient::orient
+set temp [atomselect top all]
+set i [draw principalaxes $temp]
+set a [orient $temp [lindex $i 2] {0 0 1}]
+$temp move $a
+set i [draw principalaxes $temp]
+set a [orient $temp [lindex $i 1] {0 1 0}]
+$temp move $a
+set i [draw principalaxes $temp]
+$temp writepdb MOIorient.pdb

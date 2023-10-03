@@ -1,0 +1,160 @@
+package require psfgen
+
+# STEP 1: Build Protein
+
+# Script to split 1HFE into nine PDB files: one for each unique chain,
+# one for H-cluster (including coupled [4Fe-4S]), and one for each [4Fe-4S] cluster.
+
+# Load the PDB file
+mol load pdb input.pdb
+
+# Set subsets
+set chainH [atomselect top "chain A and not hetero"]
+set chainF [atomselect top "chain B and not hetero"]
+set clusterH [atomselect top "chain A and resid 580 581"]
+set clusterA [atomselect top "chain A and resid 582"]
+set clusterB [atomselect top "chain A and resid 583"]
+set clusterC [atomselect top "chain A and resid 584"]
+set cluster2 [atomselect top "chain A and resname FES"]
+set clusterF1 [atomselect top "chain B and resid 56"]
+set clusterF2 [atomselect top "chain B and resid 57"]
+
+# Write these atoms to separate pdb files
+$chainH writepdb built/chainH.pdb
+$chainF writepdb built/chainF.pdb
+$clusterH writepdb built/clusterH.pdb
+$clusterA writepdb built/clusterA.pdb
+$clusterB writepdb built/clusterB.pdb
+$clusterC writepdb built/clusterC.pdb
+$cluster2 writepdb built/cluster2.pdb
+$clusterF1 writepdb built/clusterF1.pdb
+$clusterF2 writepdb built/clusterF2.pdb
+ 
+# Use the specified CHARMM27 topology file.
+topology ../NAMD/CHARMM_22prot_27lip.top
+topology ../NAMD/Cpclusters.top
+
+# Alias standard residues
+pdbalias residue HIS HSD
+pdbalias atom ILE CD1 CD
+
+# Build nine segments, one for each chain or cluster
+# Hydrogenase polypeptide
+segment HYDR {
+  first NONE
+  last NONE
+  pdb built/chainH.pdb
+}
+
+# Ferredoxin polypeptide
+segment FERR {
+  first NONE
+  last NONE
+  pdb built/chainF.pdb
+}
+
+# H-cluster
+segment HYDH {
+  first NONE
+  last NONE
+  pdb built/clusterH.pdb
+}
+
+# proximal (bridged) cluster
+segment HYDA {
+  first NONE
+  last NONE
+  pdb built/clusterA.pdb
+}
+
+# medial cluster
+segment HYDB {
+  first NONE
+  last NONE
+  pdb built/clusterB.pdb
+}
+
+# distal cluster
+segment HYDC {
+  first NONE
+  last NONE
+  pdb built/clusterC.pdb
+}
+
+# 2Fe-2S cluster
+segment HYDD {
+  first NONE
+  last NONE
+  pdb built/cluster2.pdb
+}
+
+# ferredoxin cluster 1
+segment FRC1 {
+  first NONE
+  last NONE
+  pdb built/clusterF1.pdb
+}
+
+# ferredoxin cluster 2
+segment FRC2 {
+  first NONE
+  last NONE
+  pdb built/clusterF2.pdb
+}
+
+# Patch to set up cluster ligation
+patch FE1C HYDH:581 HYDR:355
+patch FE2C HYDH:581 HYDR:499
+patch FE3C HYDH:581 HYDR:503
+patch FE4C HYDH:581 HYDR:300
+patch FEX  HYDH:580 HYDR:503
+patch FE1C HYDA:582 HYDR:193
+patch FE2C HYDA:582 HYDR:157
+patch FE3C HYDA:582 HYDR:190
+patch FE4C HYDA:582 HYDR:196
+patch FE1C HYDB:583 HYDR:200
+patch FE2C HYDB:583 HYDR:150
+patch FE3C HYDB:583 HYDR:153
+patch FE4C HYDB:583 HYDR:147
+patch FE1H HYDC:584 HYDR:94
+patch FE2C HYDC:584 HYDR:107
+patch FE3C HYDC:584 HYDR:98
+patch FE4C HYDC:584 HYDR:101
+patch FE1C HYDD:585 HYDR:49
+patch FE1C HYDD:585 HYDR:62
+patch FE2C HYDD:585 HYDR:34
+patch FE2C HYDD:585 HYDR:46
+patch FE1C FRC1:56 FERR:8
+patch FE2C FRC1:56 FERR:11
+patch FE3C FRC1:56 FERR:14
+patch FE4C FRC1:56 FERR:47
+patch FE1C FRC2:57 FERR:37
+patch FE2C FRC2:57 FERR:40
+patch FE3C FRC2:57 FERR:43
+patch FE4C FRC2:57 FERR:18
+
+# Load the coordinates for each segment.
+coordpdb built/chainH.pdb HYDR
+coordpdb built/chainF.pdb FERR
+coordpdb built/clusterH.pdb HYDH
+coordpdb built/clusterA.pdb HYDA
+coordpdb built/clusterB.pdb HYDB
+coordpdb built/clusterC.pdb HYDC
+coordpdb built/cluster2.pdb HYDD
+coordpdb built/clusterF1.pdb FRC1
+coordpdb built/clusterF2.pdb FRC2
+
+# Guess the positions of missing atoms.  As long as all the heavy
+# atoms are present, psfgen usually does a very good job of this.
+# However, the clusters will probably have very poor protonation.
+# Edit these manually.
+
+# Generate angles for clusters
+regenerate angles
+
+guesscoord
+
+# Write output files
+writepsf built/test.psf
+writepdb built/test.pdb
+

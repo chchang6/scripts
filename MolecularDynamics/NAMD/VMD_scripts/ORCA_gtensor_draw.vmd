@@ -1,0 +1,49 @@
+proc vmd_draw_arrow {mol start end component} {
+   if {$component == 1} {
+      set c "red"
+   } elseif {$component == 2} { 
+      set c "yellow"
+   } else {
+      set c "blue"
+   }
+   #DEBUGputs -nonewline "start="
+   #DEBUGputs $start
+   set base_vector [vecscale [vecsub $end $start] 2]
+   #DEBUGputs -nonewline "base_vector="
+   #DEBUGputs $base_vector
+   graphics top color $c
+   set scaled_base_vector [vecscale $base_vector 0.8]
+   #DEBUGputs -nonewline "scaled_base_vector="
+   #DEBUGputs $scaled_base_vector
+   set middle [vecadd $scaled_base_vector $start]
+   #DEBUGputs -nonewline "middle="
+   #DEBUGputs $middle
+   set scaled_end [vecadd $base_vector $start]
+   #DEBUGputs -nonewline "scaled_end="
+   #DEBUGputs $scaled_end
+   graphics $mol cylinder $start $middle radius 0.15
+   graphics $mol cone $middle $scaled_end radius 0.25 resolution 20
+}
+
+color Display Background silver
+# Following file does not contain the noble gas atoms marking the tensor components
+mol new G3yYM82fnpMwrRiC_3.plot.xyz
+# Following file is the full X.gori.xyz file ORCA produces. Noble gas atoms produce funky bonding, so turn autobonds off.
+mol new G3yYM82fnpMwrRiC_3.gori.xyz autobonds off
+# Change first structure to CPK, leave second structure as points
+mol modstyle 0 [expr [molinfo top]-1] CPK
+# Set up coordinates to draw
+set origin_atom [atomselect top "type He"]
+set g1_atom [atomselect top "type Ne"]
+set g2_atom [atomselect top "type Ar"]
+set g3_atom [atomselect top "type Kr"]
+set origin_coors [list [$origin_atom get x] [$origin_atom get y] [$origin_atom get z] ]
+set g1_coors [list [$g1_atom get x] [$g1_atom get y] [$g1_atom get z]]
+set g2_coors [list [$g2_atom get x] [$g2_atom get y] [$g2_atom get z]]
+set g3_coors [list [$g3_atom get x] [$g3_atom get y] [$g3_atom get z]]
+# Draw tensor components. _coors aren't endpoint, just establish direction.
+# Scaling done by subroutine.
+draw arrow $origin_coors $g1_coors 1
+draw arrow $origin_coors $g2_coors 2
+draw arrow $origin_coors $g3_coors 3
+

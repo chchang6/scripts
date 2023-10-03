@@ -1,0 +1,41 @@
+! Input deck to calculate basis normal modes of protein.
+* Title Normal Mode Calculation of CrferrHSD in vacuum solvent
+* CHC, 7/08/05
+*
+
+! read in topologies
+open unit 11 read card name ../CHARMM_22PROT+HYDFERR.RTF
+read rtf card unit 11
+close unit 11
+
+! read in parameters
+open unit 12 read card name ../CHARMM_22PROT+HYDFERR.PRM
+read para card unit 12
+close unit 12
+
+! read in psf and coordinate files
+open unit 10 read card name "_HS.psf"
+read psf card unit 10
+close unit 10
+
+open read unit 10 card name "vac_min_out.crd"
+read coor card unit 10
+close unit 10
+
+! Minimization with cutoffs for non-bonded interactions. Parameters
+! are distance for constructing pair list (cutnb), distance at which
+! switching function eliminates contributions from a pair (ctofnb), and
+! distance at which smoothing begins (ctonnb). Default 14-12-10, adapting
+! to 12A cutoff in Noskov & Lim
+
+
+OPEN WRITe FILE UNIT 20 NAME DIMB1.bas
+
+ VIBRan ELEC ATOM FSWITCH CDIE -
+          VDW VATOM VSWITCHED -
+          CUTNB 12 CTOFNB 11 CTONNB 10 WMIN 1.5 EPS 1.0 -
+          NMODes 4095 
+    DIMB  CTF1  50  ITER 0 PARDIM 1365 TOLE 0.05 IUNMode 20 BIG
+ END
+ 
+stop

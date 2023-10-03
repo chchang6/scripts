@@ -1,0 +1,18 @@
+# Script to concatenate PDB files made during ferredoxin position screen.
+
+# Set angle increment. This should be an even divisor of 360.
+set incr 1
+
+# Rotate in 1 degree incrs around x, y, z axes, dumping structure
+# at each set of values
+
+for {set z -5} {$z < 6} {incr z $incr} {
+   for {set y -5} {$y < 6} {incr y $incr} {
+      for {set x -5} {$x < 6} {incr x $incr} {
+         exec cat ./${x}_${y}_${z}.pdb >> movie.pdb
+         }
+      unset x
+      }
+   unset y
+   }
+unset z temp incr

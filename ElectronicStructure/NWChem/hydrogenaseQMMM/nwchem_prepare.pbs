@@ -1,0 +1,29 @@
+#! /bin/bash --login
+#PBS -N nwchem_prepare
+#PBS -q Std
+#PBS -l nodes=4:ppn=2
+#PBS -l walltime=48:00:00
+#PBS -m abe
+#PBS -M 
+#PBS -e nwchem_prepare.pbs.err
+#PBS -o nwchem_prepare.pbs.out
+
+# Set up base NWChem environment variables
+module load nwchem/5.0
+EXEC=`which nwchem`
+
+# Assume you have a dedicated directory for your job, containing your
+# input file with name ending in .nw
+# Modify to add other necessary input files (structures, etc.)
+# Copy input files to scratch directory and go there.
+cd $PBS_O_WORKDIR
+cp nwchem_prepare.nw built.pdb $PBS_TMPDIR
+cd $PBS_TMPDIR
+
+# Execute a serial job.
+nwchem nwchem_prepare.nw >& nwchem_prepare.out
+
+# Copy any auxiliary files (checkpoints, etc.) you wish to keep back.
+cp nwchem_prepare.out $PBS_O_WORKDIR/.
+
+exit

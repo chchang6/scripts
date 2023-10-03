@@ -1,0 +1,97 @@
+start dplot
+memory total 1600 mb global 1000 mb
+ECHO
+TITLE "QM/MM single point of oooooO CpI with quantum HYDE"
+print medium rtdbvalues
+
+basis "ao basis" spherical
+  Fe library 6-31g*
+   S library 6-31+g*
+   O library 6-31+g*
+   N library 6-31+g*
+   C library 6-31g*
+   H library 6-31g**
+end
+
+basis "cd basis" spherical
+   * library "Ahlrichs Coulomb Fitting"
+end
+
+charge 2.0
+
+dft
+ODFT; MULT 1; XC xpbe96 cpbe96
+   iterations 400;
+   convergence damp 70 ncydp 50 lshift 0.5 ncysh 400
+   vectors input QMMM_41b342a3_in.movecs output QMMM_41b342a3_out.movecs
+end
+
+geometry noautoz
+N   14.597   4.986   -13.766
+H   15.283   5.234   -14.448
+C   13.219   5.280   -14.149
+H   12.771   5.699   -13.256
+C   13.208   6.324   -15.269
+H   13.838   7.194   -14.980
+H   12.167   6.711   -15.349
+S   13.634   6.001   -16.936
+C   12.385   4.074   -14.563
+O   11.158   4.157   -14.611
+N   15.870   8.496   -18.047
+H   15.243   7.784   -17.735
+C   16.975   8.776   -17.140
+H   16.964   9.852   -17.011
+C   16.755   8.058   -15.808
+H   15.720   8.243   -15.446
+H   17.431   8.533   -15.062
+S   17.078   6.285   -15.711
+C   18.347   8.387   -17.672
+O   19.330   9.048   -17.346
+N   20.532   3.247   -17.088
+H   19.684   3.702   -17.355
+C   20.704   1.910   -17.634
+H   21.224   1.359   -16.859
+C   19.331   1.328   -17.911
+H   18.740   1.291   -16.969
+H   19.478   0.269   -18.223
+S   18.539   2.233   -19.191
+C   21.551   1.838   -18.904
+O   21.549   0.818   -19.592
+N   17.222   -0.855   -20.491
+H   17.546   0.052   -20.234
+C   15.884   -1.185   -20.010
+H   16.010   -2.142   -19.517
+C   15.416   -0.131   -19.023
+H   16.141   -0.052   -18.183
+H   14.465   -0.498   -18.575
+S   15.097   1.461   -19.677
+C   14.805   -1.349   -21.071
+O   13.752   -1.922   -20.786
+Fe   16.475   2.901   -18.571
+Fe   15.706   5.020   -17.076
+S   16.066   5.011   -19.327
+S   16.208   2.961   -16.291
+H_L   14.776   4.589   -12.922
+H_L   12.837   3.257   -14.730
+H_L   15.767   8.963   -18.867
+H_L   18.390   7.636   -18.258
+H_L   21.167   3.671   -16.519
+H_L   22.073   2.589   -19.145
+H_L   17.728   -1.472   -21.006
+H_L   14.973   -1.027   -21.946
+end
+
+dplot
+   gaussian
+   title "HYDE QMMM ferric 41 42, beta 41, alpha 42"
+   limitxyz
+      -6.0 6.0 50
+      -7.0 8.0 50
+      -5.0 5.0 50
+   spin spindens
+   output QMMM_41b342a3.cube
+   vectors QMMM_41b342a3.movecs
+end
+
+task dplot
+

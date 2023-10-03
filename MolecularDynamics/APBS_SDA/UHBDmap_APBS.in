@@ -1,0 +1,29 @@
+read
+    mol pqr HydA2.pqr
+end
+elec
+    mg-manual
+    dime 129 161 129
+    grid 0.567 0.567 0.567
+    gcent mol 1
+    mol 1
+    ion +1 0.10 1.364
+    ion -1 0.10 2.270
+    npbe
+    bcfl sdh
+    pdie 4.0
+    sdie 78.54
+    srfm smol
+    chgm spl2
+    srad 1.4
+    swin 0.3
+    temp 298.15
+    gamma 0.105
+    calcenergy total
+    calcforce no
+    write pot uhbd ESP
+end
+
+print energy 1 end
+
+quit

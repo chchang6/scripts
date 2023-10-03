@@ -1,0 +1,68 @@
+source ./namdinclude.tcl
+
+#######################################################
+#     Change these parameters between simulations     #
+#######################################################
+
+set inputname	./minimize_in
+set outputname  ./minimize_out
+
+margin 5
+
+#######################################################
+#######################################################
+
+# set checkpointFreq 1000 ;# every 2ps
+
+# INPUT FILES
+
+paraTypeCharmm	  on
+parameters        ./CHARMM_22prot_27lip.par
+parameters        ./clusters_new.par 
+structure         ./
+coordinates       ./$inputname.pdb
+minimization on
+
+# PERIODIC BOUNDARY CONDITIONS
+# Set periodic system size
+
+cellBasisVector1       50.098    0.      0.
+cellBasisVector2        0.      56.404   0.
+cellBasisVector3        0.       0.     60.634
+cellOrigin             -0.040   -0.126   0.022   ;# should center coords in PDB...
+
+wrapAll           on
+wrapWater         on
+
+# FIXED ATOMS
+fixedAtoms	    off
+
+# FORCE-FIELD PARAMS
+exclude                 scaled1-4
+1-4scaling              1.0
+cutoff                  12
+switching               yes
+switchdist              10
+pairlistdist            14
+
+# INTEGRATOR PARAMS
+rigidBonds              none
+timestep                1.0
+nonbondedFreq           1
+fullElectFrequency      2  
+stepspercycle           10
+
+#PME ELECTROSTATICS
+PME                     yes
+PMEGridSizeX              
+PMEGridSizeY              
+PMEGridSizeZ              
+
+# OUTPUT
+restartname     $outputname.restart
+outputName      $outputname
+outputEnergies  100
+
+# RUN SCRIPT
+
+minimize 10000

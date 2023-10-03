@@ -1,0 +1,14 @@
+#!/bin/bash --login
+
+#PBS -N minwaterbox
+#PBS -q Default
+#PBS -m abe
+#PBS -M user.name@domain.name
+#PBS -e ./vmd.err.pbs
+#PBS -o ./vmd.out.pbs
+
+module load vmd
+
+cd $PBS_O_WORKDIR
+
+vmd -dispdev text -eofexit < minwaterbox.tcl >& minwaterbox.log

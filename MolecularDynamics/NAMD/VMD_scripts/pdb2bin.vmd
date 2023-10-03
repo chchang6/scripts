@@ -1,0 +1,2 @@
+mol load psf Ddesulf_RRRR.psf pdb dyn_200ps_in.pdb
+[atomselect top all] writenamdbin dyn_200ps_in.coor

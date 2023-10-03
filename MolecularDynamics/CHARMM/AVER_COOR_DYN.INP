@@ -1,0 +1,42 @@
+! Input deck to create average structure over a dynamics trajectory.
+* CHC, 12/1/06
+*
+BOMlev -2
+
+! read in topologies
+open unit 11 read card name ~/CHARMM/CHARMM_22PROT+HYDFERR.RTF
+read rtf card unit 11
+close unit 11
+
+! read in parameters
+open unit 12 read card name ~/CHARMM/CHARMM_22PROT+HYDFERR.PRM
+read para card unit 12
+close unit 12
+
+! Load in PSF file data, all atoms
+OPEN UNIT 17 NAME "crferrhsd_charmm.psf" READ FORM
+READ PSF CARD UNIT 17
+CLOSE UNIT 17
+
+! Open all-atom NAMD trajectory to read, and file to write CHARMM
+! trajectory with hydrogens and transrot modes removed
+OPEN UNIT 18 NAME quasi_1-30000.dcd READ UNFORM
+COOR DYNA SELE ALL END FIRSt 18 NUNIts 1 BEGIN 0 SKIP 1 STOP 29999 -
+   NOPR ORIENT SELE (type N .or. type CA .or. type C .or. type O) END
+CLOSE UNIT 18
+
+OPEN WRIT UNIT 52 FORM NAME aver_30000.crd
+WRITE COOR CARD UNIT 52
+* Average structure for RBQH dynamics trajectory.
+* Reference = backbone only, no mass weighting.
+*
+CLOSE UNIT 52
+
+OPEN WRIT UNIT 53 FORM NAME aver_30000.pdb
+WRITE COOR PDB UNIT 53
+* Average structure for RBQH dynamics trajectory.
+* Reference = backbone only, no mass weighting.
+*
+CLOSE UNIT 53
+
+stop

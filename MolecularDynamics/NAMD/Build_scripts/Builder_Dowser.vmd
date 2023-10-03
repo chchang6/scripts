@@ -1,0 +1,106 @@
+package require psfgen
+
+# STEP 1: Build Protein
+
+# Script to split 1HFE into nine PDB files: one for each unique chain,
+# one for H-cluster (including coupled [4Fe-4S]), and one for each [4Fe-4S] cluster.
+
+# Load the PDB file
+mol load pdb 16HSD_GBmin_dowsed.pdb
+
+# Set subsets
+set chainH [atomselect top "resid 98 to 533"]
+set clusterH [atomselect top "resid 534 535"]
+set chainF [atomselect top "resid 1 to 96"]
+set clusterF [atomselect top "resid 97"]
+set Dowserwater [atomselect top "resname HOH"]
+
+# Write these atoms to separate pdb files
+$chainH writepdb built/chainH.pdb
+$chainF writepdb built/chainF.pdb
+$clusterH writepdb built/clusterH.pdb
+$clusterF writepdb built/clusterF.pdb
+$Dowserwater writepdb built/water.pdb
+ 
+# Use the specified CHARMM27 topology file.
+topology ../common/CHARMM_22prot_27lip.top
+topology ../common/Crclusters.top
+
+# Alias standard residues
+pdbalias residue HIS HSD
+pdbalias atom ILE CD1 CD
+pdbalias residue HOH TIP3
+pdbalias atom HOH OW OH2
+
+# Build nine segments, one for each chain or cluster
+# Hydrogenase polypeptide
+segment HYDR {
+  first NONE
+  last NONE
+  pdb built/chainH.pdb
+}
+
+# H-cluster
+segment HYDH {
+  first NONE
+  last NONE
+  pdb built/clusterH.pdb
+}
+
+# Ferredoxin polypeptide
+segment FERR {
+  first NONE
+  last NONE
+  pdb built/chainF.pdb
+}
+
+# ferredoxin cluster 1
+segment FRC1 {
+  first NONE
+  last NONE
+  pdb built/clusterF.pdb
+}
+
+# Dowser water
+segment DOWS {
+  first NONE
+  last NONE
+  pdb built/water.pdb
+}
+
+# Patch to set up cluster ligation and termini
+patch FE1C HYDH:535 HYDR:208
+patch FE2C HYDH:535 HYDR:263
+patch FE3C HYDH:535 HYDR:463
+patch FE4C HYDH:535 HYDR:467
+patch FEX  HYDH:534 HYDR:467
+patch FE1C FRC1:97 FERR:39
+patch FE1C FRC1:97 FERR:44
+patch FE2C FRC1:97 FERR:47
+patch FE2C FRC1:97 FERR:77
+patch NTER HYDR:98
+patch NTER FERR:1
+patch CTER HYDR:533
+patch CTER FERR:96
+
+# Load the coordinates for each segment.
+coordpdb built/chainH.pdb HYDR
+coordpdb built/clusterH.pdb HYDH
+coordpdb built/chainF.pdb FERR
+coordpdb built/clusterF.pdb FRC1
+coordpdb built/water.pdb DOWS
+
+# Guess the positions of missing atoms.  As long as all the heavy
+# atoms are present, psfgen usually does a very good job of this.
+# However, the clusters will probably have very poor protonation.
+# Edit these manually.
+
+# Generate angles for clusters
+regenerate angles
+
+guesscoord
+
+# Write output files
+writepsf built/test.psf
+writepdb built/test.pdb
+

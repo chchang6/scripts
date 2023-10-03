@@ -1,0 +1,15 @@
+#! /bin/bash --login
+
+##! /bin/csh
+#PBS -N mkdsgrd_HydA2
+#PBS -q Std
+#PBS -l nodes=1:ppn=1
+#PBS -M user.name@domain.name
+#PBS -o pbs.dsgrd.out
+#PBS -e pbs.dsgrd.err
+
+module load sda
+
+cd $PBS_O_WORKDIR
+
+mk_ds_grd < HydA2HSP_dsgrd.in > HydA2HSP_ds.log

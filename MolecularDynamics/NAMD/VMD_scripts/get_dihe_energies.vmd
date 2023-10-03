@@ -1,0 +1,26 @@
+# VMD script to calculate individual dihedral energies.
+# Calls plugin namdenergy, which in turn calls NAMD.
+# Inputs are (1) PDB and PSF files describing system (built.pdb, built.psf),
+# (2) test file with PSF dihedral numbers, reformatted with PSF8to1.pl
+# to one number per line (dihelist.txt), and (3) parameter file. CHC 12/07.
+package require namdenergy
+mol new built.pdb
+set dihelistfile [open dihelist.txt r]
+set dihelist [read $dihelistfile]
+close $dihelistfile
+unset dihelistfile
+set limit [expr [llength $dihelist] - 3]
+set i 0
+while {$i <= $limit} {
+   set a [expr [lindex $dihelist $i] - 1]
+   set b [expr [lindex $dihelist [expr $i + 1]] - 1]
+   set c [expr [lindex $dihelist [expr $i + 2]] - 1]
+   set d [expr [lindex $dihelist [expr $i + 3]] - 1]
+   namdenergy -tempname namden -dihe -sel [atomselect top "index $a $b $c $d"] -psf built.psf -ofile test_$i.out -par CHARMM_combined.par
+   exec echo $a $b $c $d >> test_all.out
+   exec cat test_$i.out >> test_all.out
+   exec rm test_$i.out
+   incr i 4
+}
+
+

@@ -1,0 +1,8 @@
+#!/usr/bin/tclsh
+foreach filename [glob *.dcd] {
+	set id [mol load dcd $filename]
+	set splitted [split $filename .]
+	set renamed [join $splitted "-32bit."]
+	animate write dcd $renamed
+	mol delete $id
+}

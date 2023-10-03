@@ -1,0 +1,39 @@
+! Input deck to pull out structure from RBQH DCD file(s).
+* CHC, 4/14/06
+*
+BOMlev -2
+
+! read in topologies
+open unit 11 read card name ../CHARMM_22PROT+HYDFERR.RTF
+read rtf card unit 11
+close unit 11
+
+! read in parameters
+open unit 12 read card name ../CHARMM_22PROT+HYDFERR.PRM
+read para card unit 12
+close unit 12
+
+! Load in PSF file data, all atoms
+OPEN UNIT 17 NAME crferrhsd_dowsed_charmm.psf READ FORM
+READ PSF CARD UNIT 17
+CLOSE UNIT 17
+
+! Open all-atom DCD file to read, and file to write CHARMM
+! timeseries
+OPEN UNIT 18 NAME quasi_1-24000.dcd READ UNFORM
+COOR DYNA SELE ALL END FIRST 18 NUNITS 1 BEGIN 0 STOP 0
+! Open output files
+OPEN UNIT 62 NAME GBMIN_IN.CRD WRITE FORM
+COOR WRITE SELE ALL END CARD UNIT 62
+* First frame of RBQH DCD file; close to equilibrated structure for
+* CrferrHSD, including Dowser waters. CHC 04/14/06.
+*
+CLOSE UNIT 62
+OPEN UNIT 63 NAME GBMIN_IN.PDB WRITE FORM
+COOR WRITE SELE ALL END PDB UNIT 63
+* First frame of RBQH DCD file; close to equilibrated structure for
+* CrferrHSD, including Dowser waters. CHC 04/14/06.
+*
+CLOSE UNIT 63
+
+stop

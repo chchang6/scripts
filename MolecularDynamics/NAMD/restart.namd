@@ -1,0 +1,126 @@
+source ../../scripts/namdinclude.tcl
+
+#######################################################
+#     Change these parameters between simulations     #
+#######################################################
+
+set inputname	1_is010_alleqNPT_in
+set outputname  1_is010_alleqNPT_out
+set runtype     cont
+
+#WES 031210
+margin 5
+
+#######################################################
+#######################################################
+
+set checkpointFreq 1000 ;# every 1ps
+
+# INPUT FILES
+
+paraTypeCharmm	  on
+#parameters        parameters/par_all27_prot_lipid.inp
+#WES 031209 par_all27_prot_lipid_hyde.inp is probably the same as above
+#KK 031214  common dir has been moved ../
+parameters        ../../common/CHARMM_22prot_27lip.par
+parameters        ../../common/Crclusters.par 
+parameters        ../../common/CHARMM_FAD.par 
+structure         ../FNRferr.psf
+
+# if runtype is "first", start at timestep 0, otherwise read step from prev sim
+if {"$runtype" == "first"} {
+  set startingtime 0
+  coordinates     ./$inputname.pdb
+  bincoordinates  ./$inputname.coor
+  temperature     303
+} elseif {"$runtype" == "cont"} {
+  set startingtime [gettimestep]
+  coordinates     ./$inputname.restart.pdb
+  bincoordinates  ./$inputname.restart.coor
+  binvelocities      ./$inputname.restart.vel
+  extendedSystem    ./$inputname.restart.xsc
+#  temperature     303
+} 
+
+
+# PERIODIC BOUNDARY CONDITIONS
+# EITHER set periodic system directly (the first time ever),
+# OR read in box sizes from another sim
+
+
+#cellBasisVector1	85.128   0.      0.
+#cellBasisVector2	0.     112.279   0.
+#cellBasisVector3	0.       0.     82.269
+#cellOrigin              0.782    0.260   0.650   ;# should center coords in PDB...
+
+#extendedSystem    ./$inputname.xsc
+wrapAll           on
+wrapWater         on
+
+# FIXED ATOMS
+# create a fixed-constraint files in which Beta column is 0 or 1
+fixedAtoms	    off
+fixedAtomsFile	./$inputname.pdb
+fixedAtomsCol	  B
+
+# FORCE-FIELD PARAMS
+exclude                 scaled1-4
+1-4scaling              1.0
+cutoff                  12
+switching               yes
+switchdist              10
+pairlistdist            14
+
+# INTEGRATOR PARAMS
+rigidBonds              all
+useSettle               on
+timestep                1.0
+nonbondedFreq           1
+fullElectFrequency      2  
+stepspercycle           10
+
+#PME ELECTROSTATICS
+PME                     yes
+PMEGridSizeX            96
+PMEGridSizeY           120
+PMEGridSizeZ            96
+
+
+# TEMPERATURE CONTROL
+langevin                yes    ;# do langevin dynamics
+langevinDamping         20     ;# initial equilibration
+#langevinDamping        5     ;# damping coefficient (gamma) of 5/ps
+langevinTemp            303.00 ;# bath temperature
+langevinHydrogen        no     ;# don't couple langevin bath to hydrogens
+
+# PRESSURE CONTROL
+useGroupPressure        yes
+useFlexibleCell         no
+langevinPiston          yes
+langevinPistonTarget    1.01325 #  in bar -> 1 atm
+langevinPistonPeriod    200     ;# initial equilibration
+langevinPistonDecay     100
+#langevinPistonPeriod    100   ;# normally
+#langevinPistonDecay     50
+langevinPistonTemp      303
+
+
+# OUTPUT
+firsttimestep   $startingtime
+restartname     $outputname.restart
+outputName      $outputname
+dcdfile         $outputname.dcd
+xstFile         $outputname.xst
+
+xstFreq         $checkpointFreq
+restartfreq     $checkpointFreq
+outputEnergies  $checkpointFreq
+outputPressure  $checkpointFreq
+dcdfreq         $checkpointFreq
+
+
+# RUN SCRIPT
+
+#Wes 031210 fix protein and let cook for 50 ps
+#reinitvels  303
+run 50000 ;# 50 ps

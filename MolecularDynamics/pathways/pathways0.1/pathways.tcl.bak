@@ -1,0 +1,43 @@
+package provide pathways 0.1
+
+namespace eval pathways {
+   variable w			# Main window
+}
+
+proc pathways::init {} {
+   variable w
+   set w [toplevel .pathways -width 50 -height 100]
+   wm title $w "VMD Pathways Analyzer"
+   wm resizable $w 0 0
+   scale $w.redscale -label Red -from 0 -to 255 -length 7c -orient horizontal -command [namespace current]::newColor
+   scale $w.greenscale -label Green -from 0 -to 255 -length 7c -orient horizontal -command [namespace current]::newColor
+   scale $w.bluescale -label Blue -from 0 -to 255 -length 7c -orient horizontal -command [namespace current]::newColor
+   frame $w.entryframe
+   entry $w.entryframe.redentry -width 7
+   entry $w.entryframe.greenentry -width 7
+   entry $w.entryframe.blueentry -width 7
+   button $w.entryframe.setbutton -text set -command [namespace current]::setColor
+   canvas $w.colorwin -width 7c -height 1.5c
+   pack $w.redscale $w.greenscale $w.bluescale -side top
+   pack $w.entryframe
+   pack $w.colorwin -side bottom
+   pack $w.entryframe.redentry $w.entryframe.greenentry $w.entryframe.blueentry $w.entryframe.setbutton -side left
+}
+
+proc pathways::newColor value {
+   variable w
+   set color [format #%02x%02x%02x [$w.redscale get] [$w.greenscale get] [$w.bluescale get]]
+   $w.colorwin config -background $color
+}
+
+proc pathways::setColor {} {
+   variable w
+   $w.redscale set [$w.entryframe.redentry get]
+   $w.greenscale set [$w.entryframe.greenentry get]
+   $w.bluescale set [$w.entryframe.blueentry get]
+}
+proc pathways_tk {} {
+    ::pathways::init
+    return $pathways::w
+}
+

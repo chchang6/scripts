@@ -1,0 +1,93 @@
+# source ../scripts/namdinclude.tcl
+source ./namdinclude.tcl
+
+#######################################################
+#     Change these parameters between simulations     #
+#######################################################
+
+set inputname	./dyn_200ps_in
+set outputname  ./dyn_200ps_out
+set runtype     first
+
+#WES 031210
+margin 5
+
+#######################################################
+#######################################################
+
+set checkpointFreq 1000 ;# every 1 ps
+
+# INPUT FILES
+
+paraTypeCharmm	  on
+#parameters        ../common/CHARMM_22prot_27lip.par
+#parameters        ../common/clusters_new.par 
+parameters        ./CHARMM_22prot_27lip.par
+parameters        ./clusters_new.par 
+structure         ./.psf
+coordinates       ./$inputname.pdb
+bincoordinates    ./$inputname.coor
+binvelocities     ./$inputname.vel
+
+# if runtype is "first", start at timestep 0, otherwise read step from prev sim
+if {"$runtype" == "first"} {
+  set startingtime 0
+} elseif {"$runtype" == "cont"} {
+  set startingtime [gettimestep]
+} 
+
+
+# PERIODIC BOUNDARY CONDITIONS
+
+extendedSystem    $inputname.xsc
+wrapAll           on
+wrapWater         on
+
+# FIXED ATOMS
+fixedAtoms	    off
+
+# FORCE-FIELD PARAMS
+exclude                 scaled1-4
+1-4scaling              1.0
+cutoff                  12
+switching               yes
+switchdist              10
+pairlistdist            14
+
+# INTEGRATOR PARAMS
+rigidBonds              water
+useSettle               on
+timestep                1.0
+nonbondedFreq           1
+fullElectFrequency      2  
+stepspercycle           10
+
+#PME ELECTROSTATICS
+PME                     yes
+PMEGridSizeX            54
+PMEGridSizeY            48
+PMEGridSizeZ            60
+
+# TEMPERATURE CONTROL
+langevin                on     ;# do langevin dynamics
+langevinDamping          5     ;# damping coefficient (gamma) of 5/ps
+langevinTemp            303.00 ;# bath temperature
+langevinHydrogen        off    ;# don't couple langevin bath to hydrogens
+
+# OUTPUT
+firsttimestep   $startingtime
+restartname     $outputname.restart
+outputName      $outputname
+dcdfile         $outputname.dcd
+xstFile         $outputname.xst
+
+xstFreq         $checkpointFreq
+restartfreq     $checkpointFreq
+outputEnergies  $checkpointFreq
+outputPressure  $checkpointFreq
+dcdfreq         200 # This samples at 5 X 10^12 Hz, corresponding to 0.8 kT
+                    # at 300 K.
+
+# RUN SCRIPT
+
+run 200000 ;# 200 ps

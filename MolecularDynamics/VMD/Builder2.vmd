@@ -1,0 +1,130 @@
+package require psfgen
+package require autoionize
+
+# STEP 1: Build Protein
+
+# Script to split 1HFE into five pdb files: one for each unique chain (large and small subunits of heterodimer),
+# one for H-cluster (including coupled [4Fe-4S]), and one for each auxiliary [4Fe-4S] cluster.
+
+# Load the PDB file
+mol load pdb start+CO.ent
+
+# Select crystallographic water within 5 Angstroms of protein
+set water [atomselect top "water exwithin 5 of protein"]
+
+# Select chains
+set chainS [atomselect top "chain S and not hetero"]
+set chainL [atomselect top "chain L and (resid 2 to 398)"]
+set clusterH [atomselect top "chain L and resid 426"]
+set clusterA [atomselect top "resid 422 and not water"]
+set clusterB [atomselect top "resid 423 and not water"]
+set clusterC [atomselect top "resid 424 and not water"]
+
+# Write these atoms to separate pdb files
+$chainS writepdb built2/chainS.pdb
+$chainL writepdb built2/chainL.pdb
+$water writepdb built2/xtalwater.pdb
+$clusterH writepdb built2/clusterH.pdb
+$clusterA writepdb built2/clusterA.pdb
+$clusterB writepdb built2/clusterB.pdb
+$clusterC writepdb built2/clusterC.pdb
+
+ 
+# Use the specified CHARMM27 topology file.
+topology CHARMM_22prot_27lip.top
+topology Ddclusters2.top
+
+# Alias standard residues
+pdbalias residue HIS HSD
+pdbalias atom ILE CD1 CD
+
+# Build five segments, one for each chain or cluster
+# Small polypeptide
+segment HYDS {
+  first NONE
+  last NONE
+  pdb built2/chainS.pdb
+}
+
+# Large polypeptide
+segment HYDL {
+  first NONE
+  last NONE
+  pdb built2/chainL.pdb
+}
+
+# H-cluster
+segment HYDH {
+  first NONE
+  last NONE
+  pdb built2/clusterH.pdb
+}
+
+# distal cluster
+segment HYDA {
+  first NONE
+  last NONE
+  pdb built2/clusterA.pdb
+}
+
+# medial cluster
+segment HYDB {
+  first NONE
+  last NONE
+  pdb built2/clusterB.pdb
+}
+
+# proximal (bridged) cluster
+segment HYDC {
+  first NONE
+  last NONE
+  pdb built2/clusterC.pdb
+}
+
+# Patch to set up cluster ligation
+patch FE1C HYDA:422 HYDL:41
+patch FE2C HYDA:422 HYDL:38
+patch FE3C HYDA:422 HYDL:35
+patch FE4C HYDA:422 HYDL:76
+patch FE1C HYDB:423 HYDL:45
+patch FE2C HYDB:423 HYDL:66
+patch FE3C HYDB:423 HYDL:69
+patch FE4C HYDB:423 HYDL:72
+patch FE1C HYDC:424 HYDL:179
+patch FE2C HYDC:424 HYDL:382
+patch FE3C HYDC:424 HYDL:378
+patch FE4C HYDC:424 HYDL:382
+patch FEX  HYDH:426 HYDL:234
+
+# Load the coordinates for each segment.
+coordpdb built2/chainS.pdb HYDS
+coordpdb built2/chainL.pdb HYDL
+coordpdb built2/clusterH.pdb HYDH
+coordpdb built2/clusterA.pdb HYDA
+coordpdb built2/clusterB.pdb HYDB
+coordpdb built2/clusterC.pdb HYDC
+
+# Build crystallographic water segment
+pdbalias residue HOH TP3M
+segment SOLV {
+  pdb built2/xtalwater.pdb
+}
+
+# Load the coordinates for water
+pdbalias atom HOH O OH2
+coordpdb built2/xtalwater.pdb SOLV
+
+# Guess the positions of missing atoms.  As long as all the heavy
+# atoms are present, psfgen usually does a very good job of this.
+# However, the clusters will probably have very poor protonation.
+# Edit these manually.
+
+# Generate angles for clusters
+regenerate angles
+
+guesscoord
+
+# Write output files
+writepsf built2/test.psf
+writepdb built2/test.pdb
+

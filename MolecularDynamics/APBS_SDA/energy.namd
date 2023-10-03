@@ -1,0 +1,45 @@
+source ../../NAMD/scripts/namdinclude.tcl
+
+#######################################################
+#     Change these parameters between simulations     #
+#######################################################
+
+set inputname	./final
+set outputname  ./energy_out
+
+margin 5
+
+#######################################################
+#######################################################
+
+# set checkpointFreq 1000 ;# every 2ps
+
+# INPUT FILES
+
+paraTypeCharmm	  on
+parameters        ../../NAMD/common/CHARMM_22prot_27lip.par
+parameters        ../../NAMD/common/Crclusters2.par 
+structure         ./CrferrHSD_NAMD.psf
+coordinates       ./$inputname.pdb
+bincoordinates    ./$inputname.coor
+minimization on
+
+# FORCE-FIELD PARAMS
+exclude                 scaled1-4
+1-4scaling              1.0
+cutoff                  1000.0
+switchdist              999.9
+
+# INTEGRATOR PARAMS
+rigidBonds              none
+nonbondedFreq           1
+FullDirect              yes
+fullElectFrequency      1  
+stepspercycle           1
+
+# OUTPUT
+outputName      $outputname
+
+# RUN SCRIPT
+
+minimize 1

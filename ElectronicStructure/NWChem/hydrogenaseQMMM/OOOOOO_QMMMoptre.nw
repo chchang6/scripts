@@ -1,0 +1,47 @@
+start CpI_OOOOOO
+ECHO
+TITLE "QM/MM optimization of [H3+F'2+] H-cluster in CpI model"
+memory total 800 mb global 500 mb
+print medium
+
+md
+system CpI_OOOOOO;
+noshake solute;
+msa 10000;
+end
+
+qmmm
+   eref 0.0;
+   bqzone 9.0;
+   mm_charges exclude linkbond;
+   link_atoms hydrogen;
+   link_ecp auto;
+   region qmlink mm_solute all;
+   method lbfgs lbfgs lbfgs;
+   ncycles 10;
+end
+
+charge -3.0
+
+basis "ao basis" spherical
+  Fe library 6-31g*
+   S library 6-31+g*
+   O library 6-31+g*
+   N library 6-31+g*
+   C library 6-31g*
+   H library 6-31g**
+end
+
+basis "cd basis" spherical
+   * library "Ahlrichs Coulomb Fitting"
+end
+
+dft
+ODFT; MULT 20; XC xpbe96 cpbe96;
+   iterations 1000;
+   direct;
+   vectors input input.movecs output opt_temp.movecs;
+end
+
+task qmmm dft optimize
+

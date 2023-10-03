@@ -1,0 +1,130 @@
+#!/usr/bin/env python
+# Script to create XYZ movie file from concatenated OUTCAR files.
+# If there are multiple restarts, create single OUTCAR by e.g.,
+#   cat OUTCAR.1 OUTCAR.2 ... > OUTCAR
+# Example usage "./catXDAT.py movie.xyz"
+# 040513: CHC Added code to check for atom jump across boundaries and fix them.
+
+import sys, re
+import numpy
+
+def getFirstGeom():
+   Geom = []
+   while True:
+      x = file.readline()
+      if re.match('\n', x): break
+      else:
+         g = x.split()
+         Geom.append([float(g[0]), float(g[1]), float(g[2])])
+   return Geom
+
+def getGeom():
+   Geom = []
+   while True:
+      x = file.readline()
+      if re.search('-----', x): break
+      else:
+         g = x.split()
+         Geom.append([float(g[0]), float(g[1]), float(g[2])])
+   return Geom
+         
+RE1 = re.compile('free  energy')
+RE2 = re.compile(' POSITION')
+RE3 = re.compile('   ions per type =')
+RE4 = re.compile(' POTCAR:')
+RE5 = re.compile(' position of ions in cartesian coordinates  (Angst)')
+RE6 = re.compile('      direct lattice vectors')
+
+gotTransformation = False
+gotElements = False
+gotNumElements = False
+gotFirstGeom = False
+gotLattice = False
+
+Elements = []
+NumElements = []
+coors = []  # List of lists of lists [x,y,z]; one list of coordinates per atom, one list of atoms per frame
+energies = []
+# Get coordinates
+file = open('OUTCAR', 'r')
+while True:
+   x = file.readline()
+
+   if x == '': break
+
+   if RE6.match(x) and gotTransformation==False:
+      XTAL2CART = numpy.zeros((3,3), numpy.float)
+      for i in xrange(3):
+         t = file.readline().split()
+         t2 = [float(j) for j in t[0:3]]
+         XTAL2CART[i,:] = numpy.asarray(t2)
+      XTAL2CART = numpy.asmatrix(XTAL2CART)
+      CART2XTAL = XTAL2CART.I
+      gotTransformation = True
+
+   if not gotElements and RE4.match(x):
+         temp = x.split(':')
+         temp = temp[1].split()
+         if temp[1] not in Elements: Elements.append(temp[1])
+         else: gotElements = True
+
+   if not gotNumElements and RE3.match(x):
+         numAtoms = 0
+         temp = x.split('=')
+         temp = temp[1].split()
+         for i in temp:
+            NumElements.append(int(i))
+            numAtoms += int(i)
+         gotNumElements = True
+
+# If input right, get geometry. Either the first geometry block, or a subsequent one.
+#    coors is nested list, coors[frame][atom][x=0|y=1|z=2]
+   if not gotFirstGeom and RE5.match(x):  # First geometry
+         coors.append(getFirstGeom())
+         gotFirstGeom = True
+   else: # Subsequent geometries
+      if RE2.match(x):
+         file.readline() # Skip first border of dashes
+         coors.append(getGeom())
+# If input right, get corresponding energy.
+   if RE1.search(x):
+         temp = x.split('=')
+         energies.append(temp[1])
+
+file.close()
+
+# Run through coors. If a fractional coordinate changed by more than 0.5,
+#   it probably jumped across the cell; modify to allow movement past cell boundary.
+for i in range(1, len(coors)):
+   for j in xrange(numAtoms):
+      frac_frame = CART2XTAL*numpy.asmatrix(coors[i][j]).T
+      frac_lastframe = CART2XTAL*numpy.asmatrix(coors[i-1][j]).T
+      for k in xrange(3):  # a, b, c
+         if abs(frac_frame[k] - frac_lastframe[k]) > 0.5:  # Jumped more than half a cell
+            # If atom went through 1.0 boundary, is now e.g. 0.01, should be 1 + 0.01
+            if frac_frame[k] < 0.1:
+               frac_frame[k] += 1.
+            # If atom went through 0.0 boundary, is now 0.99, should be -0.01 = 0.0 - (1 - 0.99) = 0.99 - 1
+            else:
+               frac_frame[k] -= 1.
+      # Convert back to Cartesians and put back into coors
+      coors[i][j] = list(numpy.asarray((XTAL2CART * frac_frame).T)[0])
+      #coors[i][j] = [k for k in ((XTAL2CART * frac_frame).T)[0]]
+      
+# Create dumb list of atom types for later
+atomtypes = []
+for i in xrange(len(NumElements)):
+   for j in xrange(NumElements[i]):
+      atomtypes.append(Elements[i])
+outfile = open(sys.argv[1], 'w')
+strnumatoms = str(numAtoms) + '\n'
+counter = 0
+for i in xrange(len(coors)):
+   outfile.write(strnumatoms)
+   outfile.write('Frame ' + str(counter+1) + ' Energy' + energies[counter])
+   for j in xrange(numAtoms):
+      x = coors[i][j][0]
+      y = coors[i][j][1]
+      outfile.write('%-5s%10.6f%10.6f%10.6f\n' % (atomtypes[j], x, y, coors[i][j][2]))
+   counter += 1
+outfile.close()

@@ -1,0 +1,10 @@
+mol new alleq_out.coor
+mol addfile Ddesulf_ROOO.psf
+set temp [atomselect top "within 5 of resname HCR"]
+$temp writepsf temp.psf
+set outfile [open indexlist w]
+foreach ind [$temp list] {
+   puts $outfile $ind
+}
+close $outfile
+exec catdcd -o temp.dcd -otype dcd -i indexlist -first 800 -dcd alleq_out.dcd

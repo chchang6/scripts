@@ -1,0 +1,40 @@
+# Script to output approximate solvent box sizes for a coarse rotation
+# grid, for purposes of minimizing. UNIX sort results.
+
+# Set angle increment. This should be an even divisor of 360.
+set angle_incr 5
+
+# Load the structure and select all atoms
+mol load psf built.psf pdb built.pdb
+set temp [atomselect top all]
+
+# Center molecule or complex
+set center [measure center $temp]
+$temp moveby [vecinvert $center]
+unset center
+
+# Rotate in 5 degree incrs around x, y, z axes, calculating minmax
+# at each geometry
+
+for {set phi1 0} {$phi1 < 181} {incr phi1 $angle_incr} {
+   set phi1_matrix [transaxis z $phi1]
+   for {set theta 0} {$theta < 181} {incr theta $angle_incr} {
+      set theta_matrix [transaxis x $theta]
+      for {set phi2 0} {$phi2 < 91} {incr phi2 $angle_incr} {
+         set phi2_matrix [transaxis z $phi2]
+         set rotation [transmult $phi2_matrix $theta_matrix $phi1_matrix]
+         set backrotation [transtranspose $rotation]
+         $temp move $rotation
+         set A [measure minmax $temp]
+         set minvec [lindex $A 0]
+         set maxvec [lindex $A 1]
+         set diffvec [vecsub $maxvec $minvec]
+         puts [list $phi1 $theta $phi2 [expr [lindex $diffvec 0] * [lindex $diffvec 1] * [lindex $diffvec 2]]]
+         $temp move $backrotation
+         unset phi2_matrix rotation backrotation A minvec maxvec
+         }
+      unset phi2 theta_matrix
+      }
+   unset theta phi1_matrix
+   }
+unset phi1 temp angle_incr

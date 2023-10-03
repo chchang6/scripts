@@ -1,0 +1,120 @@
+package require psfgen
+
+# STEP 1: Build Protein
+
+# Script to split 1HFE into nine PDB files: one for each unique chain,
+# one for H-cluster (including coupled [4Fe-4S]), and one for each [4Fe-4S] cluster.
+
+# Load the PDB file
+mol load pdb 1UBJmod.pdb
+
+# Set subsets
+set chainS [atomselect top "chain S and resid 1 to 267"]
+set cluster1 [atomselect top "chain S and resid 1002"]
+set cluster2 [atomselect top "chain S and resid 1001"]
+set cluster3 [atomselect top "chain S and resid 1003"]
+set chainL [atomselect top "chain L and resid 19 to 552"]
+set clusterN [atomselect top "chain L and resid 1004 1006"]
+
+# Write these atoms to separate pdb files
+$chainS writepdb built/chainS.pdb
+$cluster1 writepdb built/cluster1.pdb
+$cluster2 writepdb built/cluster2.pdb
+$cluster3 writepdb built/cluster3.pdb
+$chainL writepdb built/chainL.pdb
+$clusterN writepdb built/clusterN.pdb
+ 
+# Use the specified CHARMM27 topology file.
+topology ./common/CHARMM_22prot_27lip.top
+topology ./common/NiFeclusters.top
+
+# Alias standard residues
+pdbalias residue HIS HSD
+pdbalias atom ILE CD1 CD
+
+# Build nine segments, one for each chain or cluster
+# Small chain
+segment CHAS {
+  first NONE
+  last NONE
+  pdb built/chainS.pdb
+}
+
+# Distal [4Fe-4S]
+segment CLU1 {
+  first NONE
+  last NONE
+  pdb built/cluster1.pdb
+}
+
+# Proximal [4Fe-4S]
+segment CLU2 {
+  first NONE
+  last NONE
+  pdb built/cluster2.pdb
+}
+
+# [3Fe-4S]
+segment CLU3 {
+  first NONE
+  last NONE
+  pdb built/cluster3.pdb
+}
+
+# Large chain
+segment CHAL {
+  first NONE
+  last NONE
+  pdb built/chainL.pdb
+}
+
+# NiFe cluster
+segment NIFE {
+  first NONE
+  last NONE
+  pdb built/clusterN.pdb
+}
+
+# Patch to set up cluster ligation and termini
+patch ND-1O CLU1:1002 CHAS:188
+patch F4-2O CLU1:1002 CHAS:222
+patch F4-3O CLU1:1002 CHAS:191
+patch F4-4O CLU1:1002 CHAS:216
+patch F4-1O CLU2:1001 CHAS:17
+patch F4-2O CLU2:1001 CHAS:114
+patch F4-3O CLU2:1001 CHAS:150
+patch F4-4O CLU2:1001 CHAS:20
+patch F4-1O CLU3:1003 CHAS:249
+patch F4-2O CLU3:1003 CHAS:252
+patch F4-3O CLU3:1003 CHAS:231
+patch TEST NIFE:1004 CHAL:84
+patch TEST NIFE:1004 CHAL:549
+patch NI-RC NIFE:1004 CHAL:81
+patch NI-RC NIFE:1004 CHAL:546
+patch NTER CHAS:1
+patch NTER CHAL:19
+patch CTER CHAS:267
+patch CTER CHAL:552
+
+# Load the coordinates for each segment.
+coordpdb built/chainS.pdb CHAS
+coordpdb built/cluster1.pdb CLU1
+coordpdb built/cluster2.pdb CLU2
+coordpdb built/cluster3.pdb CLU3
+coordpdb built/chainL.pdb CHAL
+coordpdb built/clusterN.pdb NIFE
+
+# Guess the positions of missing atoms.  As long as all the heavy
+# atoms are present, psfgen usually does a very good job of this.
+# However, the clusters will probably have very poor protonation.
+# Edit these manually.
+
+# Generate angles for clusters
+regenerate angles
+
+guesscoord
+
+# Write output files
+writepsf built/test.psf
+writepdb built/test.pdb
+

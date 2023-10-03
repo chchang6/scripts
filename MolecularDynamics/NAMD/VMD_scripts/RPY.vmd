@@ -1,0 +1,55 @@
+# Script to calculate pitch, roll, and yaw angles of
+# diphosphine complexes given coordinates of metal,
+# phosphines on ligand 1 (P1 & P2), and phosphines on
+# ligand 2 (P3 & P4). CHC 1/24/07.
+# User-specified stuff here.
+mol new _.xyz
+set metal [atomselect top "index _"]
+set P1 [atomselect top "index _"]
+set P2 [atomselect top "index _"]
+set P3 [atomselect top "index _"]
+set P4 [atomselect top "index _"]
+
+set complex [atomselect top all]
+$complex moveby [vecinvert [measure center $metal]]
+set P1length [veclength [$P1 get {x y z}]]
+set P2length [veclength [$P2 get {x y z}]]
+set P3length [veclength [$P3 get {x y z}]]
+set P4length [veclength [$P4 get {x y z}]]
+# Move M-P1 vector to positive x axis
+$complex move [transvecinv [$P1 get {x y z}]]
+# Move M-P2 vector into xz plane
+set temp [expr {atan2([$P2 get z] / [$P2 get y])}]
+$complex move [transaxis x $temp]
+unset temp
+# Rotate around y until x axis bisects P1-M-P2 angle.
+set P1dotP2 vecdot [$P1 get {x y z}][$P2 get {x y z}]
+set temp [expr {acos($P1dotP2 / ($P1length * $P2length)) / 2}]
+$complex move [transaxis y $temp]
+unset temp
+# Calculate rotation angle around x axis to equate the y values of
+# P3 and P4. This will be the "twist angle".
+set startvalue [expr {abs([$P3 get y] - [$P4 get y])}]
+$complex move [transaxis x 1]
+if {[expr {abs([$P3 get y] - [$P4 get y])}] < $startvalue} {
+   set temp 1 # Trial rotation angle is positive.
+} else {
+   set temp -1 # Trial rotation angle is negative.
+}
+while {[expr {abs([$P3 get y] - [$P4 get y])}] > 0. } {
+   set startvalue [expr {abs([$P3 get y] - [$P4 get y])}]
+   $complex move [transaxis x $temp]
+   if {[expr {abs([$P3 get y] - [$P4 get y])}] > $startvalue} {
+      $complex move [transaxis x -$temp]
+      set temp [expr {$temp / 10}]
+      continue
+   } else {
+      set twist [expr {$twist + $temp}]
+      continue
+   }
+}
+puts "Twist angle is " $twist   
+
+   
+   
+

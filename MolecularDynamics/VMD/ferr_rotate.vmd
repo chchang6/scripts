@@ -1,0 +1,38 @@
+# Script to scan COM rotations of docking partner wrt other protein.
+# Outputs pdb files with names as rotations.
+
+# Set angle increment. This should be an even divisor of 360.
+set angle_incr 1
+
+# Load the structure and select all atoms
+mol load pdb protein+ions.pdb
+set ferr [atomselect top "segname FERR FRC1"]
+set temp [atomselect top all]
+
+# Center molecule or complex
+$temp moveby [vecinvert [measure center $ferr]]
+
+# Rotate in 1 degree incrs around x, y, z axes, dumping structure
+# at each set of values
+
+for {set z -5} {$z < 6} {incr z $angle_incr} {
+   set z_matrix [transaxis z $z]
+   for {set y -5} {$y < 6} {incr y $angle_incr} {
+      set y_matrix [transaxis y $y]
+      for {set x -5} {$x < 6} {incr x $angle_incr} {
+         set x_matrix [transaxis x $x]
+         set rotation [transmult $x_matrix $y_matrix $z_matrix]
+         set x_inverse [transaxis x -$x]
+         set y_inverse [transaxis y -$y]
+         set z_inverse [transaxis z -$z]
+         set backrotation [transmult $z_inverse $y_inverse $x_inverse]
+         $ferr move $rotation
+         $temp writepdb ${x}_${y}_${z}.pdb
+         $ferr move $backrotation
+         unset x_matrix x_inverse rotation backrotation
+         }
+      unset x y_matrix y_inverse
+      }
+   unset y z_matrix z_inverse
+   }
+unset z temp ferr angle_incr

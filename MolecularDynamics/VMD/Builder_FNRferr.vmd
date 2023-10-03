@@ -1,0 +1,98 @@
+package require psfgen
+
+# STEP 1: Build Protein
+
+# Script to build docked FNR-ferredoxin complex from cleaned up PDB file
+# from Swiss PDB-Viewer.
+
+# Load the PDB file
+mol load pdb input.pdb
+
+# Select chains
+set chainFNRA [atomselect top "chain B"]
+set chainFERR [atomselect top "chain C and not resname FS2"]
+set FADA [atomselect top "resname FAD"]
+set NADP [atomselect top "resname NAP"]
+set cluster [atomselect top "resname FS2"]
+
+# Write these atoms to separate pdb files
+$chainFNRA writepdb built/chainFNRA.pdb
+$chainFERR writepdb built/chainFERR.pdb
+$FADA writepdb built/FAD.pdb
+$NADP writepdb built/NADP.pdb
+$cluster writepdb built/cluster.pdb
+
+ 
+# Use the specified CHARMM27 topology file.
+topology ../NAMD/CHARMM_22prot_27lip.top
+topology ../NAMD/CHARMM_cofactors.top
+
+# Alias standard residues
+pdbalias residue HIS HSD
+pdbalias atom ILE CD1 CD
+
+# Build five segments, one for each chain, cofactor, or cluster
+# FNR chain
+segment FNRA {
+  first NONE
+  last NONE
+  pdb built/chainFNRA.pdb
+}
+
+segment FERR {
+  first NONE
+  last NONE
+  pdb built/chainFERR.pdb
+}
+
+# FAD+
+segment FADA {
+  first NONE
+  last NONE
+  auto angles
+  pdb built/FAD.pdb
+}
+
+# NADP+
+segment NADP {
+  first NONE
+  last NONE
+  auto angles
+  pdb built/NADP.pdb
+}
+
+# 2Fe-2S
+segment 2FES {
+  first NONE
+  last NONE
+  auto angles
+  pdb built/cluster.pdb
+}
+
+# Patch to set up cluster ligation
+patch FE1C 2FES:127 FERR:69
+patch FE1C 2FES:127 FERR:74
+patch FE2C 2FES:127 FERR:77
+patch FE2C 2FES:127 FERR:107
+
+# Load the coordinates for each segment.
+coordpdb built/chainFNRA.pdb FNRA
+coordpdb built/chainFERR.pdb FERR
+coordpdb built/FAD.pdb FADA
+coordpdb built/NADP.pdb NADP
+coordpdb built/cluster.pdb 2FES
+
+# Guess the positions of missing atoms.  As long as all the heavy
+# atoms are present, psfgen usually does a very good job of this.
+# However, the clusters will probably have very poor protonation.
+# Edit these manually.
+
+# Generate angles for cofactors
+regenerate angles
+
+guesscoord
+
+# Write output files
+writepsf built/test.psf
+writepdb built/test.pdb
+

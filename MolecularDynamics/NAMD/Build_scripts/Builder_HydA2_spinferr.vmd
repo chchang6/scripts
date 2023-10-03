@@ -1,0 +1,90 @@
+package require psfgen
+
+# STEP 1: Build Protein
+
+# Script to split 1HFE into nine PDB files: one for each unique chain,
+# one for H-cluster (including coupled [4Fe-4S]), and one for each [4Fe-4S] cluster.
+
+# Load the PDB file
+mol load pdb input.pdb
+
+# Set subsets
+set chainH [atomselect top "chain A and resid 1 to 436"]
+set chainF [atomselect top "chain B and resid 1 to 97"]
+set clusterH [atomselect top "chain A and resid 437 438"]
+set clusterF1 [atomselect top "chain B and resid 98"]
+
+# Write these atoms to separate pdb files
+$chainH writepdb built/chainH.pdb
+$chainF writepdb built/chainF.pdb
+$clusterH writepdb built/clusterH.pdb
+$clusterF1 writepdb built/clusterF1.pdb
+ 
+# Use the specified CHARMM27 topology file.
+topology ../common/CHARMM_22prot_27lip.top
+topology ../common/Crclusters.top
+
+# Alias standard residues
+pdbalias residue HIS HSP
+pdbalias atom ILE CD1 CD
+
+# Build nine segments, one for each chain or cluster
+# Hydrogenase polypeptide
+segment HYDR {
+  first NONE
+  last NONE
+  pdb built/chainH.pdb
+}
+
+# Ferredoxin polypeptide
+segment FERR {
+  first NONE
+  last NONE
+  pdb built/chainF.pdb
+}
+
+# H-cluster
+segment HYDH {
+  first NONE
+  last NONE
+  pdb built/clusterH.pdb
+}
+
+# ferredoxin cluster 1
+segment FRC1 {
+  first NONE
+  last NONE
+  pdb built/clusterF1.pdb
+}
+
+# Patch to set up cluster ligation
+patch FE1C HYDH:438 HYDR:166
+patch FE2C HYDH:438 HYDR:366
+patch FE3C HYDH:438 HYDR:370
+patch FE4C HYDH:438 HYDR:111
+patch FEX  HYDH:437 HYDR:370
+patch FE1C FRC1:98 FERR:39
+patch FE1C FRC1:98 FERR:44
+patch FE2C FRC1:98 FERR:47
+patch FE2C FRC1:98 FERR:77
+
+# Load the coordinates for each segment.
+coordpdb built/chainH.pdb HYDR
+coordpdb built/chainF.pdb FERR
+coordpdb built/clusterH.pdb HYDH
+coordpdb built/clusterF1.pdb FRC1
+
+# Guess the positions of missing atoms.  As long as all the heavy
+# atoms are present, psfgen usually does a very good job of this.
+# However, the clusters will probably have very poor protonation.
+# Edit these manually.
+
+# Generate angles for clusters
+regenerate angles
+
+guesscoord
+
+# Write output files
+writepsf built/test.psf
+writepdb built/test.pdb
+

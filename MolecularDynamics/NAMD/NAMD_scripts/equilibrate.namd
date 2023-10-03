@@ -1,0 +1,105 @@
+source ./namdinclude.tcl
+
+#######################################################
+#     Change these parameters between simulations     #
+#######################################################
+
+# Change this to "something.restart" for runtype cont
+set inputname	solveq_in
+set outputname  solveq_out
+set runtype     first
+
+#WES 031210
+margin 5
+
+#######################################################
+#######################################################
+
+set checkpointFreq 1000 ;# every 2ps
+
+# INPUT FILES
+
+paraTypeCharmm	  on
+parameters        ./CHARMM_22prot_27lip.par
+parameters        ./clusters_new.par 
+structure         ./
+coordinates       ./$inputname.pdb
+bincoordinates    ./$inputname.coor
+
+# if runtype is "first", start at timestep 0, otherwise read step from prev sim
+if {$runtype == "first"} {
+  set startingtime 0
+  temperature     303
+} elseif {$runtype == "cont"} {
+  set startingtime [gettimestep]
+  binvelocities   ./$inputname.vel
+} 
+
+
+# PERIODIC BOUNDARY CONDITIONS
+extendedSystem    ./$inputname.xsc
+wrapAll           on
+wrapWater         on
+
+# FIXED ATOMS
+# create a fixed-constraint files in which Beta column is 0 or 1
+fixedAtoms	  on
+fixedAtomsFile    ./$inputname.pdb
+fixedAtomsCol	  B
+
+# FORCE-FIELD PARAMS
+exclude                 scaled1-4
+1-4scaling              1.0
+cutoff                  12
+switching               yes
+switchdist              10
+pairlistdist            14
+
+# INTEGRATOR PARAMS
+rigidBonds              all
+useSettle               on
+timestep                1.0
+nonbondedFreq           1
+fullElectFrequency      2  
+stepspercycle           10
+
+#PME ELECTROSTATICS
+PME                     yes
+PMEGridSizeX            
+PMEGridSizeY            
+PMEGridSizeZ            
+
+# TEMPERATURE CONTROL
+langevin                yes    ;# do langevin dynamics
+langevinDamping         20     ;# initial equilibration
+langevinTemp            303.00 ;# bath temperature
+langevinHydrogen        no     ;# don't couple langevin bath to hydrogens
+
+# PRESSURE CONTROL
+useGroupPressure        yes
+useFlexibleCell         no
+langevinPiston          yes
+langevinPistonTarget    1.01325 #  in bar -> 1 atm
+langevinPistonPeriod    200     ;# initial equilibration
+langevinPistonDecay     100
+langevinPistonTemp      303
+
+
+# OUTPUT
+firsttimestep   $startingtime
+restartname     $outputname.restart
+outputName      $outputname
+dcdfile         $outputname.dcd
+xstFile         $outputname.xst
+
+xstFreq         $checkpointFreq
+restartfreq     $checkpointFreq
+outputEnergies  $checkpointFreq
+outputPressure  $checkpointFreq
+dcdfreq         $checkpointFreq
+
+
+# RUN SCRIPT
+
+reinitvels 303
+run 50000 ;# 50ps

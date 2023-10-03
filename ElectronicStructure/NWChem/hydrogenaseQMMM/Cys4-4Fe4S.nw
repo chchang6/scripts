@@ -1,0 +1,185 @@
+START FS4Cys4
+SCRATCH_DIR /tmp
+PERMANENT_DIR ./
+ECHO
+PRINT medium "ga stats" "ma stats"
+
+title "Calculation of high-spin Cys4[4Fe4S] from fragments"
+
+geometry FS4_2+_HS noautoz
+S1        -1.669763    1.897252    2.813787
+C         -3.485171    2.042282    2.380213
+H         -3.979269    1.054837    2.396936
+H         -3.979770    2.697931    3.122802
+H         -3.613616    2.479513    1.374641
+S1         2.058422    2.307128   -2.274398
+C          2.000174    4.018929   -1.517120
+H          0.966701    4.406104   -1.490353
+H          2.392868    4.003438   -0.485594
+H          2.621304    4.702933   -2.127192
+S1         2.466338   -2.628290    1.563639
+C          4.212823   -2.054230    1.207432
+H          4.379234   -1.038466    1.606153
+H          4.925731   -2.751124    1.688959
+H          4.408042   -2.038905    0.121148
+S1        -2.431647   -2.041571   -2.250755
+C         -4.143913   -1.841043   -1.522466
+H         -4.176596   -2.218599   -0.485521
+H         -4.453234   -0.780900   -1.517839
+H         -4.863739   -2.418344   -2.134354
+S2        -0.994307   -1.460001    1.174365
+S2         1.452344    0.941983    1.149666
+S2         1.025844   -1.091985   -1.558222
+S2        -1.320514    1.284939   -0.837930
+Fe3        1.095792   -1.133870    0.605772
+Fe2       -0.712087    0.687452    1.166140
+Fe3        0.831667    0.989032   -0.929985
+Fe2       -1.043012   -0.867435   -0.912718
+end
+
+geometry Cys+S noautoz
+S1        -1.669763    1.897252    2.813787 # charge 15
+C         -3.485171    2.042282    2.380213 # charge 6
+H         -3.979269    1.054837    2.396936 # charge 1
+H         -3.979770    2.697931    3.122802 # charge 1
+H         -3.613616    2.479513    1.374641 # charge 1
+S1         2.058422    2.307128   -2.274398 # charge 15
+C          2.000174    4.018929   -1.517120 # charge 6
+H          0.966701    4.406104   -1.490353 # charge 1
+H          2.392868    4.003438   -0.485594 # charge 1
+H          2.621304    4.702933   -2.127192 # charge 1
+S1         2.466338   -2.628290    1.563639 # charge 15
+C          4.212823   -2.054230    1.207432 # charge 6
+H          4.379234   -1.038466    1.606153 # charge 1
+H          4.925731   -2.751124    1.688959 # charge 1
+H          4.408042   -2.038905    0.121148 # charge 1
+S1        -2.431647   -2.041571   -2.250755 # charge 15
+C         -4.143913   -1.841043   -1.522466 # charge 6
+H         -4.176596   -2.218599   -0.485521 # charge 1
+H         -4.453234   -0.780900   -1.517839 # charge 1
+H         -4.863739   -2.418344   -2.134354 # charge 1
+S2        -0.994307   -1.460001    1.174365 # charge 14
+S2         1.452344    0.941983    1.149666 # charge 14
+S2         1.025844   -1.091985   -1.558222 # charge 14
+S2        -1.320514    1.284939   -0.837930 # charge 14
+Bq3        1.095792   -1.133870    0.605772 charge +3 # Fe1 ferric
+Bq2       -0.712087    0.687452    1.166140 charge +2 # Fe2 ferrous
+Bq3        0.831667    0.989032   -0.929985 charge +3 # Fe3 ferric
+Bq2       -1.043012   -0.867435   -0.912718 charge +2 # Fe4 ferrous
+end
+
+geometry Fe1 noautoz
+Fe3        1.095792   -1.133870    0.605772 # charge 29 # ferric
+Bq2       -0.712087    0.687452    1.166140  charge +2 # Fe2 ferrous
+Bq3        0.831667    0.989032   -0.929985  charge +3 # Fe3 ferric
+Bq2       -1.043012   -0.867435   -0.912718  charge +2 # Fe4 ferrous
+Bq1       -1.669763    1.897252    2.813787  charge -1 # Cys1 S
+Bq1        2.058422    2.307128   -2.274398  charge -1 # Cys2 S
+Bq1        2.466338   -2.628290    1.563639  charge -1 # Cys3 S
+Bq1       -2.431647   -2.041571   -2.250755  charge -1 # Cys4 S
+Bq4       -0.994307   -1.460001    1.174365  charge -2 # sulfide 1
+Bq4        1.452344    0.941983    1.149666  charge -2 # sulfide 2
+Bq4        1.025844   -1.091985   -1.558222  charge -2 # sulfide 3
+Bq4       -1.320514    1.284939   -0.837930  charge -2 # sulfide 4
+end
+
+geometry Fe2 noautoz
+Fe2       -0.712087    0.687452    1.166140 # charge 28 # ferrous
+Bq3        1.095792   -1.133870    0.605772  charge +3 # Fe1 ferric
+Bq3        0.831667    0.989032   -0.929985  charge +3 # Fe3 ferric
+Bq2       -1.043012   -0.867435   -0.912718  charge +2 # Fe4 ferrous
+Bq1       -1.669763    1.897252    2.813787  charge -1 # Cys1 S
+Bq1        2.058422    2.307128   -2.274398  charge -1 # Cys2 S
+Bq1        2.466338   -2.628290    1.563639  charge -1 # Cys3 S
+Bq1       -2.431647   -2.041571   -2.250755  charge -1 # Cys4 S
+Bq4       -0.994307   -1.460001    1.174365  charge -2 # sulfide 1
+Bq4        1.452344    0.941983    1.149666  charge -2 # sulfide 2
+Bq4        1.025844   -1.091985   -1.558222  charge -2 # sulfide 3
+Bq4       -1.320514    1.284939   -0.837930  charge -2 # sulfide 4
+end
+
+geometry Fe3 noautoz
+Fe3        0.831667    0.989032   -0.929985 # charge 29 # ferric
+Bq3        1.095792   -1.133870    0.605772  charge +3 # Fe1 ferric
+Bq2       -0.712087    0.687452    1.166140  charge +2 # Fe2 ferrous
+Bq2       -1.043012   -0.867435   -0.912718  charge +2 # Fe4 ferrous
+Bq1       -1.669763    1.897252    2.813787  charge -1 # Cys1 S
+Bq1        2.058422    2.307128   -2.274398  charge -1 # Cys2 S
+Bq1        2.466338   -2.628290    1.563639  charge -1 # Cys3 S
+Bq1       -2.431647   -2.041571   -2.250755  charge -1 # Cys4 S
+Bq4       -0.994307   -1.460001    1.174365  charge -2 # sulfide 1
+Bq4        1.452344    0.941983    1.149666  charge -2 # sulfide 2
+Bq4        1.025844   -1.091985   -1.558222  charge -2 # sulfide 3
+Bq4       -1.320514    1.284939   -0.837930  charge -2 # sulfide 4
+end
+
+geometry Fe4 noautoz
+Fe2       -1.043012   -0.867435   -0.912718 # charge 28 # ferrous
+Bq3        1.095792   -1.133870    0.605772  charge +3 # Fe1 ferric
+Bq2       -0.712087    0.687452    1.166140  charge +2 # Fe2 ferrous
+Bq3        0.831667    0.989032   -0.929985  charge +3 # Fe3 ferric
+Bq1       -1.669763    1.897252    2.813787  charge -1 # Cys1 S
+Bq1        2.058422    2.307128   -2.274398  charge -1 # Cys2 S
+Bq1        2.466338   -2.628290    1.563639  charge -1 # Cys3 S
+Bq1       -2.431647   -2.041571   -2.250755  charge -1 # Cys4 S
+Bq4       -0.994307   -1.460001    1.174365  charge -2 # sulfide 1
+Bq4        1.452344    0.941983    1.149666  charge -2 # sulfide 2
+Bq4        1.025844   -1.091985   -1.558222  charge -2 # sulfide 3
+Bq4       -1.320514    1.284939   -0.837930  charge -2 # sulfide 4
+end
+
+basis "ao basis"
+   Fe2 library 6-31g*
+   Fe3 library 6-31g*
+   S1 library 6-31+g*
+   S2 library 6-31+g*
+   C library 6-31+g*
+   H library 6-31+g*
+end
+
+basis "cd basis"
+   Fe2 library "Ahlrichs Coulomb Fitting"
+   Fe3 library "Ahlrichs Coulomb Fitting"
+   S1 library "Ahlrichs Coulomb Fitting"
+   S2 library "Ahlrichs Coulomb Fitting"
+   C library "Ahlrichs Coulomb Fitting"
+   H library "Ahlrichs Coulomb Fitting"
+end
+
+charge -2.0
+set tolguess 1e-07
+set atomscf:tags_z S1 S2 Fe2 Fe3
+set atomscf:z -1.0 -2.0 +2.0 +3.0
+
+set geometry Cys+S
+dft; mult 1; xc slater vwn_5; iterations 50; convergence density 1e-6;
+     vectors atomic output Cys+S.mo; end
+task dft
+
+set geometry Fe1
+dft; mult 6; xc slater vwn_5; iterations 100; convergence density 1e-6;
+     vectors atomic output Fe1.mo; end
+task dft
+
+set geometry Fe2
+dft; mult 5; xc slater vwn_5; iterations 300; convergence density 1e-6; smear;
+     vectors atomic output Fe2.mo; end
+task dft
+
+set geometry Fe3
+dft; mult -6; xc slater vwn_5; iterations 100; convergence density 1e-6;
+     vectors input Fe1.mo output Fe3.mo; end
+task dft
+
+set geometry Fe4
+dft; mult -5; xc slater vwn_5; iterations 300; convergence density 1e-6; smear;
+     vectors input Fe2.mo output Fe4.mo; end
+task dft
+
+# Antiferromagnetic calculation
+set geometry FS4_2+_AF
+dft; mult 1; xc slater vwn_5; iterations 300; convergence density 1e-6; smear; 
+     vectors input fragment Cys+S.mo Fe1.mo Fe2.mo Fe3.mo Fe4.mo \
+     output FS4_2+_AF.movecs; end
+     mulliken; print "final vectors" "mulliken"; end
+task dft

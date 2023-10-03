@@ -1,0 +1,34 @@
+! Input deck to convert NAMD catdcd-generated DCD file to CHARMM format for analysis.
+* Title Input deck to convert NAMD catdcd-generated DCD file to CHARMM format for analysis.
+* CHC, 7/23/05
+*
+
+! read in topologies
+open unit 11 read card name ../../CHARMM/CHARMM_22PROT+HYDFERR.RTF
+read rtf card unit 11
+close unit 11
+
+! read in parameters
+open unit 12 read card name ../../CHARMM/CHARMM_22PROT+HYDFERR.PRM
+read para card unit 12
+close unit 12
+
+! read in psf file
+open unit 10 read card name "../HydA2HSD/CHARMM_HydA2HSD.psf"
+read psf card unit 10
+close unit 10
+
+! Read in trajectory file from catdcd.
+
+OPEN UNIT 51 NAME "../HydA2HSD/quasi_1-3617.dcd" READ UNFORM
+OPEN UNIT 52 NAME test.dcd WRIT UNFORM
+TRAJ FIRStu 51 NUNIt 1 BEGIn 0 STOP 3616 SKIp 1 IWRI 52 NWRI 1 NFILE 3618 SKIP 1
+SET A 1
+LABEL LOOP
+  TRAJ READ
+  TRAJ WRITE
+  INCR A BY 1
+  IF A LT ?NFILE GOTO LOOP
+CLOSE UNIT 51
+CLOSE UNIT 52
+stop

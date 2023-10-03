@@ -1,0 +1,90 @@
+#!/usr/bin/env python
+# Script to generate Slurm input file for NWChem run.
+#   CHC 05/05/10
+
+def wrong_options(option):
+   if option == 'time':
+      print_string='You have not specified the time properly!'
+   elif option == 'numnodes':
+      print_string='You have not specified the number of nodes you want!'
+   elif option == 'numprocesses':
+      print_string='You have not specified the number of processes you want!'
+   elif option == 'file':
+      print_string='File ' + args[0] + ' isn\'t readable!'
+   print print_string
+   option_parser.print_help()
+   sys.exit()
+   
+slurmdata=['#!/bin/bash -l\n', '#SBATCH --time=', '#SBATCH -N ', '#SBATCH -n ', '#SBATCH --job-name ', '#SBATCH -p ', '#SBATCH --ntasks-per-node ', 'export SLURM_WORKING_DIR=`pwd`\n', 'export SCRATCH=/scratch/$USER/', '# Note that your scratch files will be in /scratch/username/job-name\n', '# The following is a default workflow. Modify according to your specific needs\n\n', 'if [ -d $SCRATCH ]\n', 'then\n', '   rm -rf $SCRATCH\n', 'fi\n', 'mkdir $SCRATCH\n', 'cd $SCRATCH\n', 'cp $SLURM_WORKING_DIR/* .\n', '\n', '# Modify the following line to redirect output and error to the appropriate file as desired\n', 'mpirun -np ']
+
+import re, sys, os, shutil
+import os.path
+from optparse import OptionParser
+
+RE1 = re.compile('#SBATCH --time=')
+RE2 = re.compile('#SBATCH -N ')
+RE3 = re.compile('#SBATCH -n ')
+RE4 = re.compile('#SBATCH --job-name ')
+RE5 = re.compile('#SBATCH -p ')
+RE6 = re.compile('#SBATCH --ntasks-per-node')
+RE7 = re.compile('export SCRATCH')
+RE8 = re.compile('mpirun -np ')
+
+usage = 'Usage: nrel_run_nwchem [options] file.nw'
+option_parser = OptionParser(usage=usage)
+option_parser.add_option('-t', '--time', help='Total wallclock time request', dest='t')
+option_parser.add_option('-N', default='1', help='Number of nodes requested. Default value = 1 for Red Mesa.', dest='N')
+#option_parser.add_option('-n', help='Total number of processes requested', dest='n')
+option_parser.add_option('--job-name', default=sys.argv[-1][:-3], help='Name of your job. By default, this will be the input file basename', dest='jobname')
+option_parser.add_option('-p', default='pbatch', help='Batch queue requested. Default is pbatch', dest='p')
+option_parser.add_option('--TPN', default='8', help='Tasks per node requested. Default value = 8 for Red Mesa.', dest='TPN')
+
+if len(sys.argv) == 1:  # No options given
+   sys.exit('Please try "nrel_run_nwchem -h"')
+
+(options, args) = option_parser.parse_args()
+input_file_basename = args[0][:-3]
+total_processes = int(options.N) * int(options.TPN)
+
+for i in xrange(len(slurmdata)):
+   if RE1.match(slurmdata[i]):
+      if options.t != None:
+         slurmdata[i] += options.t + '\n'
+      else:
+         wrong_options('time')
+   elif RE2.match(slurmdata[i]):
+      if option_parser.has_option('-N'):
+         slurmdata[i] += options.N + '\n'
+      else:
+         wrong_options('numnodes')
+   elif RE3.match(slurmdata[i]):
+      slurmdata[i] += str(total_processes) + '\n'
+   elif RE4.match(slurmdata[i]):
+      slurmdata[i] += options.jobname + '\n'
+   elif RE5.match(slurmdata[i]):
+      slurmdata[i] += options.p + '\n'
+   elif RE6.match(slurmdata[i]):
+      if option_parser.has_option('--TPN'):
+         slurmdata[i] += options.TPN + '\n\n'
+      else:
+         slurmdata[i] += '8\n\n'
+   elif RE7.match(slurmdata[i]):
+      slurmdata[i] += options.jobname + '\n'
+   elif RE8.match(slurmdata[i]):
+      slurmdata[i] += str(total_processes) + ' numa_wrapper -ppn=' + options.TPN + ' nwchem ' + input_file_basename + '.nw >& $SLURM_WORKING_DIR/' + input_file_basename + '.log\n'
+   else: continue
+
+# Test for existence of input file.
+if not os.path.isfile(args[0]): wrong_options('file')
+
+# Start writing
+try:
+   os.mkdir(options.jobname)
+   shutil.copy(args[0], options.jobname)
+   os.chdir(options.jobname)
+   slurm_new_file = open(input_file_basename + '.slurm', 'w')
+   for i in slurmdata:
+      slurm_new_file.write(i)
+   slurm_new_file.close()
+except OSError:
+   sys.exit('Directory ' + options.jobname + ' already exists!')

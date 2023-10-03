@@ -1,0 +1,1734 @@
+! Topology file for hydrogenase-related clusters
+   31     1  !Random version number
+
+! Oxidized [2Fe-2S] resname F2O
+MASS  1 FEKO    55.84700
+MASS  2 SKO     32.06600
+! Reduced [2Fe-2S] resname F2R
+MASS  3 FEKR    55.84700
+MASS  4 SKR     32.06600
+! [4Fe-4S]2+ resname F4O
+MASS  5 FEJO    55.84700 !
+MASS  6 SJO     32.06600 !
+! [4Fe-4S]1+ resname F4R
+MASS  7 FEJR    55.84700 !
+MASS  8 SJR     32.06600 !
+! [4Fe-4S]2+-HSD resname FHO
+MASS  9 FEIO    55.84700 !
+MASS 10 SIO     32.06600 !
+! [4Fe-4S]2+-HSD resname FHO
+MASS 11 FEIR    55.84700 !
+MASS 12 SIR     32.06600 !
+! Semi-reduced FeIFeII H-cluster resname HCO
+MASS 13 FEM1    55.84700 ! Fe bound to hydrogenase cysteine
+MASS 14 FEM2    55.84700 ! Fe not bound to cysteine, bound to hydride
+MASS 15 SM1     32.06600 ! DTMA sulfur at right angle to Fe1 CN carbon
+MASS 16 SM2     32.06600 ! DTMA sulfur trans to Fe1 CN carbon
+MASS 17 NMM     14.00700 ! DTMA nitrogen :(S^-)-CH2-NH-CH2-(S^-):
+MASS 18 OM4     15.99900 ! Terminal Fe-bound carbonyl O
+MASS 19 NM5     14.00700 ! Terminal Fe-bound cyanide N
+MASS 20 OM6     15.99900 ! Bridging Fe-bound carbonyl O
+MASS 21 CMO1    12.01100 ! Terminal Fe1-bound carbonyl C
+MASS 22 CMN1    12.01100 ! Terminal Fe1-bound cyanide C
+MASS 23 CMO2    12.01100 ! Terminal Fe2-bound carbonyl O
+MASS 24 CMN2    12.01100 ! Terminal Fe2-bound cyanide N
+MASS 25 CMC     12.01100 ! Bridging Fe-bound carbonyl CO
+MASS 26 HCM1     1.00800 ! Hydrogen of DTMA bridge facing cysteine
+MASS 27 HCM2     1.00800 ! Hydrogen of DTMA bridge opposing cysteine
+MASS 28 CCM1    12.01100 ! DTMA carbons
+! Reduced FeIFeI H-cluster with hydride resname HCR
+MASS 29 FEL1    55.84700 ! Fe bound to hydrogenase cysteine
+MASS 30 FEL2    55.84700 ! Fe not bound to cysteine, bound to hydride
+MASS 31 SL1     32.06600 ! DTMA sulfur trans to distal Fe2 CN
+MASS 32 SL2     32.06600 ! DTMA sulfur trans to proximal Fe1 CN
+MASS 33 NLM     15.01500 ! DTMA nitrogen :(S^-)-CH2-NH-CH2-(S^-):
+MASS 34 OL4     15.99900 ! Terminal Fe-bound carbonyl O
+MASS 35 NL5     14.00700 ! Terminal Fe-bound cyanide N
+MASS 36 OL6     15.99900 ! Bridging Fe-bound carbonyl O
+MASS 37 CLO1    12.01100 ! Terminal Fe1-bound carbonyl C
+MASS 38 CLN1    12.01100 ! Terminal Fe1-bound cyanide C
+MASS 39 CLO2    12.01100 ! Terminal Fe2-bound carbonyl O
+MASS 40 CLN2    12.01100 ! Terminal Fe2-bound cyanide N
+MASS 41 CLC     12.01100 ! Bridging Fe-bound carbonyl C
+MASS 42 HH       1.00800 ! Fe-bound hydride
+MASS 43 HCL1     1.00800 ! Hydrogen of DTMA bridge facing proximal side
+MASS 44 HCL2     1.00800 ! Hydrogen of DTMA bridge facing distal side
+MASS 45 CCL1    12.01100 ! DTMA carbons
+
+RESI F2O         0.02804 !
+
+GROUP
+ ATOM  FE1  FEKO  0.56889
+ ATOM  FE2  FEKO  0.56889
+ ATOM  S1   SKO  -0.55487
+ ATOM  S2   SKO  -0.55487
+
+ BOND  FE1  S1        FE1  S2       FE2  S1       FE2  S2
+ ANGL   S1 FE1  S2    S1 FE2  S2    FE1  S1  FE2
+ ANGL  FE1  S2 FE2
+ DIHE   S1 FE1  S2  FE2    S2 FE2 S1 FE1
+
+RESI F2R         -0.75088 !
+
+GROUP
+ ATOM  FE1  FEKR  0.20787
+ ATOM  FE2  FEKR  0.20787
+ ATOM  S1   SKR  -0.58330
+ ATOM  S2   SKR  -0.58330
+
+ BOND  FE1  S1        FE1  S2       FE2  S1       FE2  S2
+ ANGL   S1 FE1  S2    S1 FE2  S2    FE1  S1  FE2
+ ANGL  FE1  S2 FE2
+ DIHE   S1 FE1  S2  FE2
+
+RESI F4O         0.54050 !
+
+GROUP
+ ATOM  FE1  FEJO  1.10417
+ ATOM  FE2  FEJO  1.10417
+ ATOM  FE3  FEJO  1.10417
+ ATOM  FE4  FEJO  1.10417
+ ATOM  S1   SJO  -0.96905
+ ATOM  S2   SJO  -0.96905
+ ATOM  S3   SJO  -0.96905
+ ATOM  S4   SJO  -0.96905
+ BOND  FE1  S1         FE1  S2         FE1  S3         FE2  S1
+ BOND  FE2  S2         FE2  S4         FE3  S2         FE3  S3
+ BOND  FE3  S4         FE4  S1         FE4  S3         FE4  S4
+ BOND  FE1 FE2         FE1 FE3         FE1 FE4         FE2 FE3
+ BOND  FE2 FE4         FE3 FE4
+ ANGL    FE1     S3      FE4     FE1     S3      FE3     S4      FE2     FE1
+ ANGL    FE1     S2      FE3     FE1     S2      FE2     FE1     S1      FE4
+ ANGL    FE1     S1      FE2     FE1     FE4     FE3     FE1     FE4     FE2
+ ANGL    FE1     FE3     FE4     FE1     FE3     FE2     FE1     FE2     FE4
+ ANGL    FE1     FE2     FE3     FE2     S4      FE4     FE2     S4      FE3
+ ANGL    FE2     S2      FE3     FE2     S1      FE4     FE2     FE4     FE3
+ ANGL    FE2     FE3     FE4     FE2     FE1     FE4     FE2     FE1     FE3
+ ANGL    FE3     S4      FE4     FE3     S3      FE4     FE3     FE2     FE4
+ ANGL    FE3     FE1     FE4     S1      FE4     FE3     S1      FE4     FE2
+ ANGL    S1      FE4     FE1     S1      FE4     S4      S1      FE4     S3
+ ANGL    S1      FE2     FE4     S1      FE2     FE3     S1      FE2     FE1
+ ANGL    S1      FE2     S4      S1      FE2     S2      S1      FE1     FE4
+ ANGL    S1      FE1     FE3     S1      FE1     FE2     S1      FE1     S3
+ ANGL    S1      FE1     S2      S2      FE3     FE4     S2      FE3     FE2
+ ANGL    S2      FE3     FE1     S2      FE3     S4      S2      FE3     S3
+ ANGL    S2      FE2     FE4     S2      FE2     FE3     S2      FE2     FE1
+ ANGL    S2      FE2     S4      S2      FE1     FE4     S2      FE1     FE3
+ ANGL    S2      FE1     FE2     S2      FE1     S3      S3      FE4     FE3
+ ANGL    S3      FE4     FE2     S3      FE4     FE1     S3      FE4     S4
+ ANGL    S3      FE3     FE4     S3      FE3     FE2     S3      FE3     FE1
+ ANGL    S3      FE3     S4      S3      FE1     FE4     S3      FE1     FE3
+ ANGL    S3      FE1     FE2     S4      FE4     FE3     S4      FE4     FE2
+ ANGL    S4      FE4     FE1     S4      FE3     FE4     S4      FE3     FE2
+ ANGL    S4      FE3     FE1     S4      FE2     FE4     S4      FE2     FE3
+ DIHE    FE1     S3      FE3     FE2     FE1     S3      FE3     FE4
+ DIHE    FE1     S3      FE4     FE2     FE1     S3      FE4     FE3
+ DIHE    FE1     S2      FE2     FE3     FE1     S2      FE2     FE4
+ DIHE    FE1     S2      FE3     FE2     FE1     S2      FE3     FE4
+ DIHE    FE1     S1      FE2     FE3     FE1     S1      FE2     FE4
+ DIHE    FE1     S1      FE4     FE2     FE1     FE2     FE4     FE3
+ DIHE    FE1     S1      FE4     FE3     FE1     FE4     S1      FE2
+ DIHE    FE1     FE4     S3      FE3     FE1     FE4     S4      FE2
+ DIHE    FE1     FE4     S4      FE3     FE1     FE4     FE2     S1
+ DIHE    FE1     FE4     FE2     S2      FE1     FE4     FE2     S4
+ DIHE    FE1     FE4     FE2     FE3     FE1     FE4     FE3     S2
+ DIHE    FE1     FE4     FE3     S3      FE1     FE4     FE3     S4
+ DIHE    FE1     FE4     FE3     FE2     FE1     FE3     S2      FE2
+ DIHE    FE1     FE3     S3      FE4     FE1     FE3     S4      FE2
+ DIHE    FE1     FE3     S4      FE4     FE1     FE3     FE2     S1
+ DIHE    FE1     FE3     FE2     S2      FE1     FE3     FE2     S4
+ DIHE    FE1     FE3     FE2     FE4     FE1     FE3     FE4     S1
+ DIHE    FE1     FE3     FE4     S3      FE1     FE3     FE4     S4
+ DIHE    FE1     FE3     FE4     FE2     FE1     FE2     S1      FE4
+ DIHE    FE1     FE2     S2      FE3     FE1     FE2     S4      FE3
+ DIHE    FE1     FE2     S4      FE4     FE1     FE2     FE3     S2
+ DIHE    FE1     FE2     FE3     S3      FE1     FE2     FE3     S4
+ DIHE    FE1     FE2     FE3     FE4     FE1     FE2     FE4     S1
+ DIHE    FE1     FE2     FE4     S3      FE1     FE2     FE4     S4
+ DIHE    FE2     S4      FE3     FE4     FE2     S4      FE4     FE3
+ DIHE    FE2     S2      FE1     FE3     FE2     S2      FE1     FE4
+ DIHE    FE2     S2      FE3     FE4     FE2     FE1     FE4     FE3
+ DIHE    FE2     S1      FE1     FE3     FE2     S1      FE1     FE4
+ DIHE    FE2     S1      FE4     FE3     FE2     FE4     S3      FE3
+ DIHE    FE2     FE4     S4      FE3     FE2     FE4     FE1     S1
+ DIHE    FE2     FE4     FE1     S2      FE2     FE4     FE1     S3
+ DIHE    FE2     FE4     FE1     FE3     FE2     FE4     FE3     S2
+ DIHE    FE2     FE4     FE3     S3      FE2     FE4     FE3     S4
+ DIHE    FE2     FE3     S3      FE4     FE2     FE3     S4      FE4
+ DIHE    FE2     FE3     FE1     S1      FE2     FE3     FE1     S2
+ DIHE    FE2     FE3     FE1     S3      FE2     FE3     FE1     FE4
+ DIHE    FE2     FE3     FE4     S1      FE2     FE3     FE4     S3
+ DIHE    FE2     FE3     FE4     S4      FE2     FE1     S1      FE4
+ DIHE    FE2     FE1     S2      FE3     FE2     FE1     S3      FE3
+ DIHE    FE2     FE1     S3      FE4     FE2     FE1     FE3     S2
+ DIHE    FE2     FE1     FE3     S3      FE2     FE1     FE3     S4
+ DIHE    FE2     FE1     FE3     FE4     FE2     FE1     FE4     S1
+ DIHE    FE2     FE1     FE4     S3      FE2     FE1     FE4     S4
+ DIHE    FE3     S4      FE2     FE4     FE3     S3      FE1     FE4
+ DIHE    FE3     S2      FE1     FE4
+ DIHE    FE3     S2      FE2     FE4     FE3     FE4     FE1     S1
+ DIHE    FE3     FE4     FE1     S2      FE3     FE4     FE1     S3
+ DIHE    FE3     FE4     FE2     S1      FE3     FE4     FE2     S2
+ DIHE    FE3     FE4     FE2     S4      FE3     FE2     S1      FE4
+ DIHE    FE3     FE2     S4      FE4     FE3     FE2     FE1     S1
+ DIHE    FE3     FE2     FE1     S2      FE3     FE2     FE1     S3
+ DIHE    FE3     FE2     FE1     FE4     FE3     FE2     FE4     S1
+ DIHE    FE3     FE2     FE4     S3      FE3     FE2     FE4     S4
+ DIHE    FE3     FE1     S1      FE4     FE3     FE1     S3      FE4
+ DIHE    FE3     FE1     FE2     S1      FE3     FE1     FE2     S2
+ DIHE    FE3     FE1     FE2     S4      FE3     FE1     FE2     FE4
+ DIHE    FE3     FE1     FE4     S1      FE3     FE1     FE4     S3
+ DIHE    FE3     FE1     FE4     S4      FE4     FE3     FE1     S1
+ DIHE    FE4     FE3     FE1     S2      FE4     FE3     FE1     S3
+ DIHE    FE4     FE3     FE2     S1      FE4     FE3     FE2     S2
+ DIHE    FE4     FE3     FE2     S4      FE4     FE2     FE1     S1
+ DIHE    FE4     FE2     FE1     S2      FE4     FE2     FE1     S3
+ DIHE    FE4     FE2     FE3     S2      FE4     FE2     FE3     S3
+ DIHE    FE4     FE2     FE3     S4      FE4     FE1     FE2     S1
+ DIHE    FE4     FE1     FE2     S2      FE4     FE1     FE2     S4
+ DIHE    FE4     FE1     FE3     S2      FE4     FE1     FE3     S3
+ DIHE    FE4     FE1     FE3     S4      S1      FE4     FE1     S2
+ DIHE    S1      FE4     FE1     S3      S1      FE4     FE2     S2
+ DIHE    S1      FE4     FE2     S4      S1      FE4     FE3     S2
+ DIHE    S1      FE4     FE3     S3      S1      FE4     FE3     S4
+ DIHE    S1      FE2     FE1     S2      S1      FE2     FE1     S3
+ DIHE    S1      FE2     FE3     S2      S1      FE2     FE3     S3
+ DIHE    S1      FE2     FE3     S4      S1      FE2     FE4     S3
+ DIHE    S1      FE2     FE4     S4      S1      FE1     FE2     S2
+ DIHE    S1      FE1     FE2     S4      S1      FE1     FE3     S2
+ DIHE    S1      FE1     FE3     S3      S1      FE1     FE3     S4
+ DIHE    S1      FE1     FE4     S3      S1      FE1     FE4     S4
+ DIHE    S2      FE3     FE1     S3      S2      FE3     FE2     S4
+ DIHE    S2      FE3     FE4     S3      S2      FE3     FE4     S4
+ DIHE    S2      FE2     FE1     S3      S2      FE2     FE3     S3
+ DIHE    S2      FE2     FE3     S4      S2      FE2     FE4     S3
+ DIHE    S2      FE2     FE4     S4      S2      FE1     FE2     S4
+ DIHE    S2      FE1     FE3     S3      S2      FE1     FE3     S4
+ DIHE    S2      FE1     FE4     S3      S2      FE1     FE4     S4
+ DIHE    S3      FE4     FE2     S4      S3      FE4     FE3     S4
+ DIHE    S3      FE3     FE2     S4      S3      FE3     FE4     S4
+ DIHE    S3      FE1     FE2     S4      S3      FE1     FE3     S4
+ DIHE    S3      FE1     FE4     S4
+
+RESI F4R         0.11936 !
+
+GROUP
+ ATOM  FE1  FEJR  1.16332
+ ATOM  FE2  FEJR  1.16332
+ ATOM  FE3  FEJR  1.16332
+ ATOM  FE4  FEJR  1.16332
+ ATOM  S1   SJR  -1.13348
+ ATOM  S2   SJR  -1.13348
+ ATOM  S3   SJR  -1.13348
+ ATOM  S4   SJR  -1.13348
+
+ BOND  FE1  S1         FE1  S2         FE1  S3         FE2  S1
+ BOND  FE2  S2         FE2  S4         FE3  S2         FE3  S3
+ BOND  FE3  S4         FE4  S1         FE4  S3         FE4  S4
+ BOND  FE1 FE2         FE1 FE3         FE1 FE4         FE2 FE3
+ BOND  FE2 FE4         FE3 FE4
+ ANGL    FE1     S3      FE4     FE1     S3      FE3     S4      FE2     FE1
+ ANGL    FE1     S2      FE3     FE1     S2      FE2     FE1     S1      FE4
+ ANGL    FE1     S1      FE2     FE1     FE4     FE3     FE1     FE4     FE2
+ ANGL    FE1     FE3     FE4     FE1     FE3     FE2     FE1     FE2     FE4
+ ANGL    FE1     FE2     FE3     FE2     S4      FE4     FE2     S4      FE3
+ ANGL    FE2     S2      FE3     FE2     S1      FE4     FE2     FE4     FE3
+ ANGL    FE2     FE3     FE4     FE2     FE1     FE4     FE2     FE1     FE3
+ ANGL    FE3     S4      FE4     FE3     S3      FE4     FE3     FE2     FE4
+ ANGL    FE3     FE1     FE4     S1      FE4     FE3     S1      FE4     FE2
+ ANGL    S1      FE4     FE1     S1      FE4     S4      S1      FE4     S3
+ ANGL    S1      FE2     FE4     S1      FE2     FE3     S1      FE2     FE1
+ ANGL    S1      FE2     S4      S1      FE2     S2      S1      FE1     FE4
+ ANGL    S1      FE1     FE3     S1      FE1     FE2     S1      FE1     S3
+ ANGL    S1      FE1     S2      S2      FE3     FE4     S2      FE3     FE2
+ ANGL    S2      FE3     FE1     S2      FE3     S4      S2      FE3     S3
+ ANGL    S2      FE2     FE4     S2      FE2     FE3     S2      FE2     FE1
+ ANGL    S2      FE2     S4      S2      FE1     FE4     S2      FE1     FE3
+ ANGL    S2      FE1     FE2     S2      FE1     S3      S3      FE4     FE3
+ ANGL    S3      FE4     FE2     S3      FE4     FE1     S3      FE4     S4
+ ANGL    S3      FE3     FE4     S3      FE3     FE2     S3      FE3     FE1
+ ANGL    S3      FE3     S4      S3      FE1     FE4     S3      FE1     FE3
+ ANGL    S3      FE1     FE2     S4      FE4     FE3     S4      FE4     FE2
+ ANGL    S4      FE4     FE1     S4      FE3     FE4     S4      FE3     FE2
+ ANGL    S4      FE3     FE1     S4      FE2     FE4     S4      FE2     FE3
+ DIHE    FE1     S3      FE3     FE2     FE1     S3      FE3     FE4
+ DIHE    FE1     S3      FE4     FE2     FE1     S3      FE4     FE3
+ DIHE    FE1     S2      FE2     FE3     FE1     S2      FE2     FE4
+ DIHE    FE1     S2      FE3     FE2     FE1     S2      FE3     FE4
+ DIHE    FE1     S1      FE2     FE3     FE1     S1      FE2     FE4
+ DIHE    FE1     S1      FE4     FE2
+ DIHE    FE1     S1      FE4     FE3     FE1     FE4     S1      FE2
+ DIHE    FE1     FE4     S3      FE3     FE1     FE4     S4      FE2
+ DIHE    FE1     FE4     S4      FE3     FE1     FE4     FE2     S1
+ DIHE    FE1     FE4     FE2     S2      FE1     FE4     FE2     S4
+ DIHE    FE1     FE4     FE2     FE3     FE1     FE4     FE3     S2
+ DIHE    FE1     FE4     FE3     S3      FE1     FE4     FE3     S4
+ DIHE    FE1     FE4     FE3     FE2     FE1     FE3     S2      FE2
+ DIHE    FE1     FE3     S3      FE4     FE1     FE3     S4      FE2
+ DIHE    FE1     FE3     S4      FE4     FE1     FE3     FE2     S1
+ DIHE    FE1     FE3     FE2     S2      FE1     FE3     FE2     S4
+ DIHE    FE1     FE3     FE2     FE4     FE1     FE3     FE4     S1
+ DIHE    FE1     FE3     FE4     S3      FE1     FE3     FE4     S4
+ DIHE    FE1     FE3     FE4     FE2     FE1     FE2     S1      FE4
+ DIHE    FE1     FE2     S2      FE3     FE1     FE2     S4      FE3
+ DIHE    FE1     FE2     S4      FE4     FE1     FE2     FE3     S2
+ DIHE    FE1     FE2     FE3     S3      FE1     FE2     FE3     S4
+ DIHE    FE1     FE2     FE3     FE4     FE1     FE2     FE4     S1
+ DIHE    FE1     FE2     FE4     S3      FE1     FE2     FE4     S4
+ DIHE    FE1     FE2     FE4     FE3     FE2     S4      FE3     FE4
+ DIHE    FE2     S4      FE4     FE3     FE2     S2      FE1     FE3
+ DIHE    FE2     S2      FE1     FE4     FE2     S2      FE3     FE4
+ DIHE    FE2     S1      FE1     FE3     FE2     S1      FE1     FE4
+ DIHE    FE2     S1      FE4     FE3     FE2     FE4     S3      FE3
+ DIHE    FE2     FE4     S4      FE3     FE2     FE4     FE1     S1
+ DIHE    FE2     FE4     FE1     S2      FE2     FE4     FE1     S3
+ DIHE    FE2     FE4     FE1     FE3     FE2     FE4     FE3     S2
+ DIHE    FE2     FE4     FE3     S3      FE2     FE4     FE3     S4
+ DIHE    FE2     FE3     S3      FE4     FE2     FE3     S4      FE4
+ DIHE    FE2     FE3     FE1     S1      FE2     FE3     FE1     S2
+ DIHE    FE2     FE3     FE1     S3      FE2     FE3     FE1     FE4
+ DIHE    FE2     FE3     FE4     S1      FE2     FE3     FE4     S3
+ DIHE    FE2     FE3     FE4     S4      FE2     FE1     S1      FE4
+ DIHE    FE2     FE1     S2      FE3     FE2     FE1     S3      FE3
+ DIHE    FE2     FE1     S3      FE4     FE2     FE1     FE3     S2
+ DIHE    FE2     FE1     FE3     S3      FE2     FE1     FE3     S4
+ DIHE    FE2     FE1     FE3     FE4     FE2     FE1     FE4     S1
+ DIHE    FE2     FE1     FE4     S3      FE2     FE1     FE4     S4
+ DIHE    FE2     FE1     FE4     FE3     FE3     S4      FE2     FE4
+ DIHE    FE3     S3      FE1     FE4     FE3     S2      FE1     FE4
+ DIHE    FE3     S2      FE2     FE4     FE3     FE4     FE1     S1
+ DIHE    FE3     FE4     FE1     S2      FE3     FE4     FE1     S3
+ DIHE    FE3     FE4     FE2     S1      FE3     FE4     FE2     S2
+ DIHE    FE3     FE4     FE2     S4      FE3     FE2     S1      FE4
+ DIHE    FE3     FE2     S4      FE4     FE3     FE2     FE1     S1
+ DIHE    FE3     FE2     FE1     S2      FE3     FE2     FE1     S3
+ DIHE    FE3     FE2     FE1     FE4     FE3     FE2     FE4     S1
+ DIHE    FE3     FE2     FE4     S3      FE3     FE2     FE4     S4
+ DIHE    FE3     FE1     S1      FE4     FE3     FE1     S3      FE4
+ DIHE    FE3     FE1     FE2     S1      FE3     FE1     FE2     S2
+ DIHE    FE3     FE1     FE2     S4      FE3     FE1     FE2     FE4
+ DIHE    FE3     FE1     FE4     S1      FE3     FE1     FE4     S3
+ DIHE    FE3     FE1     FE4     S4      FE4     FE3     FE1     S1
+ DIHE    FE4     FE3     FE1     S2      FE4     FE3     FE1     S3
+ DIHE    FE4     FE3     FE2     S1      FE4     FE3     FE2     S2
+ DIHE    FE4     FE3     FE2     S4      FE4     FE2     FE1     S1
+ DIHE    FE4     FE2     FE1     S2      FE4     FE2     FE1     S3
+ DIHE    FE4     FE2     FE3     S2      FE4     FE2     FE3     S3
+ DIHE    FE4     FE2     FE3     S4      FE4     FE1     FE2     S1
+ DIHE    FE4     FE1     FE2     S2      FE4     FE1     FE2     S4
+ DIHE    FE4     FE1     FE3     S2      FE4     FE1     FE3     S3
+ DIHE    FE4     FE1     FE3     S4      S1      FE4     FE1     S2
+ DIHE    S1      FE4     FE1     S3      S1      FE4     FE2     S2
+ DIHE    S1      FE4     FE2     S4      S1      FE4     FE3     S2
+ DIHE    S1      FE4     FE3     S3      S1      FE4     FE3     S4
+ DIHE    S1      FE2     FE1     S2      S1      FE2     FE1     S3
+ DIHE    S1      FE2     FE3     S2      S1      FE2     FE3     S3
+ DIHE    S1      FE2     FE3     S4      S1      FE2     FE4     S3
+ DIHE    S1      FE2     FE4     S4      S1      FE1     FE2     S2
+ DIHE    S1      FE1     FE2     S4      S1      FE1     FE3     S2
+ DIHE    S1      FE1     FE3     S3      S1      FE1     FE3     S4
+ DIHE    S1      FE1     FE4     S3      S1      FE1     FE4     S4
+ DIHE    S2      FE3     FE1     S3      S2      FE3     FE2     S4
+ DIHE    S2      FE3     FE4     S3      S2      FE3     FE4     S4
+ DIHE    S2      FE2     FE1     S3      S2      FE2     FE3     S3
+ DIHE    S2      FE2     FE3     S4      S2      FE2     FE4     S3
+ DIHE    S2      FE2     FE4     S4      S2      FE1     FE2     S4
+ DIHE    S2      FE1     FE3     S3      S2      FE1     FE3     S4
+ DIHE    S2      FE1     FE4     S3      S2      FE1     FE4     S4
+ DIHE    S3      FE4     FE2     S4      S3      FE4     FE3     S4
+ DIHE    S3      FE3     FE2     S4      S3      FE3     FE4     S4
+ DIHE    S3      FE1     FE2     S4      S3      FE1     FE3     S4
+ DIHE    S3      FE1     FE4     S4
+
+RESI FHO       -0.03145 !
+
+GROUP
+ ATOM  FE1  FEIO -0.02364
+ ATOM  FE2  FEIO -0.02364
+ ATOM  FE3  FEIO -0.02364
+ ATOM  FE4  FEIO -0.02364
+ ATOM  S1   SIO   0.01578
+ ATOM  S2   SIO   0.01578
+ ATOM  S3   SIO   0.01578
+ ATOM  S4   SIO   0.01578
+
+ BOND  FE1  S1         FE1  S2         FE1  S3         FE2  S1
+ BOND  FE2  S2         FE2  S4         FE3  S2         FE3  S3
+ BOND  FE3  S4         FE4  S1         FE4  S3         FE4  S4
+ BOND  FE1 FE2         FE1 FE3         FE1 FE4         FE2 FE3
+ BOND  FE2 FE4         FE3 FE4
+ ANGL    FE1     S3      FE4     FE1     S3      FE3     S4      FE2     FE1
+ ANGL    FE1     S2      FE3     FE1     S2      FE2     FE1     S1      FE4
+ ANGL    FE1     S1      FE2     FE1     FE4     FE3     FE1     FE4     FE2
+ ANGL    FE1     FE3     FE4     FE1     FE3     FE2     FE1     FE2     FE4
+ ANGL    FE1     FE2     FE3     FE2     S4      FE4     FE2     S4      FE3
+ ANGL    FE2     S2      FE3     FE2     S1      FE4     FE2     FE4     FE3
+ ANGL    FE2     FE3     FE4     FE2     FE1     FE4     FE2     FE1     FE3
+ ANGL    FE3     S4      FE4     FE3     S3      FE4     FE3     FE2     FE4
+ ANGL    FE3     FE1     FE4     S1      FE4     FE3     S1      FE4     FE2
+ ANGL    S1      FE4     FE1     S1      FE4     S4      S1      FE4     S3
+ ANGL    S1      FE2     FE4     S1      FE2     FE3     S1      FE2     FE1
+ ANGL    S1      FE2     S4      S1      FE2     S2      S1      FE1     FE4
+ ANGL    S1      FE1     FE3     S1      FE1     FE2     S1      FE1     S3
+ ANGL    S1      FE1     S2      S2      FE3     FE4     S2      FE3     FE2
+ ANGL    S2      FE3     FE1     S2      FE3     S4      S2      FE3     S3
+ ANGL    S2      FE2     FE4     S2      FE2     FE3     S2      FE2     FE1
+ ANGL    S2      FE2     S4      S2      FE1     FE4     S2      FE1     FE3
+ ANGL    S2      FE1     FE2     S2      FE1     S3      S3      FE4     FE3
+ ANGL    S3      FE4     FE2     S3      FE4     FE1     S3      FE4     S4
+ ANGL    S3      FE3     FE4     S3      FE3     FE2     S3      FE3     FE1
+ ANGL    S3      FE3     S4      S3      FE1     FE4     S3      FE1     FE3
+ ANGL    S3      FE1     FE2     S4      FE4     FE3     S4      FE4     FE2
+ ANGL    S4      FE4     FE1     S4      FE3     FE4     S4      FE3     FE2
+ ANGL    S4      FE3     FE1     S4      FE2     FE4     S4      FE2     FE3
+ DIHE    FE1     S3      FE3     FE2     FE1     S3      FE3     FE4
+ DIHE    FE1     S3      FE4     FE2     FE1     S3      FE4     FE3
+ DIHE    FE1     S2      FE2     FE3     FE1     S2      FE2     FE4
+ DIHE    FE1     S2      FE3     FE2     FE1     S2      FE3     FE4
+ DIHE    FE1     S1      FE2     FE3     FE1     S1      FE2     FE4
+ DIHE    FE1     S1      FE4     FE2
+ DIHE    FE1     S1      FE4     FE3     FE1     FE4     S1      FE2
+ DIHE    FE1     FE4     S3      FE3     FE1     FE4     S4      FE2
+ DIHE    FE1     FE4     S4      FE3     FE1     FE4     FE2     S1
+ DIHE    FE1     FE4     FE2     S2      FE1     FE4     FE2     S4
+ DIHE    FE1     FE4     FE2     FE3     FE1     FE4     FE3     S2
+ DIHE    FE1     FE4     FE3     S3      FE1     FE4     FE3     S4
+ DIHE    FE1     FE4     FE3     FE2     FE1     FE3     S2      FE2
+ DIHE    FE1     FE3     S3      FE4     FE1     FE3     S4      FE2
+ DIHE    FE1     FE3     S4      FE4     FE1     FE3     FE2     S1
+ DIHE    FE1     FE3     FE2     S2      FE1     FE3     FE2     S4
+ DIHE    FE1     FE3     FE2     FE4     FE1     FE3     FE4     S1
+ DIHE    FE1     FE3     FE4     S3      FE1     FE3     FE4     S4
+ DIHE    FE1     FE3     FE4     FE2     FE1     FE2     S1      FE4
+ DIHE    FE1     FE2     S2      FE3     FE1     FE2     S4      FE3
+ DIHE    FE1     FE2     S4      FE4     FE1     FE2     FE3     S2
+ DIHE    FE1     FE2     FE3     S3      FE1     FE2     FE3     S4
+ DIHE    FE1     FE2     FE3     FE4     FE1     FE2     FE4     S1
+ DIHE    FE1     FE2     FE4     S3      FE1     FE2     FE4     S4
+ DIHE    FE1     FE2     FE4     FE3     FE2     S4      FE3     FE4
+ DIHE    FE2     S4      FE4     FE3     FE2     S2      FE1     FE3
+ DIHE    FE2     S2      FE1     FE4     FE2     S2      FE3     FE4
+ DIHE    FE2     S1      FE1     FE3     FE2     S1      FE1     FE4
+ DIHE    FE2     S1      FE4     FE3     FE2     FE4     S3      FE3
+ DIHE    FE2     FE4     S4      FE3     FE2     FE4     FE1     S1
+ DIHE    FE2     FE4     FE1     S2      FE2     FE4     FE1     S3
+ DIHE    FE2     FE4     FE1     FE3     FE2     FE4     FE3     S2
+ DIHE    FE2     FE4     FE3     S3      FE2     FE4     FE3     S4
+ DIHE    FE2     FE3     S3      FE4     FE2     FE3     S4      FE4
+ DIHE    FE2     FE3     FE1     S1      FE2     FE3     FE1     S2
+ DIHE    FE2     FE3     FE1     S3      FE2     FE3     FE1     FE4
+ DIHE    FE2     FE3     FE4     S1      FE2     FE3     FE4     S3
+ DIHE    FE2     FE3     FE4     S4      FE2     FE1     S1      FE4
+ DIHE    FE2     FE1     S2      FE3     FE2     FE1     S3      FE3
+ DIHE    FE2     FE1     S3      FE4     FE2     FE1     FE3     S2
+ DIHE    FE2     FE1     FE3     S3      FE2     FE1     FE3     S4
+ DIHE    FE2     FE1     FE3     FE4     FE2     FE1     FE4     S1
+ DIHE    FE2     FE1     FE4     S3      FE2     FE1     FE4     S4
+ DIHE    FE2     FE1     FE4     FE3     FE3     S4      FE2     FE4
+ DIHE    FE3     S3      FE1     FE4     FE3     S2      FE1     FE4
+ DIHE    FE3     S2      FE2     FE4     FE3     FE4     FE1     S1
+ DIHE    FE3     FE4     FE1     S2      FE3     FE4     FE1     S3
+ DIHE    FE3     FE4     FE2     S1      FE3     FE4     FE2     S2
+ DIHE    FE3     FE4     FE2     S4      FE3     FE2     S1      FE4
+ DIHE    FE3     FE2     S4      FE4     FE3     FE2     FE1     S1
+ DIHE    FE3     FE2     FE1     S2      FE3     FE2     FE1     S3
+ DIHE    FE3     FE2     FE1     FE4     FE3     FE2     FE4     S1
+ DIHE    FE3     FE2     FE4     S3      FE3     FE2     FE4     S4
+ DIHE    FE3     FE1     S1      FE4     FE3     FE1     S3      FE4
+ DIHE    FE3     FE1     FE2     S1      FE3     FE1     FE2     S2
+ DIHE    FE3     FE1     FE2     S4      FE3     FE1     FE2     FE4
+ DIHE    FE3     FE1     FE4     S1      FE3     FE1     FE4     S3
+ DIHE    FE3     FE1     FE4     S4      FE4     FE3     FE1     S1
+ DIHE    FE4     FE3     FE1     S2      FE4     FE3     FE1     S3
+ DIHE    FE4     FE3     FE2     S1      FE4     FE3     FE2     S2
+ DIHE    FE4     FE3     FE2     S4      FE4     FE2     FE1     S1
+ DIHE    FE4     FE2     FE1     S2      FE4     FE2     FE1     S3
+ DIHE    FE4     FE2     FE3     S2      FE4     FE2     FE3     S3
+ DIHE    FE4     FE2     FE3     S4      FE4     FE1     FE2     S1
+ DIHE    FE4     FE1     FE2     S2      FE4     FE1     FE2     S4
+ DIHE    FE4     FE1     FE3     S2      FE4     FE1     FE3     S3
+ DIHE    FE4     FE1     FE3     S4      S1      FE4     FE1     S2
+ DIHE    S1      FE4     FE1     S3      S1      FE4     FE2     S2
+ DIHE    S1      FE4     FE2     S4      S1      FE4     FE3     S2
+ DIHE    S1      FE4     FE3     S3      S1      FE4     FE3     S4
+ DIHE    S1      FE2     FE1     S2      S1      FE2     FE1     S3
+ DIHE    S1      FE2     FE3     S2      S1      FE2     FE3     S3
+ DIHE    S1      FE2     FE3     S4      S1      FE2     FE4     S3
+ DIHE    S1      FE2     FE4     S4      S1      FE1     FE2     S2
+ DIHE    S1      FE1     FE2     S4      S1      FE1     FE3     S2
+ DIHE    S1      FE1     FE3     S3      S1      FE1     FE3     S4
+ DIHE    S1      FE1     FE4     S3      S1      FE1     FE4     S4
+ DIHE    S2      FE3     FE1     S3      S2      FE3     FE2     S4
+ DIHE    S2      FE3     FE4     S3      S2      FE3     FE4     S4
+ DIHE    S2      FE2     FE1     S3      S2      FE2     FE3     S3
+ DIHE    S2      FE2     FE3     S4      S2      FE2     FE4     S3
+ DIHE    S2      FE2     FE4     S4      S2      FE1     FE2     S4
+ DIHE    S2      FE1     FE3     S3      S2      FE1     FE3     S4
+ DIHE    S2      FE1     FE4     S3      S2      FE1     FE4     S4
+ DIHE    S3      FE4     FE2     S4      S3      FE4     FE3     S4
+ DIHE    S3      FE3     FE2     S4      S3      FE3     FE4     S4
+ DIHE    S3      FE1     FE2     S4      S3      FE1     FE3     S4
+ DIHE    S3      FE1     FE4     S4
+
+RESI FHR       -0.23760 !
+
+GROUP
+ ATOM  FE1  FEIR  0.80816
+ ATOM  FE2  FEIR  0.80816
+ ATOM  FE3  FEIR  0.80816
+ ATOM  FE4  FEIR  0.80816
+ ATOM  S1   SIR  -0.86756
+ ATOM  S2   SIR  -0.86756
+ ATOM  S3   SIR  -0.86756
+ ATOM  S4   SIR  -0.86756
+
+ BOND  FE1  S1         FE1  S2         FE1  S3         FE2  S1
+ BOND  FE2  S2         FE2  S4         FE3  S2         FE3  S3
+ BOND  FE3  S4         FE4  S1         FE4  S3         FE4  S4
+ BOND  FE1 FE2         FE1 FE3         FE1 FE4         FE2 FE3
+ BOND  FE2 FE4         FE3 FE4
+ ANGL    FE1     S3      FE4     FE1     S3      FE3     S4      FE2     FE1
+ ANGL    FE1     S2      FE3     FE1     S2      FE2     FE1     S1      FE4
+ ANGL    FE1     S1      FE2     FE1     FE4     FE3     FE1     FE4     FE2
+ ANGL    FE1     FE3     FE4     FE1     FE3     FE2     FE1     FE2     FE4
+ ANGL    FE1     FE2     FE3     FE2     S4      FE4     FE2     S4      FE3
+ ANGL    FE2     S2      FE3     FE2     S1      FE4     FE2     FE4     FE3
+ ANGL    FE2     FE3     FE4     FE2     FE1     FE4     FE2     FE1     FE3
+ ANGL    FE3     S4      FE4     FE3     S3      FE4     FE3     FE2     FE4
+ ANGL    FE3     FE1     FE4     S1      FE4     FE3     S1      FE4     FE2
+ ANGL    S1      FE4     FE1     S1      FE4     S4      S1      FE4     S3
+ ANGL    S1      FE2     FE4     S1      FE2     FE3     S1      FE2     FE1
+ ANGL    S1      FE2     S4      S1      FE2     S2      S1      FE1     FE4
+ ANGL    S1      FE1     FE3     S1      FE1     FE2     S1      FE1     S3
+ ANGL    S1      FE1     S2      S2      FE3     FE4     S2      FE3     FE2
+ ANGL    S2      FE3     FE1     S2      FE3     S4      S2      FE3     S3
+ ANGL    S2      FE2     FE4     S2      FE2     FE3     S2      FE2     FE1
+ ANGL    S2      FE2     S4      S2      FE1     FE4     S2      FE1     FE3
+ ANGL    S2      FE1     FE2     S2      FE1     S3      S3      FE4     FE3
+ ANGL    S3      FE4     FE2     S3      FE4     FE1     S3      FE4     S4
+ ANGL    S3      FE3     FE4     S3      FE3     FE2     S3      FE3     FE1
+ ANGL    S3      FE3     S4      S3      FE1     FE4     S3      FE1     FE3
+ ANGL    S3      FE1     FE2     S4      FE4     FE3     S4      FE4     FE2
+ ANGL    S4      FE4     FE1     S4      FE3     FE4     S4      FE3     FE2
+ ANGL    S4      FE3     FE1     S4      FE2     FE4     S4      FE2     FE3
+ DIHE    FE1     S3      FE3     FE2     FE1     S3      FE3     FE4
+ DIHE    FE1     S3      FE4     FE2     FE1     S3      FE4     FE3
+ DIHE    FE1     S2      FE2     FE3     FE1     S2      FE2     FE4
+ DIHE    FE1     S2      FE3     FE2     FE1     S2      FE3     FE4
+ DIHE    FE1     S1      FE2     FE3     FE1     S1      FE2     FE4
+ DIHE    FE1     S1      FE4     FE2
+ DIHE    FE1     S1      FE4     FE3     FE1     FE4     S1      FE2
+ DIHE    FE1     FE4     S3      FE3     FE1     FE4     S4      FE2
+ DIHE    FE1     FE4     S4      FE3     FE1     FE4     FE2     S1
+ DIHE    FE1     FE4     FE2     S2      FE1     FE4     FE2     S4
+ DIHE    FE1     FE4     FE2     FE3     FE1     FE4     FE3     S2
+ DIHE    FE1     FE4     FE3     S3      FE1     FE4     FE3     S4
+ DIHE    FE1     FE4     FE3     FE2     FE1     FE3     S2      FE2
+ DIHE    FE1     FE3     S3      FE4     FE1     FE3     S4      FE2
+ DIHE    FE1     FE3     S4      FE4     FE1     FE3     FE2     S1
+ DIHE    FE1     FE3     FE2     S2      FE1     FE3     FE2     S4
+ DIHE    FE1     FE3     FE2     FE4     FE1     FE3     FE4     S1
+ DIHE    FE1     FE3     FE4     S3      FE1     FE3     FE4     S4
+ DIHE    FE1     FE3     FE4     FE2     FE1     FE2     S1      FE4
+ DIHE    FE1     FE2     S2      FE3     FE1     FE2     S4      FE3
+ DIHE    FE1     FE2     S4      FE4     FE1     FE2     FE3     S2
+ DIHE    FE1     FE2     FE3     S3      FE1     FE2     FE3     S4
+ DIHE    FE1     FE2     FE3     FE4     FE1     FE2     FE4     S1
+ DIHE    FE1     FE2     FE4     S3      FE1     FE2     FE4     S4
+ DIHE    FE1     FE2     FE4     FE3     FE2     S4      FE3     FE4
+ DIHE    FE2     S4      FE4     FE3     FE2     S2      FE1     FE3
+ DIHE    FE2     S2      FE1     FE4     FE2     S2      FE3     FE4
+ DIHE    FE2     S1      FE1     FE3     FE2     S1      FE1     FE4
+ DIHE    FE2     S1      FE4     FE3     FE2     FE4     S3      FE3
+ DIHE    FE2     FE4     S4      FE3     FE2     FE4     FE1     S1
+ DIHE    FE2     FE4     FE1     S2      FE2     FE4     FE1     S3
+ DIHE    FE2     FE4     FE1     FE3     FE2     FE4     FE3     S2
+ DIHE    FE2     FE4     FE3     S3      FE2     FE4     FE3     S4
+ DIHE    FE2     FE3     S3      FE4     FE2     FE3     S4      FE4
+ DIHE    FE2     FE3     FE1     S1      FE2     FE3     FE1     S2
+ DIHE    FE2     FE3     FE1     S3      FE2     FE3     FE1     FE4
+ DIHE    FE2     FE3     FE4     S1      FE2     FE3     FE4     S3
+ DIHE    FE2     FE3     FE4     S4      FE2     FE1     S1      FE4
+ DIHE    FE2     FE1     S2      FE3     FE2     FE1     S3      FE3
+ DIHE    FE2     FE1     S3      FE4     FE2     FE1     FE3     S2
+ DIHE    FE2     FE1     FE3     S3      FE2     FE1     FE3     S4
+ DIHE    FE2     FE1     FE3     FE4     FE2     FE1     FE4     S1
+ DIHE    FE2     FE1     FE4     S3      FE2     FE1     FE4     S4
+ DIHE    FE2     FE1     FE4     FE3     FE3     S4      FE2     FE4
+ DIHE    FE3     S3      FE1     FE4     FE3     S2      FE1     FE4
+ DIHE    FE3     S2      FE2     FE4     FE3     FE4     FE1     S1
+ DIHE    FE3     FE4     FE1     S2      FE3     FE4     FE1     S3
+ DIHE    FE3     FE4     FE2     S1      FE3     FE4     FE2     S2
+ DIHE    FE3     FE4     FE2     S4      FE3     FE2     S1      FE4
+ DIHE    FE3     FE2     S4      FE4     FE3     FE2     FE1     S1
+ DIHE    FE3     FE2     FE1     S2      FE3     FE2     FE1     S3
+ DIHE    FE3     FE2     FE1     FE4     FE3     FE2     FE4     S1
+ DIHE    FE3     FE2     FE4     S3      FE3     FE2     FE4     S4
+ DIHE    FE3     FE1     S1      FE4     FE3     FE1     S3      FE4
+ DIHE    FE3     FE1     FE2     S1      FE3     FE1     FE2     S2
+ DIHE    FE3     FE1     FE2     S4      FE3     FE1     FE2     FE4
+ DIHE    FE3     FE1     FE4     S1      FE3     FE1     FE4     S3
+ DIHE    FE3     FE1     FE4     S4      FE4     S4      FE2     S1
+ DIHE    FE4     FE3     FE1     S1
+ DIHE    FE4     FE3     FE1     S2      FE4     FE3     FE1     S3
+ DIHE    FE4     FE3     FE2     S1      FE4     FE3     FE2     S2
+ DIHE    FE4     FE3     FE2     S4      FE4     FE2     FE1     S1
+ DIHE    FE4     FE2     FE1     S2      FE4     FE2     FE1     S3
+ DIHE    FE4     FE2     FE3     S2      FE4     FE2     FE3     S3
+ DIHE    FE4     FE2     FE3     S4      FE4     FE1     FE2     S1
+ DIHE    FE4     FE1     FE2     S2      FE4     FE1     FE2     S4
+ DIHE    FE4     FE1     FE3     S2      FE4     FE1     FE3     S3
+ DIHE    FE4     FE1     FE3     S4      S1      FE4     FE1     S2
+ DIHE    S1      FE4     FE1     S3      S1      FE4     FE2     S2
+ DIHE    S1      FE4     FE2     S4      S1      FE4     FE3     S2
+ DIHE    S1      FE4     FE3     S3      S1      FE4     FE3     S4
+ DIHE    S1      FE2     FE1     S2      S1      FE2     FE1     S3
+ DIHE    S1      FE2     FE3     S2      S1      FE2     FE3     S3
+ DIHE    S1      FE2     FE3     S4      S1      FE2     FE4     S3
+ DIHE    S1      FE2     FE4     S4      S1      FE1     FE2     S2
+ DIHE    S1      FE1     FE2     S4      S1      FE1     FE3     S2
+ DIHE    S1      FE1     FE3     S3      S1      FE1     FE3     S4
+ DIHE    S1      FE1     FE4     S3      S1      FE1     FE4     S4
+ DIHE    S2      FE3     FE1     S3      S2      FE3     FE2     S4
+ DIHE    S2      FE3     FE4     S3      S2      FE3     FE4     S4
+ DIHE    S2      FE2     FE1     S3      S2      FE2     FE3     S3
+ DIHE    S2      FE2     FE3     S4      S2      FE2     FE4     S3
+ DIHE    S2      FE2     FE4     S4      S2      FE1     FE2     S4
+ DIHE    S2      FE1     FE3     S3      S2      FE1     FE3     S4
+ DIHE    S2      FE1     FE4     S3      S2      FE1     FE4     S4
+ DIHE    S3      FE4     FE2     S4      S3      FE4     FE3     S4
+ DIHE    S3      FE3     FE2     S4      S3      FE3     FE4     S4
+ DIHE    S3      FE1     FE2     S4      S3      FE1     FE3     S4
+ DIHE    S3      FE1     FE4     S4
+
+!!! CHC 102705 ICs reflect Gaussian geometry optimization of di-Fe(I) reduced
+!!! cluster Model 5 (methylthiol ligand). HB1 and HB4 hydrogens face cysteine. S1 at
+!!! right angle to C4 carbon.
+RESI HCR         -1.00!
+ATOM  FE1  FEL1 -0.19373
+ATOM  FE2  FEL2 -0.29303
+ATOM  S1   SL1   0.01831  
+ATOM  S2   SL2   0.00690  
+ATOM  O3   OL4  -0.37185
+ATOM  N4   NL5  -0.39702
+ATOM  O5   OL6  -0.34865
+ATOM  N6   NL5  -0.38678
+ATOM  O7   OL4  -0.35972
+ATOM  C3   CLO1  0.42940
+ATOM  C4   CLN1  0.02753
+ATOM  C5   CLC   0.39227
+ATOM  C6   CLN2  0.07199
+ATOM  C7   CLO2  0.46579
+ATOM  N1   NLM  -0.50106
+ATOM  HN   H     0.30269
+ATOM  CB1  CCL1  -0.29430
+ATOM  HB1  HCL1   0.17601
+ATOM  HB2  HCL2   0.18442
+ATOM  CB3  CCL1  -0.29101
+ATOM  HB3  HCL2   0.18684
+ATOM  HB4  HCL1   0.16972
+ATOM  HH1  HH    0.00528
+BOND    FE1   S1      FE1   S2      FE1   C3      FE1   C4
+BOND    FE2   C6      FE1   C5      FE2   S1      FE2   S2
+BOND    FE2   C5      FE2   C7       S1  CB1       S2  CB3
+BOND    CB1  HB1      CB1  HB2      CB3  HB3      CB3  HB4
+BOND     N1   HN       N1  CB1       N1  CB3      HH1  FE2
+TRIPLE   O3   C3       N4   C4       O5   C5       N6   C6
+TRIPLE   O7   C7
+ANGL    FE1   C5    O5      FE1   C5  FE2      FE1   C4   N4
+ANGL    FE1   C3    O3      FE1   S2   CB3     FE1   S2  FE2
+ANGL    FE1   S1    CB1     FE1   S1  FE2      FE2   C7   O7
+ANGL    FE2   C6    N6      FE2   C5   O5      FE2   S2   CB3
+ANGL    FE2   S1    CB1     S1    CB1  N1       S1   CB1  HB2
+ANGL    S1    CB1   HB1     S1   FE2   HH1      S1  FE2   C7
+ANGL    S1   FE2    C5      S1   FE2   S2       S1  FE1   C5
+ANGL    S1   FE1    C4      S1   FE1   C3       S1  FE1   S2
+ANGL    S2    CB3   N1      S2    CB3  HB4      S2   CB3  HB3
+ANGL    S2   FE2    HH1     S2   FE2   C7       S2  FE2   C5
+ANGL    S2   FE1    C5      S2   FE1   C4       S2  FE1   C3
+ANGL    C3   FE1    C5      C3   FE1   C4       C4  FE1   C5
+ANGL    C5   FE2    HH1     C5   FE2   C7       C6  FE2   HH1
+ANGL    C6   FE2    C7      C6   FE2   C5       C6  FE2   S2
+ANGL    C6   FE2    S1      C7   FE2   HH1      HN   N1   CB3
+ANGL    HN    N1    CB1     CB1   N1   CB3      HB1  CB1  N1
+ANGL    HB1   CB1   HB2     HB2   CB1  N1       HB3  CB3  N1
+ANGL    HB3   CB3   HB4     HB4   CB3  N1
+DIHE    FE1   C5   FE2   C6       FE1   C5   FE2   S1
+DIHE    FE1   C5   FE2   S2       FE1   C5   FE2   C7
+DIHE    FE1   S2   FE2   C6       FE1   S1    CB1  N1
+DIHE    FE1   S2   FE2   S1       FE1   S2   FE2   C5
+DIHE    FE1   S2   FE2   HH1      FE1   S2    CB3  HB3
+DIHE    FE1   S2    CB3  HB4      FE1   S2    CB3  N1
+DIHE    FE1   S1   FE2   S2       FE1   S1   FE2   C5
+DIHE    FE1   S1   FE2   C7       FE1   S1   FE2   HH1
+DIHE    FE1   S1    CB1  HB1      FE1   S1    CB1  HB2
+DIHE    FE2   C5   FE1   S1       FE2   S1    CB1  N1
+DIHE    FE2   C5   FE1   S2       FE2   C5   FE1   C3
+DIHE    FE2   C5   FE1   C4       FE2   S2   FE1   S1
+DIHE    FE2   S2   FE1   C3       FE2   S2   FE1   C5
+DIHE    FE2   S2    CB3  HB3      FE2   S2    CB3  HB4
+DIHE    FE2   S2    CB3  N1       FE2   S1   FE1   S2
+DIHE    FE2   S1   FE1   C4       FE2   S1   FE1   C5
+DIHE    FE2   S1    CB1  HB1      FE2   S1    CB1  HB2
+DIHE     S1   CB1   N1   HN
+DIHE     S1   CB1   N1   CB3       S1  FE2    S2   CB3
+DIHE     S1  FE1    S2   CB3       S1  FE1    C5   O5
+DIHE     S2   CB3   N1   HN        S2   CB3   N1   CB1
+DIHE     S2  FE2    S1   CB1       S2  FE2    C5   O5
+DIHE     S2  FE1    S1   CB1       S2  FE1    C5   O5
+DIHE     O5   C5   FE1   C3        O5   C5   FE1   C4
+DIHE     O5   C5   FE2   C6        O5   C5   FE2   C7
+DIHE     C3  FE1    S2   CB3
+DIHE     C4  FE1    S1   CB1       C5  FE2    S1   CB1
+DIHE     C5  FE2    S2   CB3       C5  FE1    S1   CB1
+DIHE     C5  FE1    S2   CB3       C6  FE2    S2   CB3
+DIHE     C7  FE2    S1   CB1       HN   N1    CB1  HB1
+DIHE     HN   N1    CB1  HB2       HN   N1    CB3  HB3
+DIHE     HN   N1    CB3  HB4       CB1  N1    CB3  HB3
+DIHE     CB1  N1    CB3  HB4       CB1  S1   FE2   HH1
+DIHE     HB1  CB1   N1   CB3       HB2  CB1   N1   CB3
+DIHE     CB3  S2   FE2   HH1
+IMPR     N6   C6    C7  FE2        O7   C7    C6  FE2
+IC FE1   S2   S1  CB1   2.3357   47.0408 -134.4427   78.4580  1.9133 
+IC FE1   S1   S2  CB3   2.3472   46.7387  134.9792   79.0947  1.9128
+IC FE1   S1  CB1   N1   2.3472  111.2520  -63.5219  118.7196  1.4507
+IC FE1   S2  CB3   N1   2.3357  112.2737   62.4126  118.3568  1.4499
+IC FE1   S1  CB1  HB1   2.3472  111.2520   60.0899  106.2605  1.1027
+IC FE1   S1  CB1  HB2   2.3472  111.2520  175.1306  104.3815  1.1008
+IC FE2   S2  CB3  HB3   2.3654  106.6331  110.8096  104.2490  1.1033 
+IC FE2   S2  CB3  HB4   2.3654  106.6331 -133.9197  107.0784  1.1009
+IC  S1  CB1   N1  CB3   1.9133  118.7196   63.8897  115.6870  1.4499
+IC CB1   N1  CB3   S2   1.4507  115.6870  -62.7725  118.3568  1.9128
+IC FE2   S2  CB3   N1   2.3654  106.6331  -10.1018  118.3568  1.4499
+IC FE2   S1  CB1   N1   2.3471  106.7300    8.9572  118.7196  1.4507
+IC  C3  FE1   S2  CB3   1.7707   92.9550  140.9576  112.2737  1.9128 
+IC  C4  FE1   S1  CB1   1.9451   87.6807 -141.4511  111.2520  1.9133
+IC  C5  FE1   S1  CB1   2.4309   87.1607  131.3410  111.2520  1.9133
+IC  C5  FE2   S2  CB3   1.8481   95.7725  159.2111  106.6331  1.9128
+IC  C6  FE2   S2  CB3   1.9426   89.4235 -113.0929  106.6331  1.9128
+IC  C7  FE2   S1  CB1   1.7747   90.3921  116.8097  106.7300  1.9133
+IC  O3   C3   C4  FE1   1.1789  132.0441 -175.9035   41.6903  1.9451
+IC  N4   C4   S1  FE1   1.1868  129.2845 -174.4134   40.5872  2.3472
+IC  O5   C5  FE2   C7   1.1754  159.3296  -46.8095   92.1346  1.7747
+IC  N6   C6   C7  FE2   1.1846  138.0507  177.2080   45.8119  1.7747
+IC  O7   C7   C6  FE2   1.1727  133.5612 -176.3078   40.9258  1.9426
+IC  HN   N1  CB1  HB1   1.0303  109.0007  178.8884  109.3598  1.1027
+IC  HN   N1  CB1  HB2   1.0303  109.0007   60.0317  108.8192  1.1008
+IC  HN   N1  CB3  HB3   1.0303  108.7905  -58.3132  108.7390  1.1033
+IC  HN   N1  CB3  HB4   1.0303  108.7905 -176.9642  109.1892  1.1009
+IC HH1  FE2   S1  CB1   1.5356   92.7493   35.8691  106.7300  1.9133
+
+!!! CHC 102005 ICs reflect Gaussian geometry optimization of Fe(I)-Fe(II)
+!!! cluster Model 6 (methylthiol ligand). HC1's face methylthiol. S1 trans to
+!!! C3 carbon. S2 trans to C4 carbon. Charges scaled uniformly
+!!! from G2003 NPA values to maintain neutrality.
+RESI HCO         -1.00
+ATOM  FE1  FEM1 -0.22930
+ATOM  FE2  FEM2  0.00276
+ATOM  S1   SM1  -0.03055
+ATOM  S2   SM2  -0.04107
+ATOM  O3   OM4  -0.38084
+ATOM  N4   NM5  -0.40514
+ATOM  O5   OM6  -0.37296
+ATOM  N6   NM5  -0.37139
+ATOM  O7   OM4  -0.36663
+ATOM  C3   CMO1  0.44093
+ATOM  C4   CMN1  0.03875
+ATOM  C5   CMC   0.34359
+ATOM  C6   CMN2 -0.00642
+ATOM  C7   CMO2  0.43330
+ATOM  N1   NMM  -0.51356
+ATOM  HN   H     0.31571
+ATOM  CB1  CCM1 -0.30040
+ATOM  HB1  HCM1  0.17586
+ATOM  HB2  HCM2  0.18896
+ATOM  CB3  CCM1 -0.28745
+ATOM  HB3  HCM2  0.19453
+ATOM  HB4  HCM1  0.17132
+BOND    FE1   S1      FE1   S2      FE1   C3      FE1   C4
+BOND    FE2   C6      FE1   C5      FE2   S1      FE2   S2
+BOND    FE2   C5      FE2   C7       S1  CB1       S2  CB3
+BOND    CB1  HB1       CB1  HB2      CB3  HB3       CB3 HB4
+BOND     N1   HN       N1  CB1       N1  CB3
+TRIPLE   O3   C3       N4   C4       O5   C5       N6   C6
+TRIPLE   O7   C7
+ANGL    FE1   C5    O5      FE1   C5  FE2      FE1   C4   N4
+ANGL    FE1   C3    O3      FE1   S2   CB3     FE1   S2  FE2
+ANGL    FE1   S1    CB1     FE1   S1  FE2      FE2   C7   O7
+ANGL    FE2   C6    N6      FE2   C5   O5      FE2   S2   CB3
+ANGL    FE2   S1    CB1     S1    CB1  N1       S1   CB1  HB2
+ANGL    S1    CB1   HB1     S1   FE2   C7       C5   FE2  C7
+ANGL    S1   FE2    C5      S1   FE2   S2       S1  FE1   C5
+ANGL    S1   FE1    C4      S1   FE1   C3       S1  FE1   S2
+ANGL    S2    CB3   N1      S2    CB3  HB4      S2   CB3  HB3
+ANGL    S2   FE1    C5      S2   FE1   C4       S2  FE1   C3
+ANGL    C3   FE1    C5      C3   FE1   C4       C4  FE1   C5
+ANGL    C6   FE2    C7      C6   FE2   C5       C6  FE2   S2
+ANGL    HN    N1    CB1     CB1   N1   CB3      HB1  CB1  N1
+ANGL    HB1   CB1   HB2     HB2   CB1  N1       HB3  CB3  N1
+ANGL    HB3   CB3   HB4     HB4   CB3  N1       S2   FE2  C7
+ANGL    C6   FE2    S1      HN    N1   CB3      S2   FE2  C5   
+DIHE    FE1   C5  FE2   C6     FE1   C5  FE2   S1  
+DIHE    FE1   C5  FE2   S2     FE1   C5  FE2   C7  
+DIHE    FE1   S2  FE2   C6     FE1   S2  FE2   S1  
+DIHE    FE1   S2  FE2   C5     FE1   S2   CB3  N1  
+DIHE    FE1   S1  FE2   S2     FE1   S2   CB3  HB3 
+DIHE    FE1   S2   CB3  HB4    FE1   S1  FE2   C5  
+DIHE    FE1   S1  FE2   C7     FE1   S1   CB1  N1  
+DIHE    FE1   S1   CB1  HB1    FE1   S1   CB1  HB2 
+DIHE    FE2   C5  FE1   S1     FE2   C5  FE1   S2  
+DIHE    FE2   C5  FE1   C3     FE2   C5  FE1   C4  
+DIHE    FE2   S2  FE1   S1     FE2   S1  FE1   S2  
+DIHE    FE2   S2  FE1   C3     FE2   S2  FE1   C5  
+DIHE    FE2   S2   CB3  N1     FE2   S2   CB3  HB3 
+DIHE    FE2   S2   CB3  HB4    FE2   S1  FE1   C4  
+DIHE    FE2   S1  FE1   C5     FE2   S1   CB1  N1  
+DIHE    FE2   S1   CB1  HB1    FE2   S1   CB1  HB2 
+DIHE     S1   CB1  N1   HN      S1   CB1  N1   CB3 
+DIHE     S1  FE1   S2   CB3     S1  FE2   S2   CB3 
+DIHE     S1  FE2   C5   O5      S1  FE1   C5   O5  
+DIHE     S2   CB3  N1   HN      S2   CB3  N1   CB1 
+DIHE     S2  FE1   S1   CB1     S2  FE2   S1   CB1 
+DIHE     S2  FE2   C5   O5      S2  FE1   C5   O5  
+DIHE     O5   C5  FE1   C3      O5   C5  FE1   C4  
+DIHE     O5   C5  FE2   C6      O5   C5  FE2   C7      
+DIHE     C3  FE1   S2   CB3     C4  FE1   S1   CB1 
+DIHE     C5  FE2   S1   CB1     C5  FE2   S2   CB3 
+DIHE     C5  FE1   S1   CB1     C5  FE1   S2   CB3 
+DIHE     HN   N1   CB1  HB1     C6  FE2   S2   CB3 
+DIHE     C7  FE2   S1   CB1     HN   N1   CB1  HB2 
+DIHE     HN   N1   CB3  HB3     HN   N1   CB3  HB4 
+DIHE    CB1   N1   CB3  HB3    CB1   N1   CB3  HB4 
+DIHE    HB1   CB1  N1   CB3    HB2   CB1  N1   CB3 
+IMPR     O5  FE1  FE2   C5
+IMPR    FE1   C5   C3   O3
+IMPR    FE2   S1   C7   O7
+IMPR    FE1   S1   C4   N4
+IMPR    FE2   S2   C6   N6
+IC FE1   S2   S1  CB1   2.3706   46.9956 -134.8451   76.7010  1.9136
+IC FE1   S1   S2  CB3   2.3993   46.2650  138.0604   78.6792  1.9207
+IC  C3  FE1   S2  CB3   1.7696   92.2942  138.4947  113.5473  1.9207 
+IC  C4  FE1   S1  CB1   1.9405   87.9642 -142.6066  109.6845  1.9136
+IC  C5  FE1   S1  CB1   2.1765   91.7532  128.2425  109.6845  1.9136
+IC  C5  FE2   S2  CB3   1.8629   88.8773  158.7212  105.1580  1.9207
+IC  C6  FE2   S2  CB3   1.9374   92.2621  -64.9720  105.1580  1.9207
+IC  C7  FE2   S1  CB1   1.7784   92.1545  128.2523  105.1721  1.9136
+IC FE1   S1  CB1   N1   2.3993  109.6845  -65.7480  118.6109  1.4512
+IC FE1   S2  CB3   N1   2.3706  113.5473   58.2997  118.1504  1.4452
+IC FE1   S1  CB1  HB1   2.3993  109.6845   58.5165  107.4602  1.1029
+IC FE1   S1  CB1  HB2   2.3993  109.6845  173.5586  103.6952  1.1011
+IC FE2   S2  CB3  HB3   2.3421  105.1580  108.8840  104.0996  1.1001 
+IC FE2   S2  CB3  HB4   2.3421  105.1580 -135.7329  106.5839  1.1033
+IC  S1  CB1   N1  CB3   1.9136  118.6109   68.3978  116.3229  1.4452
+IC CB1   N1  CB3   S2   1.4512  116.3229  -62.6768  118.1504  1.9207
+IC FE2   S2  CB3   N1   2.3421  105.1580  -12.0836  118.1504  1.4452
+IC FE2   S1  CB1   N1   2.3632  105.1721    3.2384  118.6109  1.4512
+IC  O3   C3   C4  FE1   1.1791  133.1279 -175.9459   41.3256  1.9405
+IC  N4   C4   S1  FE1   1.1869  128.9673 -174.3635   39.7666  2.3993
+IC  O5   C5  FE2   C7   1.1885  147.6809  -52.2098   89.6129  1.7784
+IC  N6   C6   C7  FE2   1.1875  138.5104  173.5161   48.1196  1.7784
+IC  O7   C7   C6  FE2   1.1754  130.9892 -179.6396   43.1116  1.9374
+IC  HN   N1  CB1  HB1   1.0288  110.8770  178.5940  109.1362  1.1029
+IC  HN   N1  CB1  HB2   1.0288  110.8770   60.0911  108.7841  1.1011
+IC  HN   N1  CB3  HB3   1.0288  109.7881  -54.1994  108.9710  1.1001
+IC  HN   N1  CB3  HB4   1.0288  109.7881 -173.5794  109.4865  1.1033
+
+!!!!!!!!!!!!! Patches to ligate Fe and S between residues
+
+PRES F2-1O       -0.50701 ! patch for CYS to FE1 of oxidized [2Fe2S] (1-F2O 2-CYS)
+!
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.81869
+ATOM 2HB1  HA      0.33818
+ATOM 2HB2  HA      0.33818
+ATOM 2SG   S      -0.36468
+DELETE ATOM 2HG1
+BOND 1FE1 2SG
+ANGL 2SG 1FE1 1S1   2SG 1FE1 1S2
+ANGL 1FE1 2SG 2CB
+DIHE 1FE1 2SG 2CB 2HB1   1FE1 2SG 2CB 2HB2
+DIHE 2CB  2SG 1FE1 1S1   2CB  2SG 1FE1 1S2
+DIHE 2SG 1FE1 1S1 1FE2   2SG 1FE1 1S2 1FE2
+
+PRES F2-2O       -0.50701 ! patch for CYS to FE2 of oxidized [2Fe2S] (1-F2O 2-CYS)
+!
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.81869
+ATOM 2HB1  HA      0.33818
+ATOM 2HB2  HA      0.33818
+ATOM 2SG   S      -0.36468
+DELETE ATOM 2HG1
+BOND 1FE2 2SG
+ANGL 2SG 1FE2 1S1   2SG 1FE2 1S2
+ANGL 1FE2 2SG 2CB
+DIHE 1FE2 2SG 2CB 2HB1   1FE2 2SG 2CB 2HB2
+DIHE 2CB  2SG 1FE2 1S1   2CB  2SG 1FE2 1S2
+DIHE 2SG 1FE2 1S1 1FE1   2SG 1FE2 1S2 1FE1
+
+PRES F2-1R       -0.56228 ! patch for CYS to FE1 of reduced [2Fe2S] (1-F2R 2-CYS)
+!
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.84492
+ATOM 2HB1  HA      0.33094
+ATOM 2HB2  HA      0.33094
+ATOM 2SG   S      -0.37924
+DELETE ATOM 2HG1
+BOND 1FE1 2SG
+ANGL 2SG 1FE1 1S1   2SG 1FE1 1S2
+ANGL 1FE1 2SG 2CB
+DIHE 1FE1 2SG 2CB 2HB1   1FE1 2SG 2CB 2HB2
+DIHE 2CB  2SG 1FE1 1S1   2CB  2SG 1FE1 1S2
+DIHE 2SG 1FE1 1S1 1FE2   2SG 1FE1 1S2 1FE2
+
+PRES F2-2R       -0.56228 ! patch for CYS to FE2 of reduced [2Fe2S] (1-F2R 2-CYS)
+!
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.84492
+ATOM 2HB1  HA      0.33094
+ATOM 2HB2  HA      0.33094
+ATOM 2SG   S      -0.37924
+DELETE ATOM 2HG1
+BOND 1FE2 2SG
+ANGL 2SG 1FE2 1S1   2SG 1FE2 1S2
+ANGL 1FE2 2SG 2CB
+DIHE 1FE2 2SG 2CB 2HB1   1FE2 2SG 2CB 2HB2
+DIHE 2CB  2SG 1FE2 1S1   2CB  2SG 1FE2 1S2
+DIHE 2SG 1FE2 1S1 1FE1   2SG 1FE2 1S2 1FE1
+
+PRES F4-1O       -0.635126 ! patch for CYS to FE1 of oxidized [4Fe4S] (1-F4O 2-CYS).
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.82229
+ATOM 2HB1  HA      0.342857
+ATOM 2HB2  HA      0.342857
+ATOM 2SG   S      -0.49855
+DELETE ATOM 2HG1
+BOND 1FE1 2SG
+ANGL 1FE2 1FE1 2SG
+ANGL 1FE3 1FE1 2SG
+ANGL 1FE4 1FE1 2SG
+ANGL 1S1 1FE1 2SG
+ANGL 1S2 1FE1 2SG
+ANGL 1S3 1FE1 2SG
+ANGL 1FE1 2SG 2CB
+DIHE 1FE1 2SG 2CB 2HB1
+DIHE 1FE1 2SG 2CB 2HB2
+DIHE 1FE2 1FE1 2SG 2CB
+DIHE 1FE2 1FE3 1FE1 2SG
+DIHE 1FE2 1FE4 1FE1 2SG
+DIHE 1FE2 1S1  1FE1 2SG
+DIHE 1FE2 1S2  1FE1 2SG
+DIHE 1FE3 1FE1 2SG 2CB
+DIHE 1FE3 1FE2 1FE1 2SG
+DIHE 1FE3 1FE4 1FE1 2SG
+DIHE 1FE3 1S2  1FE1 2SG
+DIHE 1FE3 1S3  1FE1 2SG
+DIHE 1FE4 1FE1 2SG 2CB
+DIHE 1FE4 1FE2 1FE1 2SG
+DIHE 1FE4 1FE3 1FE1 2SG
+DIHE 1FE4 1S1  1FE1 2SG
+DIHE 1FE4 1S3  1FE1 2SG
+DIHE 1S1 1FE2 1FE1 2SG
+DIHE 1S1 1FE4 1FE1 2SG
+DIHE 1S1 1FE1 2SG 2CB
+DIHE 1S2 1FE2 1FE1 2SG
+DIHE 1S2 1FE3 1FE1 2SG
+DIHE 1S2 1FE1 2SG 2CB
+DIHE 1S3 1FE3 1FE1 2SG
+DIHE 1S3 1FE4 1FE1 2SG
+DIHE 1S3 1FE1 2SG 2CB
+DIHE 1S4 1FE2 1FE1 2SG
+DIHE 1S4 1FE3 1FE1 2SG
+DIHE 1S4 1FE4 1FE1 2SG
+
+PRES F4-2O       -0.635126 ! patch for CYS to FE2 of oxidized [4Fe4S] (1-F4O 2-CYS).
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.82229
+ATOM 2HB1  HA      0.342857
+ATOM 2HB2  HA      0.342857
+ATOM 2SG   S      -0.49855
+DELETE ATOM 2HG1
+BOND 1FE2 2SG
+ANGL 1FE1 1FE2 2SG
+ANGL 1FE3 1FE2 2SG
+ANGL 1FE4 1FE2 2SG
+ANGL 1S1 1FE2 2SG
+ANGL 1S2 1FE2 2SG
+ANGL 1S4 1FE2 2SG
+ANGL 1FE2 2SG 2CB
+DIHE 1FE1 1FE2 2SG 2CB
+DIHE 1FE1 1FE3 1FE2 2SG
+DIHE 1FE1 1FE4 1FE2 2SG
+DIHE 1FE1 1S1 1FE2 2SG
+DIHE 1FE1 1S2 1FE2 2SG
+DIHE 1FE2 2SG 2CB 2HB1
+DIHE 1FE2 2SG 2CB 2HB2
+DIHE 1FE3 1FE1 1FE2 2SG
+DIHE 1FE3 1FE2 2SG 2CB   
+DIHE 1FE3 1FE4 1FE2 2SG
+DIHE 1FE3 1S2 1FE2 2SG
+DIHE 1FE3 1S4 1FE2 2SG   
+DIHE 1FE4 1FE1 1FE2 2SG   
+DIHE 1FE4 1FE2 2SG 2CB
+DIHE 1FE4 1FE3 1FE2 2SG   
+DIHE 1FE4 1S1 1FE2 2SG   
+DIHE 1FE4 1S4 1FE2 2SG
+DIHE 1S1 1FE4 1FE2 2SG
+DIHE 1S1 1FE1 1FE2 2SG   
+DIHE 1S1 1FE2 2SG 2CB
+DIHE 1S2 1FE2 2SG 2CB   
+DIHE 1S2 1FE3 1FE2 2SG
+DIHE 1S2 1FE1 1FE2 2SG   
+DIHE 1S3 1FE4 1FE2 2SG   
+DIHE 1S3 1FE3 1FE2 2SG
+DIHE 1S3 1FE1 1FE2 2SG   
+DIHE 1S4 1FE3 1FE2 2SG
+DIHE 1S4 1FE2 2SG 2CB
+DIHE 1S4 1FE4 1FE2 2SG
+
+PRES F4-3O       -0.635126 ! patch for CYS to FE3 of oxidized [4Fe4S] (1-F4O 2-CYS).
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.82229
+ATOM 2HB1  HA      0.342857
+ATOM 2HB2  HA      0.342857
+ATOM 2SG   S      -0.49855
+DELETE ATOM 2HG1
+BOND 1FE3 2SG
+ANGL 1FE1 1FE3 2SG
+ANGL 1FE2 1FE3 2SG
+ANGL 1FE4 1FE3 2SG
+ANGL 1S2 1FE3 2SG
+ANGL 1S3 1FE3 2SG
+ANGL 1S4 1FE3 2SG
+ANGL 1FE3 2SG 2CB
+DIHE 1FE1 1FE2 1FE3 2SG
+DIHE 1FE1 1FE4 1FE3 2SG
+DIHE 1FE1 1FE3 2SG 2CB
+DIHE 1FE1 1S2 1FE3 2SG
+DIHE 1FE1 1S3 1FE3 2SG
+DIHE 1FE2 1FE1 1FE3 2SG
+DIHE 1FE2 1FE3 2SG 2CB
+DIHE 1FE2 1FE4 1FE3 2SG
+DIHE 1FE2 1S2 1FE3 2SG
+DIHE 1FE2 1S4 1FE3 2SG
+DIHE 1FE3 2SG 2CB 2HB1
+DIHE 1FE3 2SG 2CB 2HB2
+DIHE 1FE4 1FE1 1FE3 2SG
+DIHE 1FE4 1FE2 1FE3 2SG
+DIHE 1FE4 1FE3 2SG 2CB
+DIHE 1FE4 1S3 1FE3 2SG
+DIHE 1FE4 1S4 1FE3 2SG
+DIHE 1S1 1FE1 1FE3 2SG
+DIHE 1S1 1FE2 1FE3 2SG
+DIHE 1S1 1FE4 1FE3 2SG
+DIHE 1S2 1FE1 1FE3 2SG
+DIHE 1S2 1FE2 1FE3 2SG
+DIHE 1S2 1FE3 2SG 2CB
+DIHE 1S3 1FE1 1FE3 2SG
+DIHE 1S3 1FE3 2SG 2CB
+DIHE 1S3 1FE4 1FE3 2SG
+DIHE 1S4 1FE2 1FE3 2SG
+DIHE 1S4 1FE3 2SG 2CB
+DIHE 1S4 1FE4 1FE3 2SG
+
+PRES F4-4O       -0.635126 ! patch for CYS to FE4 of oxidized [4Fe4S] (1-F4O 2-CYS).
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.82229
+ATOM 2HB1  HA      0.342857
+ATOM 2HB2  HA      0.342857
+ATOM 2SG   S      -0.49855
+DELETE ATOM 2HG1
+BOND 1FE4 2SG
+ANGL 1FE1 1FE4 2SG
+ANGL 1FE2 1FE4 2SG
+ANGL 1FE3 1FE4 2SG
+ANGL 1S1 1FE4 2SG
+ANGL 1S3 1FE4 2SG
+ANGL 1S4 1FE4 2SG
+ANGL 1FE4 2SG 2CB
+DIHE 1FE1 1FE2 1FE4 2SG
+DIHE 1FE1 1FE3 1FE4 2SG
+DIHE 1FE1 1FE4 2SG 2CB
+DIHE 1FE1 1S1 1FE4 2SG
+DIHE 1FE1 1S3 1FE4 2SG
+DIHE 1FE2 1FE1 1FE4 2SG
+DIHE 1FE2 1FE3 1FE4 2SG
+DIHE 1FE2 1FE4 2SG 2CB
+DIHE 1FE2 1S1 1FE4 2SG
+DIHE 1FE2 1S4 1FE4 2SG
+DIHE 1FE3 1FE1 1FE4 2SG
+DIHE 1FE3 1FE2 1FE4 2SG
+DIHE 1FE3 1FE4 2SG 2CB
+DIHE 1FE3 1S3 1FE4 2SG
+DIHE 1FE3 1S4 1FE4 2SG
+DIHE 1FE4 2SG 2CB 2HB1
+DIHE 1FE4 2SG 2CB 2HB2
+DIHE 1S1 1FE1 1FE4 2SG
+DIHE 1S1 1FE2 1FE4 2SG
+DIHE 1S1 1FE4 2SG 2CB
+DIHE 1S2 1FE1 1FE4 2SG
+DIHE 1S2 1FE2 1FE4 2SG
+DIHE 1S2 1FE3 1FE4 2SG
+DIHE 1S3 1FE1 1FE4 2SG
+DIHE 1S3 1FE3 1FE4 2SG
+DIHE 1S3 1FE4 2SG 2CB
+DIHE 1S4 1FE2 1FE4 2SG
+DIHE 1S4 1FE3 1FE4 2SG
+DIHE 1S4 1FE4 2SG 2CB
+
+PRES F4-1R       -0.77984 ! patch for CYS to FE1 of reduced [4Fe4S] (1-F4R 2-CYS).
+!                          Total cysteinate charge -0.6539
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.82048
+ATOM 2HB1  HA      0.32061
+ATOM 2HB2  HA      0.32061
+ATOM 2SG   S      -0.60058
+DELETE ATOM 2HG1
+BOND 1FE1 2SG
+ANGL 1FE2 1FE1 2SG
+ANGL 1FE3 1FE1 2SG
+ANGL 1FE4 1FE1 2SG
+ANGL 1S1 1FE1 2SG
+ANGL 1S2 1FE1 2SG
+ANGL 1S3 1FE1 2SG
+ANGL 1FE1 2SG 2CB
+DIHE 1FE1 2SG 2CB 2HB1
+DIHE 1FE1 2SG 2CB 2HB2
+DIHE 1FE2 1FE1 2SG 2CB
+DIHE 1FE2 1FE3 1FE1 2SG
+DIHE 1FE2 1FE4 1FE1 2SG
+DIHE 1FE2 1S1  1FE1 2SG
+DIHE 1FE2 1S2  1FE1 2SG
+DIHE 1FE3 1FE1 2SG 2CB
+DIHE 1FE3 1FE2 1FE1 2SG
+DIHE 1FE3 1FE4 1FE1 2SG
+DIHE 1FE3 1S2  1FE1 2SG
+DIHE 1FE3 1S3  1FE1 2SG
+DIHE 1FE4 1FE1 2SG 2CB
+DIHE 1FE4 1FE2 1FE1 2SG
+DIHE 1FE4 1FE3 1FE1 2SG
+DIHE 1FE4 1S1  1FE1 2SG
+DIHE 1FE4 1S3  1FE1 2SG
+DIHE 1S1 1FE2 1FE1 2SG
+DIHE 1S1 1FE4 1FE1 2SG
+DIHE 1S1 1FE1 2SG 2CB
+DIHE 1S2 1FE2 1FE1 2SG
+DIHE 1S2 1FE3 1FE1 2SG
+DIHE 1S2 1FE1 2SG 2CB
+DIHE 1S3 1FE3 1FE1 2SG
+DIHE 1S3 1FE4 1FE1 2SG
+DIHE 1S3 1FE1 2SG 2CB
+DIHE 1S4 1FE2 1FE1 2SG
+DIHE 1S4 1FE3 1FE1 2SG
+DIHE 1S4 1FE4 1FE1 2SG
+
+
+PRES F4-2R       -0.77984 ! patch for CYS to FE2 of reduced [4Fe4S] (1-F4R 2-CYS).
+!                          Total cysteinate charge -0.6539
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.82048
+ATOM 2HB1  HA      0.32061
+ATOM 2HB2  HA      0.32061
+ATOM 2SG   S      -0.60058
+DELETE ATOM 2HG1
+BOND 1FE2 2SG
+ANGL 1FE1 1FE2 2SG
+ANGL 1FE3 1FE2 2SG
+ANGL 1FE4 1FE2 2SG
+ANGL 1S1 1FE2 2SG
+ANGL 1S2 1FE2 2SG
+ANGL 1S4 1FE2 2SG
+ANGL 1FE2 2SG 2CB
+DIHE 1FE1 1FE2 2SG 2CB
+DIHE 1FE1 1FE3 1FE2 2SG
+DIHE 1FE1 1FE4 1FE2 2SG
+DIHE 1FE1 1S1 1FE2 2SG
+DIHE 1FE1 1S2 1FE2 2SG
+DIHE 1FE2 2SG 2CB 2HB1
+DIHE 1FE2 2SG 2CB 2HB2
+DIHE 1FE3 1FE1 1FE2 2SG
+DIHE 1FE3 1FE2 2SG 2CB   
+DIHE 1FE3 1FE4 1FE2 2SG
+DIHE 1FE3 1S2 1FE2 2SG
+DIHE 1FE3 1S4 1FE2 2SG   
+DIHE 1FE4 1FE1 1FE2 2SG   
+DIHE 1FE4 1FE2 2SG 2CB
+DIHE 1FE4 1FE3 1FE2 2SG   
+DIHE 1FE4 1S1 1FE2 2SG   
+DIHE 1FE4 1S4 1FE2 2SG
+DIHE 1S1 1FE4 1FE2 2SG
+DIHE 1S1 1FE1 1FE2 2SG   
+DIHE 1S1 1FE2 2SG 2CB
+DIHE 1S2 1FE2 2SG 2CB   
+DIHE 1S2 1FE3 1FE2 2SG
+DIHE 1S2 1FE1 1FE2 2SG   
+DIHE 1S3 1FE4 1FE2 2SG   
+DIHE 1S3 1FE3 1FE2 2SG
+DIHE 1S3 1FE1 1FE2 2SG   
+DIHE 1S4 1FE3 1FE2 2SG
+DIHE 1S4 1FE2 2SG 2CB
+DIHE 1S4 1FE4 1FE2 2SG
+
+PRES F4-3R       -0.77984 ! patch for CYS to FE3 of reduced [4Fe4S] (1-F4R 2-CYS).
+!                          Total cysteinate charge -0.6539
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.82048
+ATOM 2HB1  HA      0.32061
+ATOM 2HB2  HA      0.32061
+ATOM 2SG   S      -0.60058
+DELETE ATOM 2HG1
+BOND 1FE3 2SG
+ANGL 1FE1 1FE3 2SG
+ANGL 1FE2 1FE3 2SG
+ANGL 1FE4 1FE3 2SG
+ANGL 1S2 1FE3 2SG
+ANGL 1S3 1FE3 2SG
+ANGL 1S4 1FE3 2SG
+ANGL 1FE3 2SG 2CB
+DIHE 1FE1 1FE2 1FE3 2SG
+DIHE 1FE1 1FE4 1FE3 2SG
+DIHE 1FE1 1FE3 2SG 2CB
+DIHE 1FE1 1S2 1FE3 2SG
+DIHE 1FE1 1S3 1FE3 2SG
+DIHE 1FE2 1FE1 1FE3 2SG
+DIHE 1FE2 1FE3 2SG 2CB
+DIHE 1FE2 1FE4 1FE3 2SG
+DIHE 1FE2 1S2 1FE3 2SG
+DIHE 1FE2 1S4 1FE3 2SG
+DIHE 1FE3 2SG 2CB 2HB1
+DIHE 1FE3 2SG 2CB 2HB2
+DIHE 1FE4 1FE1 1FE3 2SG
+DIHE 1FE4 1FE2 1FE3 2SG
+DIHE 1FE4 1FE3 2SG 2CB
+DIHE 1FE4 1S3 1FE3 2SG
+DIHE 1FE4 1S4 1FE3 2SG
+DIHE 1S1 1FE1 1FE3 2SG
+DIHE 1S1 1FE2 1FE3 2SG
+DIHE 1S1 1FE4 1FE3 2SG
+DIHE 1S2 1FE1 1FE3 2SG
+DIHE 1S2 1FE2 1FE3 2SG
+DIHE 1S2 1FE3 2SG 2CB
+DIHE 1S3 1FE1 1FE3 2SG
+DIHE 1S3 1FE3 2SG 2CB
+DIHE 1S3 1FE4 1FE3 2SG
+DIHE 1S4 1FE2 1FE3 2SG
+DIHE 1S4 1FE3 2SG 2CB
+DIHE 1S4 1FE4 1FE3 2SG
+
+PRES F4-4R       -0.77984 ! patch for CYS to FE4 of reduced [4Fe4S] (1-F4R 2-CYS).
+!                          Total cysteinate charge -0.6539
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.82048
+ATOM 2HB1  HA      0.32061
+ATOM 2HB2  HA      0.32061
+ATOM 2SG   S      -0.60058
+DELETE ATOM 2HG1
+BOND 1FE4 2SG
+ANGL 1FE1 1FE4 2SG
+ANGL 1FE2 1FE4 2SG
+ANGL 1FE3 1FE4 2SG
+ANGL 1S1 1FE4 2SG
+ANGL 1S3 1FE4 2SG
+ANGL 1S4 1FE4 2SG
+ANGL 1FE4 2SG 2CB
+DIHE 1FE1 1FE2 1FE4 2SG
+DIHE 1FE1 1FE3 1FE4 2SG
+DIHE 1FE1 1S1 1FE4 2SG
+DIHE 1FE1 1S3 1FE4 2SG
+DIHE 1FE2 1FE1 1FE4 2SG
+DIHE 1FE2 1FE3 1FE4 2SG
+DIHE 1FE2 1FE4 2SG 2CB
+DIHE 1FE2 1S1 1FE4 2SG
+DIHE 1FE2 1S4 1FE4 2SG
+DIHE 1FE3 1FE1 1FE4 2SG
+DIHE 1FE3 1FE2 1FE4 2SG
+DIHE 1FE3 1FE4 2SG 2CB
+DIHE 1FE3 1S3 1FE4 2SG
+DIHE 1FE3 1S4 1FE4 2SG
+DIHE 1FE4 2SG 2CB 2HB1
+DIHE 1FE4 2SG 2CB 2HB2
+DIHE 1S1 1FE1 1FE4 2SG
+DIHE 1S1 1FE2 1FE4 2SG
+DIHE 1S1 1FE4 2SG 2CB
+DIHE 1S2 1FE1 1FE4 2SG
+DIHE 1S2 1FE2 1FE4 2SG
+DIHE 1S2 1FE3 1FE4 2SG
+DIHE 1S3 1FE1 1FE4 2SG
+DIHE 1S3 1FE3 1FE4 2SG
+DIHE 1S3 1FE4 2SG 2CB
+DIHE 1S4 1FE2 1FE4 2SG
+DIHE 1S4 1FE3 1FE4 2SG
+DIHE 1S4 1FE4 2SG 2CB
+
+
+PRES FHO-1H       0.07433 ! Patch to ligate Fe1 to NE2 of HSD-ligated [4Fe-4S] cluster
+                          ! in 2+ state. (1-FHO 2-HSD)
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.70937
+ATOM 2HB1  HA      0.37533
+ATOM 2HB2  HA      0.37533
+ATOM 2ND1  NR1    -0.56083
+ATOM 2HD1  H       0.43762
+ATOM 2CG   CPH1    0.08468
+ATOM 2CE1  CPH2    0.15479
+ATOM 2HE1  HR1     0.24623
+ATOM 2NE2  NR2    -0.50194
+ATOM 2CD2  CPH1   -0.08168
+ATOM 2HD2  HR3     0.25417
+BOND 1FE1 2NE2
+ANGL 1FE2 1FE1 2NE2
+ANGL 1FE3 1FE1 2NE2
+ANGL 1FE4 1FE1 2NE2
+ANGL 1S1 1FE1 2NE2
+ANGL 1S2 1FE1 2NE2
+ANGL 1S3 1FE1 2NE2
+ANGL 1FE1 2NE2 2CD2
+ANGL 1FE1 2NE2 2CE1
+DIHE 1FE1 2NE2 2CD2 2CG
+DIHE 1FE1 2NE2 2CD2 2HD2
+DIHE 1FE1 2NE2 2CE1 2HE1
+DIHE 1FE1 2NE2 2CE1 2ND1
+DIHE 1FE2 1FE1 2NE2 2CD2  
+DIHE 1FE2 1FE1 2NE2 2CE1
+DIHE 1FE2 1FE3 1FE1 2NE2
+DIHE 1FE2 1FE4 1FE1 2NE2
+DIHE 1FE2 1S1 1FE1 2NE2
+DIHE 1FE2 1S2 1FE1 2NE2  
+DIHE 1FE3 1FE1 2NE2 2CD2  
+DIHE 1FE3 1FE1 2NE2 2CE1  
+DIHE 1FE3 1FE2 1FE1 2NE2
+DIHE 1FE3 1FE4 1FE1 2NE2  
+DIHE 1FE3 1S2 1FE1 2NE2  
+DIHE 1FE3 1S3 1FE1 2NE2  
+DIHE 1FE4 1FE1 2NE2 2CD2
+DIHE 1FE4 1FE1 2NE2 2CE1  
+DIHE 1FE4 1FE2 1FE1 2NE2
+DIHE 1FE4 1FE3 1FE1 2NE2
+DIHE 1FE4 1S1 1FE1 2NE2
+DIHE 1FE4 1S3 1FE1 2NE2  
+DIHE 1S1 1FE1 2NE2 2CD2
+DIHE 1S1 1FE1 2NE2 2CE1  
+DIHE 1S1 1FE2 1FE1 2NE2  
+DIHE 1S1 1FE4 1FE1 2NE2
+DIHE 1S2 1FE1 2NE2 2CD2
+DIHE 1S2 1FE1 2NE2 2CE1  
+DIHE 1S2 1FE2 1FE1 2NE2
+DIHE 1S2 1FE3 1FE1 2NE2  
+DIHE 1S3 1FE1 2NE2 2CD2
+DIHE 1S3 1FE1 2NE2 2CE1  
+DIHE 1S3 1FE3 1FE1 2NE2
+DIHE 1S3 1FE4 1FE1 2NE2  
+DIHE 1S4 1FE2 1FE1 2NE2
+DIHE 1S4 1FE3 1FE1 2NE2
+DIHE 1S4 1FE4 1FE1 2NE2
+
+PRES FHO-2C       -0.34763 ! Patch to ligate Fe2 to SG of HSD-ligated [4Fe-4S] cluster
+                           ! in 2+ state. (1-FHO 2-HSD)
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.81732
+ATOM 2HB1  HA      0.34788
+ATOM 2HB2  HA      0.34788
+ATOM 2SG   S      -0.22607
+DELETE ATOM 2HG1
+BOND 1FE2 2SG
+ANGL 1FE1 1FE2 2SG
+ANGL 1FE3 1FE2 2SG
+ANGL 1FE4 1FE2 2SG
+ANGL 1S1 1FE2 2SG
+ANGL 1S2 1FE2 2SG
+ANGL 1S4 1FE2 2SG
+ANGL 1FE2 2SG 2CB
+DIHE 1FE1 1FE2 2SG 2CB
+DIHE 1FE1 1FE3 1FE2 2SG
+DIHE 1FE1 1FE4 1FE2 2SG
+DIHE 1FE1 1S1 1FE2 2SG
+DIHE 1FE1 1S2 1FE2 2SG
+DIHE 1FE2 2SG 2CB 2HB1
+DIHE 1FE2 2SG 2CB 2HB2
+DIHE 1FE3 1FE1 1FE2 2SG
+DIHE 1FE3 1FE2 2SG 2CB   
+DIHE 1FE3 1FE4 1FE2 2SG
+DIHE 1FE3 1S2 1FE2 2SG
+DIHE 1FE3 1S4 1FE2 2SG   
+DIHE 1FE4 1FE1 1FE2 2SG   
+DIHE 1FE4 1FE2 2SG 2CB
+DIHE 1FE4 1FE3 1FE2 2SG   
+DIHE 1FE4 1S1 1FE2 2SG   
+DIHE 1FE4 1S4 1FE2 2SG
+DIHE 1S1 1FE4 1FE2 2SG
+DIHE 1S1 1FE1 1FE2 2SG   
+DIHE 1S1 1FE2 2SG 2CB
+DIHE 1S2 1FE2 2SG 2CB   
+DIHE 1S2 1FE3 1FE2 2SG
+DIHE 1S2 1FE1 1FE2 2SG   
+DIHE 1S3 1FE4 1FE2 2SG   
+DIHE 1S3 1FE3 1FE2 2SG
+DIHE 1S3 1FE1 1FE2 2SG   
+DIHE 1S4 1FE3 1FE2 2SG
+DIHE 1S4 1FE2 2SG 2CB
+DIHE 1S4 1FE4 1FE2 2SG
+
+PRES FHO-3C       -0.34763 ! Patch to ligate Fe3 to SG of HSD-ligated [4Fe-4S] cluster
+                           ! in 2+ state. (1-FHO 2-HSD)
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.81732
+ATOM 2HB1  HA      0.34788
+ATOM 2HB2  HA      0.34788
+ATOM 2SG   S      -0.22607
+DELETE ATOM 2HG1
+BOND 1FE3 2SG
+ANGL 1FE1 1FE3 2SG
+ANGL 1FE2 1FE3 2SG
+ANGL 1FE4 1FE3 2SG
+ANGL 1S2 1FE3 2SG
+ANGL 1S3 1FE3 2SG
+ANGL 1S4 1FE3 2SG
+ANGL 1FE3 2SG 2CB
+DIHE 1FE1 1FE2 1FE3 2SG
+DIHE 1FE1 1FE4 1FE3 2SG
+DIHE 1FE1 1FE3 2SG 2CB
+DIHE 1FE1 1S2 1FE3 2SG
+DIHE 1FE1 1S3 1FE3 2SG
+DIHE 1FE2 1FE1 1FE3 2SG
+DIHE 1FE2 1FE3 2SG 2CB
+DIHE 1FE2 1FE4 1FE3 2SG
+DIHE 1FE2 1S2 1FE3 2SG
+DIHE 1FE2 1S4 1FE3 2SG
+DIHE 1FE3 2SG 2CB 2HB1
+DIHE 1FE3 2SG 2CB 2HB2
+DIHE 1FE4 1FE1 1FE3 2SG
+DIHE 1FE4 1FE2 1FE3 2SG
+DIHE 1FE4 1FE3 2SG 2CB
+DIHE 1FE4 1S3 1FE3 2SG
+DIHE 1FE4 1S4 1FE3 2SG
+DIHE 1S1 1FE1 1FE3 2SG
+DIHE 1S1 1FE2 1FE3 2SG
+DIHE 1S1 1FE4 1FE3 2SG
+DIHE 1S2 1FE1 1FE3 2SG
+DIHE 1S2 1FE2 1FE3 2SG
+DIHE 1S2 1FE3 2SG 2CB
+DIHE 1S3 1FE1 1FE3 2SG
+DIHE 1S3 1FE3 2SG 2CB
+DIHE 1S3 1FE4 1FE3 2SG
+DIHE 1S4 1FE2 1FE3 2SG
+DIHE 1S4 1FE3 2SG 2CB
+DIHE 1S4 1FE4 1FE3 2SG
+
+PRES FHO-4C       -0.34763 ! Patch to ligate Fe4 to SG of HSD-ligated [4Fe-4S] cluster
+                           ! in 2+ state. (1-FHO 2-HSD)
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.81732
+ATOM 2HB1  HA      0.34788
+ATOM 2HB2  HA      0.34788
+ATOM 2SG   S      -0.22607
+DELETE ATOM 2HG1
+BOND 1FE4 2SG
+ANGL 1FE1 1FE4 2SG
+ANGL 1FE2 1FE4 2SG
+ANGL 1FE3 1FE4 2SG
+ANGL 1S1 1FE4 2SG
+ANGL 1S3 1FE4 2SG
+ANGL 1S4 1FE4 2SG
+ANGL 1FE4 2SG 2CB
+DIHE 1FE1 1FE2 1FE4 2SG
+DIHE 1FE1 1FE3 1FE4 2SG
+DIHE 1FE1 1S1 1FE4 2SG
+DIHE 1FE1 1S3 1FE4 2SG
+DIHE 1FE2 1FE1 1FE4 2SG
+DIHE 1FE2 1FE3 1FE4 2SG
+DIHE 1FE2 1FE4 2SG 2CB
+DIHE 1FE2 1S1 1FE4 2SG
+DIHE 1FE2 1S4 1FE4 2SG
+DIHE 1FE3 1FE1 1FE4 2SG
+DIHE 1FE3 1FE2 1FE4 2SG
+DIHE 1FE3 1FE4 2SG 2CB
+DIHE 1FE3 1S3 1FE4 2SG
+DIHE 1FE3 1S4 1FE4 2SG
+DIHE 1FE4 2SG 2CB 2HB1
+DIHE 1FE4 2SG 2CB 2HB2
+DIHE 1S1 1FE1 1FE4 2SG
+DIHE 1S1 1FE2 1FE4 2SG
+DIHE 1S1 1FE4 2SG 2CB
+DIHE 1S2 1FE1 1FE4 2SG
+DIHE 1S2 1FE2 1FE4 2SG
+DIHE 1S2 1FE3 1FE4 2SG
+DIHE 1S3 1FE1 1FE4 2SG
+DIHE 1S3 1FE3 1FE4 2SG
+DIHE 1S3 1FE4 2SG 2CB
+DIHE 1S4 1FE2 1FE4 2SG
+DIHE 1S4 1FE3 1FE4 2SG
+DIHE 1S4 1FE4 2SG 2CB
+
+PRES FHR-1H       0.07447 ! Patch to ligate Fe1 to NE2 of HSD-ligated [4Fe-4S] cluster
+                          ! in 2+ state. (1-FHO 2-HSD)
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.70782
+ATOM 2HB1  HA      0.36806
+ATOM 2HB2  HA      0.36806
+ATOM 2ND1  NR1    -0.57492
+ATOM 2HD1  H       0.43578
+ATOM 2CG   CPH1    0.07095
+ATOM 2CE1  CPH2    0.21149
+ATOM 2HE1  HR1     0.26477
+ATOM 2NE2  NR2    -0.56809
+ATOM 2CD2  CPH1   -0.05102
+ATOM 2HD2  HR3     0.25721
+BOND 1FE1 2NE2
+ANGL 1FE2 1FE1 2NE2
+ANGL 1FE3 1FE1 2NE2
+ANGL 1FE4 1FE1 2NE2
+ANGL 1S1 1FE1 2NE2
+ANGL 1S2 1FE1 2NE2
+ANGL 1S3 1FE1 2NE2
+ANGL 1FE1 2NE2 2CD2
+ANGL 1FE1 2NE2 2CE1
+DIHE 1FE1 2NE2 2CD2 2CG
+DIHE 1FE1 2NE2 2CD2 2HD2
+DIHE 1FE1 2NE2 2CE1 2HE1
+DIHE 1FE1 2NE2 2CE1 2ND1
+DIHE 1FE2 1FE1 2NE2 2CD2  
+DIHE 1FE2 1FE1 2NE2 2CE1
+DIHE 1FE2 1FE3 1FE1 2NE2
+DIHE 1FE2 1FE4 1FE1 2NE2
+DIHE 1FE2 1S1 1FE1 2NE2
+DIHE 1FE2 1S2 1FE1 2NE2  
+DIHE 1FE3 1FE1 2NE2 2CD2  
+DIHE 1FE3 1FE1 2NE2 2CE1  
+DIHE 1FE3 1FE2 1FE1 2NE2
+DIHE 1FE3 1FE4 1FE1 2NE2  
+DIHE 1FE3 1S2 1FE1 2NE2  
+DIHE 1FE3 1S3 1FE1 2NE2  
+DIHE 1FE4 1FE1 2NE2 2CD2
+DIHE 1FE4 1FE1 2NE2 2CE1  
+DIHE 1FE4 1FE2 1FE1 2NE2
+DIHE 1FE4 1FE3 1FE1 2NE2
+DIHE 1FE4 1S1 1FE1 2NE2
+DIHE 1FE4 1S3 1FE1 2NE2  
+DIHE 1S1 1FE1 2NE2 2CD2
+DIHE 1S1 1FE1 2NE2 2CE1  
+DIHE 1S1 1FE2 1FE1 2NE2  
+DIHE 1S1 1FE4 1FE1 2NE2
+DIHE 1S2 1FE1 2NE2 2CD2
+DIHE 1S2 1FE1 2NE2 2CE1  
+DIHE 1S2 1FE2 1FE1 2NE2
+DIHE 1S2 1FE3 1FE1 2NE2  
+DIHE 1S3 1FE1 2NE2 2CD2
+DIHE 1S3 1FE1 2NE2 2CE1  
+DIHE 1S3 1FE3 1FE1 2NE2
+DIHE 1S3 1FE4 1FE1 2NE2  
+DIHE 1S4 1FE2 1FE1 2NE2
+DIHE 1S4 1FE3 1FE1 2NE2
+DIHE 1S4 1FE4 1FE1 2NE2
+
+PRES FHR-2C       -0.61229 ! Patch to ligate Fe2 to SG of HSD-ligated [4Fe-4S] cluster
+                           ! in 1+ state. (1-FHR 2-HSD)
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.82155
+ATOM 2HB1  HA      0.33762
+ATOM 2HB2  HA      0.33762
+ATOM 2SG   S      -0.46598
+DELETE ATOM 2HG1
+BOND 1FE2 2SG
+ANGL 1FE1 1FE2 2SG
+ANGL 1FE3 1FE2 2SG
+ANGL 1FE4 1FE2 2SG
+ANGL 1S1 1FE2 2SG
+ANGL 1S2 1FE2 2SG
+ANGL 1S4 1FE2 2SG
+ANGL 1FE2 2SG 2CB
+DIHE 1FE1 1FE2 2SG 2CB
+DIHE 1FE1 1FE3 1FE2 2SG
+DIHE 1FE1 1FE4 1FE2 2SG
+DIHE 1FE1 1S1 1FE2 2SG
+DIHE 1FE1 1S2 1FE2 2SG
+DIHE 1FE2 2SG 2CB 2HB1
+DIHE 1FE2 2SG 2CB 2HB2
+DIHE 1FE3 1FE1 1FE2 2SG
+DIHE 1FE3 1FE2 2SG 2CB   
+DIHE 1FE3 1FE4 1FE2 2SG
+DIHE 1FE3 1S2 1FE2 2SG
+DIHE 1FE3 1S4 1FE2 2SG   
+DIHE 1FE4 1FE1 1FE2 2SG   
+DIHE 1FE4 1FE2 2SG 2CB
+DIHE 1FE4 1FE3 1FE2 2SG   
+DIHE 1FE4 1S1 1FE2 2SG   
+DIHE 1FE4 1S4 1FE2 2SG
+DIHE 1S1 1FE4 1FE2 2SG
+DIHE 1S1 1FE1 1FE2 2SG   
+DIHE 1S1 1FE2 2SG 2CB
+DIHE 1S2 1FE2 2SG 2CB   
+DIHE 1S2 1FE3 1FE2 2SG
+DIHE 1S2 1FE1 1FE2 2SG   
+DIHE 1S3 1FE4 1FE2 2SG   
+DIHE 1S3 1FE3 1FE2 2SG
+DIHE 1S3 1FE1 1FE2 2SG   
+DIHE 1S4 1FE3 1FE2 2SG
+DIHE 1S4 1FE2 2SG 2CB
+DIHE 1S4 1FE4 1FE2 2SG
+
+PRES FHR-3C       -0.61229 ! Patch to ligate Fe3 to SG of HSD-ligated [4Fe-4S] cluster
+                           ! in 1+ state. (1-FHR 2-HSD)
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.82155
+ATOM 2HB1  HA      0.33762
+ATOM 2HB2  HA      0.33762
+ATOM 2SG   S      -0.46598
+DELETE ATOM 2HG1
+BOND 1FE3 2SG
+ANGL 1FE1 1FE3 2SG
+ANGL 1FE2 1FE3 2SG
+ANGL 1FE4 1FE3 2SG
+ANGL 1S2 1FE3 2SG
+ANGL 1S3 1FE3 2SG
+ANGL 1S4 1FE3 2SG
+ANGL 1FE3 2SG 2CB
+DIHE 1FE1 1FE2 1FE3 2SG
+DIHE 1FE1 1FE4 1FE3 2SG
+DIHE 1FE1 1FE3 2SG 2CB
+DIHE 1FE1 1S2 1FE3 2SG
+DIHE 1FE1 1S3 1FE3 2SG
+DIHE 1FE2 1FE1 1FE3 2SG
+DIHE 1FE2 1FE3 2SG 2CB
+DIHE 1FE2 1FE4 1FE3 2SG
+DIHE 1FE2 1S2 1FE3 2SG
+DIHE 1FE2 1S4 1FE3 2SG
+DIHE 1FE3 2SG 2CB 2HB1
+DIHE 1FE3 2SG 2CB 2HB2
+DIHE 1FE4 1FE1 1FE3 2SG
+DIHE 1FE4 1FE2 1FE3 2SG
+DIHE 1FE4 1FE3 2SG 2CB
+DIHE 1FE4 1S3 1FE3 2SG
+DIHE 1FE4 1S4 1FE3 2SG
+DIHE 1S1 1FE1 1FE3 2SG
+DIHE 1S1 1FE2 1FE3 2SG
+DIHE 1S1 1FE4 1FE3 2SG
+DIHE 1S2 1FE1 1FE3 2SG
+DIHE 1S2 1FE2 1FE3 2SG
+DIHE 1S2 1FE3 2SG 2CB
+DIHE 1S3 1FE1 1FE3 2SG
+DIHE 1S3 1FE3 2SG 2CB
+DIHE 1S3 1FE4 1FE3 2SG
+DIHE 1S4 1FE2 1FE3 2SG
+DIHE 1S4 1FE3 2SG 2CB
+DIHE 1S4 1FE4 1FE3 2SG
+
+PRES FHR-4C       -0.61229 ! Patch to ligate Fe4 to SG of HSD-ligated [4Fe-4S] cluster
+                           ! in 1+ state. (1-FHR 2-HSD)
+ATOM 2N    NH1    -0.47
+ATOM 2HN   H       0.31
+ATOM 2CA   CT1     0.07
+ATOM 2HA   HB      0.09
+ATOM 2CB   CT2    -0.82155
+ATOM 2HB1  HA      0.33762
+ATOM 2HB2  HA      0.33762
+ATOM 2SG   S      -0.46598
+DELETE ATOM 2HG1
+BOND 1FE4 2SG
+ANGL 1FE1 1FE4 2SG
+ANGL 1FE2 1FE4 2SG
+ANGL 1FE3 1FE4 2SG
+ANGL 1S1 1FE4 2SG
+ANGL 1S3 1FE4 2SG
+ANGL 1S4 1FE4 2SG
+ANGL 1FE4 2SG 2CB
+DIHE 1FE1 1FE2 1FE4 2SG
+DIHE 1FE1 1FE3 1FE4 2SG
+DIHE 1FE1 1S1 1FE4 2SG
+DIHE 1FE1 1S3 1FE4 2SG
+DIHE 1FE2 1FE1 1FE4 2SG
+DIHE 1FE2 1FE3 1FE4 2SG
+DIHE 1FE2 1FE4 2SG 2CB
+DIHE 1FE2 1S1 1FE4 2SG
+DIHE 1FE2 1S4 1FE4 2SG
+DIHE 1FE3 1FE1 1FE4 2SG
+DIHE 1FE3 1FE2 1FE4 2SG
+DIHE 1FE3 1FE4 2SG 2CB
+DIHE 1FE3 1S3 1FE4 2SG
+DIHE 1FE3 1S4 1FE4 2SG
+DIHE 1FE4 2SG 2CB 2HB1
+DIHE 1FE4 2SG 2CB 2HB2
+DIHE 1S1 1FE1 1FE4 2SG
+DIHE 1S1 1FE2 1FE4 2SG
+DIHE 1S1 1FE4 2SG 2CB
+DIHE 1S2 1FE1 1FE4 2SG
+DIHE 1S2 1FE2 1FE4 2SG
+DIHE 1S2 1FE3 1FE4 2SG
+DIHE 1S3 1FE1 1FE4 2SG
+DIHE 1S3 1FE3 1FE4 2SG
+DIHE 1S3 1FE4 2SG 2CB
+DIHE 1S4 1FE2 1FE4 2SG
+DIHE 1S4 1FE3 1FE4 2SG
+DIHE 1S4 1FE4 2SG 2CB
+
+
+PRES HCB               ! patch to bond bridging CYS to FE1 of H-Cluster
+!                        (1-HCR 2-CYS). Must apply this after F4-X-type patch!
+BOND 1FE1 2SG
+ANGLE  2SG  1FE1  1S1    2SG  1FE1  1S2   1FE2  1FE1  2SG
+ANGLE  1FE1  2SG  2CB    2SG  1FE1  1C4   2SG   1FE1  1C3
+IMPR   2SG  1S1  1FE1  1C5    1S1  1FE1  2SG  1C3
+
+PRES FHX-C-H               ! Patch for dihedrals involving 3 residues.
+                           ! (1-FHO or FHR 2-CYS 3-HSD)
+DIHE 3NE2 1FE1 1FE2 2SG
+DIHE 3NE2 1FE1 1FE3 2SG
+DIHE 3NE2 1FE1 1FE4 2SG
+DIHE 2SG 1FE3 1FE2 2SG
+
+END

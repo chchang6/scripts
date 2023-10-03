@@ -1,0 +1,9 @@
+------------Grid spacing, dimensions (x, y, z); make is in APBS ESP file
+0.539, 97, 129, 129
+------------ionic strength (mM), solvent dielectric, ion exclusion radius
+100, 78.5, 2.27
+------------PDB filename, output filename, format on next line
+CrferrHSP.pdb
+------------Output filename for desolvation penalty grid and format (0=UHBDbin)
+CrferrHSP.dsg
+0

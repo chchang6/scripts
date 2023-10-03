@@ -1,0 +1,50 @@
+! Input deck to calculate average energy of protein over trajectory.
+! GB parameters from Dominy & Brooks, JPCB 103: 3765 (1999).
+* Title Calculation of internal energies from dynamics trajectory
+*
+
+! read in topologies
+open unit 11 read card name ../CHARMM_22PROT+HYDFERR.RTF
+read rtf card unit 11
+close unit 11
+
+! read in parameters
+open unit 12 read card name ../CHARMM_22PROT+HYDFERR.PRM
+read para card unit 12
+close unit 12
+
+! read in psf file
+open unit 10 read card name crferrhsd_charmm.psf
+read psf card unit 10
+close unit 10
+
+SET numframes 2000
+! CALC lastframe = @numframes - 1
+! Read in a structure, calculate energy, add to stack
+open unit 10 NAME quasi_18001-20000.dcd READ UNFORM
+TRAJ FIRST 10 NUNIT 1 SKIP 1 BEGIN 18000 STOP 19999
+! GBORN P1 0.448 P2 0.173 P3 .013 P4 9.015 P5 0.900 LAMBDA 0.705 EPSILON 78.5
+
+SET TOTALE 0
+
+SET I 1
+LABEL LOOP
+   TRAJ READ
+   UPDATE ELEC ATOM CDIE FSWITCH -
+     VDW VATOM VSWITCHED -
+     CUTNB 99 CTOFNB 97 CTONNB 95 EPS 1.0
+   GETE NOPR
+   CALC TOTALE = @TOTALE + ?ENER
+   INCR I
+   IF I LE @numframes GOTO LOOP
+! GBorn Clear
+CLOSE UNIT 10
+
+CALC AVERAGE = @TOTALE/@numframes
+PRINT TITL
+* Average Vacuum energy: @AVERAGE
+
+!PRINT TITL
+!* Average Generlized Born energy: @AVERAGE
+
+stop

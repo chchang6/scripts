@@ -1,0 +1,72 @@
+! Input deck to construct system from PDB files.
+* Title Build of CHARMM coordinate file from all-atom PDB output from
+* NAMD calculations.
+bomblev -2
+
+! read in topology
+open unit 10 name "~/CHARMM/CHARMM_22PROT+HYDFERR.RTF" READ FORM
+read rtf unit 10 card
+close unit 10
+
+! Read in parameters
+open unit 11 name "~/CHARMM/CHARMM_22PROT+HYDFERR.PRM" READ FORM
+read param unit 11 card
+close unit 11
+
+! Set up ferredoxin segment
+open unit 12 name "FERR.pdb" READ FORM
+read sequ PDB unit 12
+gener FERR setup
+read COOR PDB UNIT 12
+close unit 12
+
+! Set up [2Fe-2S] cluster segment
+open unit 13 name "FRC1.pdb" READ FORM
+read sequ PDB unit 13
+gener FRC1 FIRST none LAST none NODI setup
+READ COOR PDB UNIT 13
+close unit 13
+
+! Set up HydA2 segment
+open unit 14 name "HYDR.pdb" READ FORM
+read sequ PDB unit 14
+gener HYDR setup
+READ COOR PDB UNIT 14
+close unit 14
+
+! Set up H-cluster segment
+open unit 15 name "HYDH.pdb" READ FORM
+read sequ PDB unit 15
+gener HYDH FIRST none LAST none NODI setup
+READ COOR PDB UNIT 15
+close unit 15
+
+! Set up Dowser water segment
+open unit 16 name "DOWS.pdb" READ FORM
+read sequ PDB unit 16
+gener DOWS FIRST none LAST none setup
+READ COOR PDB UNIT 16
+close unit 16
+
+! Establish cysteine-cluster bonding
+patch FE1C HYDH 535 HYDR 208
+patch FE2C HYDH 535 HYDR 263
+patch FE3C HYDH 535 HYDR 463
+patch FE4C HYDH 535 HYDR 467
+patch FEX  HYDH 534 HYDR 467
+patch FE1C FRC1 97 FERR  39
+patch FE1C FRC1 97 FERR  44
+patch FE2C FRC1 97 FERR  47
+patch FE2C FRC1 97 FERR  77
+
+print coor
+
+! write out PSF and CRD files
+open unit 61 name 42hsd_gbmin_dowsed.psf WRIT FORM
+write psf CARD unit 61
+close unit 61
+
+open unit 62 name 42hsd_gbmin_dowsed.crd WRIT FORM
+write coor card unit 62
+
+stop

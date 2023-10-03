@@ -1,0 +1,41 @@
+! Input deck to gather statistics for vibrational analysis using Langevin dynamics and SHAKE
+* Title Production run of HydA2HSP in vacuum
+* CHC, 6/07/05
+*
+
+! read in topologies
+open unit 11 read card name ../CHARMM_22PROT+HYDFERR.RTF
+read rtf card unit 11
+close unit 11
+
+! read in parameters
+open unit 12 read card name ../CHARMM_22PROT+HYDFERR.PRM
+read para card unit 12
+close unit 12
+
+! read in psf and coordinate files
+open unit 10 read card name "HydA2_HSP.psf"
+read psf card unit 10
+close unit 10
+
+! Dynamics with cutoffs for non-bonded interactions.
+! Production run starting from previous equilibration using Langevin dynamics
+
+OPEN UNIT 10 FILE NAME initequil.dcd READ
+OPEN UNIT 20 NAME initequil.RMSF WRITE FORM
+OPEN UNIT 30 NAME initequil.binRMSF WRITE UNFORM
+
+CORREL MAXSERIES 1 MAXTIMESTEPS 200 MAXATOMS 7000
+ENTE RMSF RMS
+TRAJ FIRSTU 10 NUNIT 1 BEGI 100 SKIP 100 SELE ALL END
+MANTIME RMSF DAVER
+WRITE RMSF UNIT 20 DUMB TIME
+* RMS Fluctuations about average geometry value
+* for determination of convergence
+WRITE RMSF UNIT 30 FILE
+* Binary output of initequil RMS fluctuations about
+* average geometry
+END
+
+CLOSE UNIT 10
+stop

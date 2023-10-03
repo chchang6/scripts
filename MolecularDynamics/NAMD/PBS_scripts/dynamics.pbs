@@ -1,0 +1,37 @@
+#!/bin/bash --login
+
+#PBS -N dyn_
+#PBS -q Std
+#PBS -l nodes=4:ppn=2
+#PBS -l walltime=48:00:00
+#PBS -m abe
+#PBS -M user.name@domain.name
+#PBS -e ./namd2.err.pbs
+#PBS -o ./namd2.out.pbs
+
+TIME="200ps"
+PSFFILE=".psf"
+
+cd $PBS_O_WORKDIR
+
+NODES=`cat $PBS_NODEFILE`
+NODELIST=$PBS_O_WORKDIR/nodelist
+echo group main > $NODELIST
+for node in $NODES; 
+do
+  echo host $node >> $NODELIST
+done
+
+# Copy working files to scratch directory
+for x in namdinclude.tcl clusters_new.par CHARMM_22prot_27lip.par
+do
+  cp ~/NAMD/common/$x $PBS_TMPDIR
+done
+cp dynamics.namd dyn_${TIME}_in.* $PSFFILE nodelist $PBS_TMPDIR
+# Change to local scratch
+cd $PBS_TMPDIR
+chmod 400 clusters_new.par
+# Run NAMD
+charmrun `which namd2` +p${PBS_NPROCS} dynamics.namd >> $PBS_O_WORKDIR/dyn_${TIME}.log
+# Copy output files to home directory
+cp *_out.* $PBS_O_WORKDIR

@@ -1,0 +1,24 @@
+render format TachyonInternal PPM
+for {set i 0} {$i < 90} {incr i} {
+   scale by 1.005
+   rotate x by 0.45
+   rotate y by -0.45
+   rotate z by -0.95
+   set counter [format %03u $i]
+   render TachyonInternal frame${counter}.ppm
+}
+for {set i 90} {$i < 135} {incr i} {
+   rotate x by -0.9
+   set counter [format %03u $i]
+   render TachyonInternal frame${counter}.ppm
+}
+for {set i 135} {$i < 180} {incr i} {
+   rotate y by -2.67
+   set counter [format %03u $i]
+   render TachyonInternal frame${counter}.ppm
+}
+for {set i 180} {$i < 200} {incr i} {
+   rotate x by -1
+   set counter [format %03u $i]
+   render TachyonInternal frame${counter}.ppm
+}

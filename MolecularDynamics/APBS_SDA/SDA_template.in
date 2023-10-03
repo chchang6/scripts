@@ -1,0 +1,51 @@
+dseed= # Random number generator seed controlling BD runs. Change to vary BD trajectories.
+nrun=  # Number of BD runs
+nprint=  # Frequency of printout of reaction events
+iwrite=  # Number of trajectory to write
+probes=  # Radius of probe to represent mobile protein atoms
+thres=   # Threshold of atomic accessibility
+hexcl=   # Exclusion grid spacing for stationary protein
+dsfactor=  # Factor to multiply desolvation grid to penalize
+pdb1f=   # Name of file with stationary protein's coordinates (PDB format)
+pdb2f=   # Name of file with mobile protein's coordinates (PDB format)
+po1f=    # Name of file with ESP of stationary protein (UHBD binary format)
+po2f=    # Name of file with ESP of mobile protein (UHBD binary format)
+qef1f=   # Name of file with stationary protein's charges ('ATOM',24x,3f8.3,f15.8)
+qef2f=   # Name of file with mobile protein's charges ('ATOM',24x,3f8.3,f15.8)
+rxna1f=  # Name of file with stationary protein reaction atom coordinates (PDB format)
+rxna2f=  # Name of file with mobile protein reaction atom coordinates (PDB format)
+ic1fix=  # 0 or 1, determines whether coordinates of stationary protein center are
+         # recomputed (0) or used directly (1)
+xc1=     # Second line after ic1fix, defines stationary protein's center coordinates
+ic2fix=  # 0 or 1, determines whether coordinates of mobile protein center are
+         # recomputed (0) or used directly (1)
+xc2=     # Second line after ic2fix, defines stationary protein's center coordinates
+icomm=   # How to handle encounter complex reaction counting; 1 implies RMSD coordinate
+         # differences between reactive atoms less than a threshold; 2 implies distance
+         # between reactive atoms less than threshold; 3 implies independent contacts among
+         # all possible reaction atom pairs, with a definable minimum distance between
+         # reactive atoms on the same protein. Used to define a subset of reaction pairs
+         # among a superset of donor-acceptor pairs.
+iforce=  # 0 - All forces except exclusion turned off
+         # 1 - Forces computed with potential grid of protein 1 and charges of protein 2
+         # 2 - Electrostatics computed directly from charges, no ESP's used; only efficient for
+         #     number of charges < 10
+aiostr=  # Ionic strength, in millimolar. Accuracy important for iforce=2
+dm=      # Relative translational diffusion coefficient, Angstrom^2/ps
+dr=      # Rotational diffusion coefficient for stationary protein, radians^2/ps
+drI=     # Rotational diffusion coefficient for mobile protein, radians^2/ps
+irot2f=  # 0 switches off rotational modeling of stationary protein
+b=       # Distance from stationary protein center at which simulation is started, Ansgtroms
+c=       # Distance from stationary protein center at which simulation is terminated, Angstroms; c > b
+novers=  # Threshold number of BD move rejections after which proteins are moved apart; gets around unproductive jams
+rboost=  # Distance by which proteins are moved apart after reaching novers
+dt1=     # Smallest timestep to use; automatically used when proteins close to each other
+swd1=    # See http://projects.villa-bosch.de/mcmsoft/sda/4.23/sda.html#timest
+dt2=     # See http://projects.villa-bosch.de/mcmsoft/sda/4.23/sda.html#timest
+swd2=    # See http://projects.villa-bosch.de/mcmsoft/sda/4.23/sda.html#timest
+rswd=    # See http://projects.villa-bosch.de/mcmsoft/sda/4.23/sda.html#timest
+nwin=    # Number of reaction contacts at which to record reaction
+win0,dwin=  # di=win0+(i-1)*dwin, i=1,nwin; d1 is the distance threshold for reactive contacts
+dspo1f=  # File with charge desolvation penalty for stationary protein (UHBD binary format); created by
+         # mk_ds_grd executable in SDA distribution. Default name ds1.grd
+dspo2f=  # As for spo2f for mobile protein. Default name ds2.grd

@@ -1,0 +1,42 @@
+# Script to explore rotation space of protein to minimize the minmax
+# values around general solution given by a prior coarse scan.
+
+# Set the near-optimal angles from minwater_coarse.tcl
+set coarse_phi1 165
+set coarse_theta 155
+set coarse_phi2 75
+
+# Load the structure and select all atoms
+mol load psf built.psf pdb built.pdb
+set temp [atomselect top all]
+
+# Center molecule or complex
+set center [measure center $temp]
+$temp moveby [vecinvert $center]
+unset center
+
+# Rotate in 5 degree incrs around x, y, z axes, calculating minmax
+# at each geometry
+
+for {set phi1 [expr $coarse_phi1 - 5]} {$phi1 < [expr $coarse_phi1 + 6]} {incr phi1 1} {
+   set phi1_matrix [transaxis z $phi1]
+   for {set theta [expr $coarse_theta - 5]} {$theta < [expr $coarse_theta + 6]} {incr theta 1} {
+      set theta_matrix [transaxis x $theta]
+      for {set phi2 [expr $coarse_phi2 - 5]} {$phi2 < [expr $coarse_phi2 + 6]} {incr phi2 1} {
+         set phi2_matrix [transaxis z $phi2]
+         set rotation [transmult $phi2_matrix $theta_matrix $phi1_matrix]
+         set backrotation [transtranspose $rotation]
+         $temp move $rotation
+#         set A [measure minmax $temp]
+         set minvec [lindex [measure minmax $temp] 0]
+         set maxvec [lindex [measure minmax $temp] 1]
+         set diffvec [vecsub $maxvec $minvec]
+         puts [list $phi1 $theta $phi2 [expr [lindex $diffvec 0] * [lindex $diffvec 1] * [lindex $diffvec 2]]]
+         $temp move $backrotation
+         unset rotation backrotation minvec maxvec phi2_matrix
+         }
+      unset phi2 theta_matrix
+      }
+   unset theta phi1_matrix
+   }
+unset coarse_phi1 coarse_theta coarse_phi2 phi1 temp

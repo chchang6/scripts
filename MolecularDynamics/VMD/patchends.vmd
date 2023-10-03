@@ -1,0 +1,31 @@
+package require psfgen
+
+# STEP 1: Build Protein
+
+# Script to split HydA2 model into two pdb files: one for polypeptide, and
+# one for H-cluster (including coupled [4Fe-4S]).
+
+# Load the PDB file
+resetpsf
+readpsf desolvate.psf
+coordpdb desolvate.pdb
+mol load psf desolvate.psf pdb desolvate.pdb
+
+# Use the specified CHARMM27 topology file.
+topology ../NAMD/common/CHARMM_22prot_27lip.top
+
+# Patch to set up cluster ligation
+patch NTER HYDR:1
+patch CTER HYDR:436
+
+# Guess the positions of missing atoms.  As long as all the heavy
+# atoms are present, psfgen usually does a very good job of this.
+# However, the clusters will probably have very poor protonation.
+# Edit these manually.
+
+guesscoord
+
+# Write output files
+writepsf built/test.psf
+writepdb built/test.pdb
+

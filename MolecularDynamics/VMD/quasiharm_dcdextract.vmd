@@ -1,0 +1,4 @@
+mol new Hydferr42HSD.psf
+animate read dcd all_2501-3000.dcd beg 0 end 499 waitfor all top
+set temp [atomselect top "protein or (resname HC1 FS4 FS2)"]
+animate write dcd quasi_2501-3000.dcd beg 0 end 499 waitfor all sel $temp top

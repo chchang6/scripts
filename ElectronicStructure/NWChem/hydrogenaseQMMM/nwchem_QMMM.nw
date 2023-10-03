@@ -1,0 +1,90 @@
+start CpIQMMM_HF'q
+ECHO
+title "QMMM single-point on CpI hydrogenase with QM H-cluster and brid cubane"
+print debug
+# Make the solvated system
+prepare
+   system solvate
+   source built.pdb
+   histidine hid
+   new_top new_seq
+   amber
+   center
+   link 34:_SG 585:_FE2
+   link 46:_SG 585:_FE2
+   link 49:_SG 585:_FE1
+   link 62:_SG 585:_FE1
+   link 94:_NE2 584:_FE1
+   link 98:_SG 584:_FE3
+   link 101:_SG 584:_FE4
+   link 107:_SG 584:_FE2
+   link 147:_SG 583:_FE4
+   link 150:_SG 583:_FE2
+   link 153:_SG 583:_FE3
+   link 200:_SG 583:_FE1
+   link 157:_SG 582:_FE2
+   link 190:_SG 582:_FE3
+   link 193:_SG 582:_FE1
+   link 196:_SG 582:_FE4
+   link 300:_SG 581:_FE4
+   link 355:_SG 581:_FE1
+   link 499:_SG 581:_FE2
+   link 503:_SG 581:_FE3
+   link 503:_SG 580:_FE1
+   solvate box 2.5 2.5 2.5
+   write CpI_em.rst
+   write CpI_em.pdb
+end; task prepare
+
+md
+   system solvate_min
+   sd 1000 init 0.01
+   cg 1000
+   noshake solute
+end; task md optimize
+
+task shell "cp solvate_min.qrs QMMM_opt.rst"
+
+prepare
+   system QMMM_opt
+   modify segment 300 quantum
+   modify segment 355 quantum
+   modify segment 499 quantum
+   modify segment 503 quantum
+   modify segment 580 quantum
+   modify segment 581 quantum
+   update lists
+   new_top
+   read QMMM_opt.rst
+end; task prepare
+
+md
+   system QMMM_opt
+end
+
+basis
+   * 6-31g*
+end
+
+ecp
+  F_L nelec 2
+  F_L ul
+     1  2.21955   0.49852
+  F_L s
+     2 25.00120  29.99904
+  F_L p
+     2  3.56805   0.40215
+end
+
+qmmm
+   eref 0.0
+   bqzone 9.0
+   bqexclude linkbond
+   bq_update static
+   link_atoms halogen
+   link_ecp auto
+   optimization qm
+end
+
+task qmmm dft energy
+

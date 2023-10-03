@@ -1,0 +1,56 @@
+read
+    mol pqr HydA2.pqr
+end
+elec
+    mg-auto
+    dime 129 161 129
+    cglen 89.4642 125.6912 90.5624
+    fglen 72.6260 93.9360 73.2720
+    cgcent mol 1
+    fgcent mol 1
+    mol 1
+    ion +1 0.10 1.364
+    ion -1 0.10 2.270
+    npbe
+    bcfl sdh
+    pdie 4.0
+    sdie 78.54
+    srfm smol
+    chgm spl2
+    srad 1.4
+    swin 0.3
+    temp 298.15
+    gamma 0.105
+    calcenergy total
+    calcforce no
+    write pot dx pot
+    write pot uhbd ESP
+    write smol dx acc
+end
+elec
+    mg-auto
+    dime 129 161 129
+    cglen 89.4642 125.6912 90.5624
+    fglen 72.6260 93.9360 73.2720
+    cgcent mol 1
+    fgcent mol 1
+    mol 1
+    ion +1 0.10 1.364
+    ion -1 0.10 2.270
+    npbe
+    bcfl sdh
+    pdie 4.0
+    sdie 1.00
+    srfm smol
+    chgm spl2
+    srad 1.4
+    swin 0.3
+    temp 298.15
+    gamma 0.105
+    calcenergy total
+    calcforce no
+end
+
+print energy 2 - 1 end
+
+quit

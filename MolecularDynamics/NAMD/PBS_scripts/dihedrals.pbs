@@ -1,0 +1,23 @@
+#!/bin/bash --login
+#PBS -N RRRRRR_dihedrals
+#PBS -q Std
+#PBS -l nodes=1:ppn=2
+#PBS -l walltime=24:00:00
+#PBS -m abe
+#PBS -M user.name@domain.name
+#PBS -e ./vmd.err.pbs
+#PBS -o ./vmd.out.pbs
+
+# Script to calculate individual dihedral energies as specified
+# in file dihelist.txt, the output from PSF8to1.pl. CHC 12/07.
+
+module load vmd
+
+cd $PBS_O_WORKDIR
+cp built.pdb dihelist.txt get_dihe_energies.vmd built.psf $PBS_TMPDIR
+cp ../common/CHARMM_combined.par $PBS_TMPDIR
+cd $PBS_TMPDIR
+
+vmd -dispdev text < get_dihe_energies.vmd
+
+cp test_all.out $PBS_O_WORKDIR

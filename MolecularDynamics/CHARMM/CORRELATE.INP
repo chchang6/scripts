@@ -1,0 +1,48 @@
+! Input deck for reduced basis quasiharmonic analysis from NAMD-generated trajectory
+* RBQuasi of NAMD 16HSD_dowsed trajectory, including only heavy backbone atoms, and
+* associated dihedral angles in basis.
+* CHC, 4/10/06
+*
+BOMlev -2
+
+! read in topologies
+open unit 11 read card name ../CHARMM_22PROT+HYDFERR.RTF
+read rtf card unit 11
+close unit 11
+
+! read in parameters
+open unit 12 read card name ../CHARMM_22PROT+HYDFERR.PRM
+read para card unit 12
+close unit 12
+
+! Load in PSF file data, all atoms
+OPEN UNIT 17 NAME crferrhsd_dowsed_charmm.psf READ FORM
+READ PSF CARD UNIT 17
+CLOSE UNIT 17
+
+! Open all-atom DCD file to read, and file to write CHARMM
+! timeseries
+OPEN UNIT 18 NAME quasi_1-2000.dcd READ UNFORM
+CORREL MAXTimesteps 2000 MAXSERIES 3
+ENTER E93A DIHE FERR 93 CB FERR 93 CG FERR 93 CD FERR 93 OE1 GEOM
+ENTER SE01 DIHE FERR 95 CA FERR 95 CB FERR 95 CG FERR 95 CD1 GEOM
+ENTER SE02 DIHE FERR 90 CA FERR 90 CB FERR 90 CG FERR 90 ND1 GEOM
+TRAJ FIRST 18 NUNIT 1 BEGIN 0 STOP 1999 SKIP 1
+MANTIME E93A DERIVATIVE
+
+! Begin loop 1
+SET A 1
+LABEL LOOP1
+MANTIME SE0@A DERIVATIVE
+CORFUN E93A SE0@A FFT TOTAL 2000
+OPEN UNIT 62 NAME Series@A.txt WRIT FORM
+WRITE CORR UNIT 62 DUMB TIME
+* Correlation series for Ferredoxin Glu93 CB-CG-CD-OE1 dihedral angle.
+* CHC 04/10/06
+*
+IF A EQ 2 GOTO FINISH
+INCR A
+GOTO LOOP1
+
+LABEL FINISH
+stop

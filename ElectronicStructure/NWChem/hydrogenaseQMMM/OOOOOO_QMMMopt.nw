@@ -1,0 +1,219 @@
+restart CpI_OOOOOO
+memory total 100 mw
+ECHO
+TITLE "QM/MM optimization of [H3+F'2+] H-cluster in CpI model"
+print medium rtdbvalues
+
+prepare
+#--name of the pdb file
+   source built.pdb
+#--Default ionization state of histidines
+   histidine hid
+#--generate new topology and sequence file
+   new_top new_seq
+   amber
+#--generate new restart file
+   new_rst
+#--Specify protein-cluster bonds
+   link 34:_SG 585:_FE2
+   link 46:_SG 585:_FE2
+   link 49:_SG 585:_FE1
+   link 62:_SG 585:_FE1
+   link 94:_NE2 584:_FE1
+   link 98:_SG 584:_FE3
+   link 101:_SG 584:_FE4
+   link 107:_SG 584:_FE2
+   link 147:_SG 583:_FE4
+   link 150:_SG 583:_FE2
+   link 153:_SG 583:_FE3
+   link 200:_SG 583:_FE1
+   link 157:_SG 582:_FE2
+   link 190:_SG 582:_FE3
+   link 193:_SG 582:_FE1
+   link 196:_SG 582:_FE4
+   link 300:_SG 581:_FE4
+   link 355:_SG 581:_FE1
+   link 499:_SG 581:_FE2
+   link 503:_SG 581:_FE3
+   link 503:_SG 580:_FE1
+# Modify cysteine charges to reflect charge transfer to clusters
+modify atom 34:_CB charge -0.81869
+modify atom 34:2HB charge  0.33818
+modify atom 34:3HB charge  0.33818
+modify atom 34:_SG charge -0.36468
+modify atom 46:_CB charge -0.81869
+modify atom 46:2HB charge  0.33818
+modify atom 46:3HB charge  0.33818
+modify atom 46:_SG charge -0.36468
+modify atom 49:_CB charge -0.81869
+modify atom 49:2HB charge  0.33818
+modify atom 49:3HB charge  0.33818
+modify atom 49:_SG charge -0.36468
+modify atom 62:_CB charge -0.81869
+modify atom 62:2HB charge  0.33818
+modify atom 62:3HB charge  0.33818
+modify atom 62:_SG charge -0.36468
+modify atom 94:_CB charge -0.70937
+modify atom 94:2HB charge  0.37533
+modify atom 94:3HB charge  0.37533
+modify atom 94:_CG charge  0.08468
+modify atom 94:_ND1 charge -0.56083
+modify atom 94:_HD1 charge  0.43762
+modify atom 94:_NE2 charge -0.50194
+modify atom 94:_CE1 charge  0.15479
+modify atom 94:_HE1 charge  0.24623
+modify atom 94:_CD2 charge -0.08168
+modify atom 94:_HD2 charge  0.25417
+modify atom 98:_SG charge -0.22607
+modify atom 98:_CB charge -0.81732
+modify atom 98:2HB charge  0.34788
+modify atom 98:3HB charge  0.34788
+modify atom 101:_SG charge -0.22607
+modify atom 101:_CB charge -0.81732
+modify atom 101:2HB charge  0.34788
+modify atom 101:3HB charge  0.34788
+modify atom 107:_SG charge -0.22607
+modify atom 107:_CB charge -0.81732
+modify atom 107:2HB charge  0.34788
+modify atom 107:3HB charge  0.34788
+modify atom 147:_SG charge -0.22396
+modify atom 147:_CB charge -0.81929
+modify atom 147:2HB charge  0.333615
+modify atom 147:3HB charge  0.333615
+modify atom 150:_SG charge -0.22396
+modify atom 150:_CB charge -0.81929
+modify atom 150:2HB charge  0.333615
+modify atom 150:3HB charge  0.333615
+modify atom 153:_SG charge -0.22396
+modify atom 153:_CB charge -0.81929
+modify atom 153:2HB charge  0.333615
+modify atom 153:3HB charge  0.333615
+modify atom 200:_SG charge -0.22396
+modify atom 200:_CB charge -0.81929
+modify atom 200:2HB charge  0.333615
+modify atom 200:3HB charge  0.333615
+modify atom 157:_SG charge -0.22396
+modify atom 157:_CB charge -0.81929
+modify atom 157:2HB charge  0.333615
+modify atom 157:3HB charge  0.333615
+modify atom 190:_SG charge -0.22396
+modify atom 190:_CB charge -0.81929
+modify atom 190:2HB charge  0.333615
+modify atom 190:3HB charge  0.333615
+modify atom 193:_SG charge -0.22396
+modify atom 193:_CB charge -0.81929
+modify atom 193:2HB charge  0.333615
+modify atom 193:3HB charge  0.333615
+modify atom 196:_SG charge -0.22396
+modify atom 196:_CB charge -0.81929
+modify atom 196:2HB charge  0.333615
+modify atom 196:3HB charge  0.333615
+modify atom 300:_SG charge -0.22396
+modify atom 300:_CB charge -0.81929
+modify atom 300:2HB charge  0.333615
+modify atom 300:3HB charge  0.333615
+modify atom 355:_SG charge -0.22396
+modify atom 355:_CB charge -0.81929
+modify atom 355:2HB charge  0.333615
+modify atom 355:3HB charge  0.333615
+modify atom 499:_SG charge -0.22396
+modify atom 499:_CB charge -0.81929
+modify atom 499:2HB charge  0.333615
+modify atom 499:3HB charge  0.333615
+modify atom 503:_SG charge -0.22396
+modify atom 503:_CB charge -0.81929
+modify atom 503:2HB charge  0.333615
+modify atom 503:3HB charge  0.333615
+#--define quantum region (note the use of underscore)
+# F2O res 585
+#modify segment 34 quantum
+# F2O res 585
+#modify segment 46 quantum
+# F2O res 585
+#modify segment 49 quantum
+# F2O res 585
+#modify segment 62 quantum
+# FHO res 584
+#modify segment 94 quantum
+#modify segment 98 quantum # FHO res 584
+#modify segment 101 quantum # FHO res 584
+#modify segment 107 quantum # FHO res 584
+#modify segment 147 quantum # F4O res 583
+#modify segment 150 quantum # F4O res 583
+#modify segment 153 quantum # F4O res 583
+#modify segment 157 quantum # F4O res 582
+#modify segment 190 quantum # F4O res 582
+#modify segment 193 quantum # F4O res 582
+#modify segment 196 quantum # F4O res 582
+#modify segment 200 quantum # F4O res 583
+# F4O res 581
+modify segment 300 quantum
+# F4O res 581
+modify segment 355 quantum
+# F4O res 581
+modify segment 499 quantum
+# Bridging CYS
+modify segment 503 quantum
+# H-cluster
+modify segment 580 quantum
+# bridged cubane
+modify segment 581 quantum
+# proximal cubane
+#modify segment 582 quantum
+# medial cubane
+#modify segment 583 quantum
+# distal cubane
+#modify segment 584 quantum
+# [2Fe-2S]
+#modify segment 585 quantum
+#
+   update lists
+   ignore
+   write CpI_OOOOOO.rst
+   write CpI_OOOOOO.pdb
+end
+
+task prepare
+
+title "QMMM optimization on CpI hydrogenase with QM H-cluster and prox cubane"
+
+basis "ao basis" spherical
+  Fe library 6-31g*
+   S library 6-31+g*
+   O library 6-31+g*
+   N library 6-31+g*
+   C library 6-31g*
+   H library 6-31g**
+end
+
+basis "cd basis" spherical
+   * library "Ahlrichs Coulomb Fitting"
+end
+
+charge -3.0
+
+dft
+ODFT; MULT 20; XC xpbe96 cpbe96;
+   iterations 1000;
+   vectors input HCO_FS4-2.movecs output opt_temp.movecs;
+end
+
+md
+system CpI_OOOOOO;
+noshake solute;
+msa 10000;
+end
+
+qmmm
+   eref 0.0
+   bqzone 9.0
+   mm_charges exclude linkbond
+   link_atoms hydrogen
+   link_ecp auto
+   region qmlink mm_solute all
+   method lbfgs lbfgs lbfgs
+   ncycles 10
+end
+
+task qmmm dft optimize
+

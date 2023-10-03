@@ -1,0 +1,34 @@
+#!/bin/bash --login
+
+#PBS -N min_
+#PBS -q Std
+#PBS -l nodes=2:ppn=2
+#PBS -l walltime=12:00:00
+#PBS -m abe
+#PBS -M user.name@domain.name
+#PBS -e ./namd2.err.pbs
+#PBS -o ./namd2.out.pbs
+
+PSFFILE=
+TEMPPATH=/uhome/cchang/NAMD/common
+
+module load namd2/2.6b1
+
+cd $PBS_O_WORKDIR
+
+NODES=`cat $PBS_NODEFILE`
+NODELIST=$PBS_O_WORKDIR/nodelist
+echo group main > $NODELIST
+for node in $NODES; 
+  do
+  echo host $node >> $NODELIST
+done
+
+for x in namdinclude.tcl CHARMM_22prot_27lip.par clusters_new.par
+do
+   cp $TEMPPATH/$x $PBS_TMPDIR
+done
+cp nodelist minimize.namd minimize_in.* $PSFFILE $PBS_TMPDIR
+cd $PBS_TMPDIR
+charmrun `which namd2` +p$PBS_NPROCS minimize.namd > minimize.log
+cp minimize.log minimize_out.* $PBS_O_WORKDIR

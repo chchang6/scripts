@@ -1,0 +1,15 @@
+#!/bin/bash --login
+
+#PBS -N APBS_HydA2
+#PBS -q Std-Test
+#PBS -l nodes=1:ppn=1
+#PBS -m abe
+#PBS -M user.name@domain.name
+#PBS -e ./APBS.err.pbs
+#PBS -o ./APBS.out.pbs
+
+module load apbs
+
+cd $PBS_O_WORKDIR
+
+apbs HydA2HSD_UHBDmap.in > UHBDmap.log

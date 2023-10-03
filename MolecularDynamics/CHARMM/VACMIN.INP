@@ -1,0 +1,46 @@
+! Input deck to calculate minimum energy structure in vacuum of protein
+! by the method outlined in Noskov & Lim, Biophys J. 81: 737-750 (2001).
+* Title Vacuum minimization of the Hydferr42_HSP structure for normal mode
+* analysis.
+*
+
+! read in topologies
+open unit 11 read card name ../../CHARMM_22PROT+HYDFERR.RTF
+read rtf card unit 11
+close unit 11
+
+! read in parameters
+open unit 12 read card name ../../CHARMM_22PROT+HYDFERR.PRM
+read para card unit 12
+close unit 12
+
+! read in psf and coordinate files
+open unit 10 read card name "Hydferr42_HSP.psf"
+read psf card unit 10
+close unit 10
+
+open read unit 10 card name "gb_min_out.crd"
+read coor card unit 10
+close unit 10
+
+! Minimization with cutoffs for non-bonded interactions. Parameters
+! are distance for constructing pair list (cutnb), distance at which
+! switching function eliminates contributions from a pair (ctofnb), and
+! distance at which smoothing begins (ctonnb). Default 14-12-10, adapting
+! to 12A cutoff in Noskov & Lim
+
+MINI ABNR NSTEP 10000 TOLGRD 1E-09 TOLENR 1E-09 FMEM=0.1 INBFRQ 10 -
+     ELEC ATOM FSWITCH CDIE -
+     VDW VATOM VSWITCHED -
+     CUTNB 12 CTOFNB 11 CTONNB 10 WMIN 1.5 EPS 1.0 -
+END
+
+! write out PDB and CRD files
+open unit 4 name "VAC_min_out.pdb" write CARD
+write coor PDB unit 4
+close unit 4
+
+open unit 4 name "VAC_min_out.crd" write CARD
+write coor card unit 4
+
+stop

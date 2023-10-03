@@ -1,0 +1,72 @@
+! Input deck to create dihedral basis file for REDU job. Goal to 
+! create heavy atom dihedral basis for NM and QH analyses with reduced
+! basis. Assumes vac_min_out.crd exists.
+* Initial no-hydrogen dihedral-only basis creation. CHC 8/03/05
+* Unformatted file output.
+
+bomblev -2
+
+! read in topology
+open unit 1 read card name ../../CHARMM_22PROT+HYDFERR.RTF
+read rtf unit 1 card
+close unit 1
+open unit 1 read card name ../../CHARMM_22PROT+HYDFERR.PRM
+read param unit 1 card
+close unit 1
+
+! Set up HydA2 segment
+open unit 2 read card name "HYDR.seq"
+read sequ unit 2 card
+close unit 2
+gener HYDR setup
+
+! Set up H-cluster segment
+open unit 2 read card name "HYDH.seq"
+read sequ unit 2 card
+close unit 2
+gener HYDH FIRST none LAST none NODI setup
+
+! Set up [4Fe-4S] cluster segment
+open unit 2 read card name "HYDA.seq"
+read sequ unit 2 card
+close unit 2
+gener HYDA FIRST none LAST none NODI setup
+
+! Establish cysteine-cluster bonding
+patch FE1C HYDA 1 HYDR 111
+patch FE2C HYDA 1 HYDR 166
+patch FE3C HYDA 1 HYDR 366
+patch FE4C HYDA 1 HYDR 370
+patch FEX  HYDH 1 HYDR 370
+
+! Read in coordinates
+open unit 3 read card name "vac_min_out.crd"
+read coor CARD unit 3
+close unit 3
+
+! Generate internal coordinates
+hbonds
+IC PARAM
+IC BUILD
+
+! Delete dihedrals involving hydrogen
+IC DELETE FIRST FOURTH DIHE SELE HYDR END
+IC DELETE FIRST FOURTH IMPR SELE HYDR END
+PRINT IC
+
+! Generate basis set of dihedral angles only.
+VIBRAN ELEC ATOM FSWITCH CDIE -
+      VDW VATOM VSWITCHED -
+      CUTNB 12 CTOFNB 11 CTONNB 10 WMIN 1.5 EPS 1.0 -
+  NMODe 4000
+BASIS IC DIHEdral
+
+! Write out normal mode basis
+OPEN UNIT 51 NAME NOHYDR.IC WRITE UNFORM
+WRITE NORM UNIT 51
+* Reduced basis generation -- dihedral angles without hydrogen
+*
+
+END
+
+stop

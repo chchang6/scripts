@@ -1,0 +1,55 @@
+! Input deck to calculate Generalized Born solvation energy of protein
+! by the method outlined in Noskov & Lim, Biophys J. 81: 737-750 (2001).
+! GB parameters
+* Title Generalized Born calculation of the electrostatic component
+* of the solvation energy.
+*
+
+! read in topologies
+open unit 11 read card name CHARMM_22PROT+HYDFERR.RTF
+read rtf card unit 11
+close unit 11
+
+! read in parameters
+open unit 12 read card name CHARMM_22PROT+HYDFERR.PRM
+read para card unit 12
+close unit 12
+
+! read in psf and coordinate files
+open unit 10 read card name "HYDA2_HSP.PSF"
+read psf card unit 10
+close unit 10
+
+open read unit 10 card name "GB_min_in.crd"
+read coor card unit 10
+close unit 10
+
+! Minimization with cutoffs for non-bonded interactions. Parameters
+! are distance for constructing pair list (cutnb), distance at which
+! switching function eliminates contributions from a pair (ctofnb), and
+! distance at which smoothing begins (ctonnb). Default 14-12-10, adapting
+! to 12A cutoff in Noskov & Lim
+
+GBORN P1 0.448 P2 0.173 P3 0.013 P4 9.015 P5 0.900 LAMBDA 0.705 EPSILON 80
+
+MINI SD NSTEP 1000 -
+     ELEC ATOM FSWITCH CDIE -
+     VDW VATOM VSWITCHED -
+     CUTNB 12 CTOFNB 11 CTONNB 10 WMIN 1.5 EPS 1.0 -
+
+MINI ABNR NSTEP 1000 TOLGRD 0.000002 FMEM=0.1 INBFRQ 10 -
+     ELEC ATOM FSWITCH CDIE -
+     VDW VATOM VSWITCHED -
+     CUTNB 12 CTOFNB 11 CTONNB 10 WMIN 1.5 EPS 1.0 -
+
+GBORN Clear
+
+! write out PDB and CRD files
+open unit 4 name "GB_min_out.pdb" write CARD
+write coor PDB unit 4
+close unit 4
+
+open write unit 4 name "GB_min_out.crd" write CARD
+write coor card unit 4
+
+stop

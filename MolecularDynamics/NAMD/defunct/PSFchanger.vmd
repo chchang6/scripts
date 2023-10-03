@@ -1,0 +1,16 @@
+package require psfgen
+resetpsf
+readpsf Hydferr42HSD.psf
+
+mol load psf Hydferr42HSD.psf namdbin dynamics3_in.coor
+
+# Set subsets
+set temp [atomselect top "not (protein or (resname HC1 FS4 FS2))"]
+foreach segid [$temp get segid] resid [$temp get resid] {
+   delatom $segid $resid
+}
+
+# Write output files
+writepsf test.psf
+writepdb test.pdb
+

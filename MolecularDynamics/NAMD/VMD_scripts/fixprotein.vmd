@@ -1,0 +1,5 @@
+mol new solveq_in.coor
+mol addfile PSFFILE
+set temp [atomselect top "not water and not ions"]
+$temp set beta 1
+[atomselect top all] writepdb solveq_in.pdb

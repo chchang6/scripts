@@ -1,0 +1,130 @@
+#! /bin/ksh
+
+#Version 2.0.1 Lester
+#NREL NWChem PBS submission script creation tool for use with MPICH2
+
+NWC_JOB_NW=$1
+NWC_JOB=`basename $NWC_JOB_NW .nw`
+
+NWC_USAGE="usage: $0 <nwchem_input_file>.nw [<total_number_processors> [<queue> [<wallclock time]]]"
+
+if ( [[ -f $NWC_JOB.pbs ]] ) then
+   echo "PBS script \"$NWC_JOB.pbs\" has already been made"
+   echo "Remove file \"$NWC_JOB.pbs\" and rerun the `basename $0` command"
+   exit 1
+fi
+
+case $# in 
+1)	;; #NPROCS=4 ;;
+2)	NPROCS=$2 ;;
+3)	NPROCS=$2 ; CLASS=$3;;
+4)	NPROCS=$2 ; CLASS=$3; WALLCLOCK=$4;;
+*)	echo $NWC_USAGE
+	exit 1
+	;;
+esac
+
+IS_A_NUMBER(){
+        [[ $# -eq 1 ]] && [[ $1 = +([0-9]) ]] &&
+	return 0
+        return 1
+}
+
+while ( ! IS_A_NUMBER $NPROCS ); do
+    echo "Enter even number of processors to use"; read NPROCS
+done
+
+((NODES=$NPROCS/2))
+
+
+if ( ! [[ -f $NWC_JOB_NW ]] ) then
+	echo "$0: $1 does not exist"; echo $NWC_USAGE; exit
+fi 
+
+if [[ -z "$CLASS" ]] then
+  CLASS=Std
+fi
+
+if ! [ -z "$WALLCLOCK" ]; then
+  PBS_WALLCLOCK="#PBS -l walltime=$WALLCLOCK"
+else
+  PBS_WALLCLOCK="#PBS -l walltime=01:00:00"
+fi
+
+if [ -n "$EXT_MAIL" ]; then
+  PBS_MAIL="#PBS -M $EXT_MAIL"
+fi
+
+#@ wall_clock_limit =  00:00:00
+
+if [ $NPROCS -eq 1 ]; then
+  cat >> $NWC_JOB.pbs << EOF
+#!/bin/bash --login
+#PBS -N $NWC_JOB
+#PBS -q $CLASS
+#PBS -l nodes=1:ppn=1
+$PBS_WALLCLOCK
+#PBS -m abe
+$PBS_MAIL
+#PBS -e ${NWC_JOB}.pbs.err
+#PBS -o ${NWC_JOB}.pbs.out
+
+# Set up base NWChem environment variables
+module load nwchem/5.0
+EXEC=\`which nwchem\`
+
+# Assume you have a dedicated directory for your job, containing your
+# input file with name ending in .nw
+# Modify to add other necessary input files (structures, etc.)
+# Copy input files to scratch directory and go there.
+cd \$PBS_O_WORKDIR
+export SCRATCH_DIR=\$PBS_TMPDIR
+
+# Execute a serial job.
+nwchem $NWC_JOB_NW >& $NWC_JOB.out
+
+exit
+EOF
+else
+  cat >> $NWC_JOB.pbs << EOF
+#! /bin/bash --login
+#PBS -N $NWC_JOB
+#PBS -q $CLASS
+#PBS -l nodes=$NODES:ppn=2
+$PBS_WALLCLOCK
+#PBS -m abe
+$PBS_MAIL
+#PBS -e ${NWC_JOB}.pbs.err
+#PBS -o ${NWC_JOB}.pbs.out
+
+# Set up base NWChem environment variables
+# Change "mpich2.pgi" to "mpich2.pgi/1.0.4p1_gm" if running in Myr queue.
+module load mpich2.pgi
+module load nwchem/5.0
+EXEC=\`which nwchem\`
+
+# Assume you have a dedicated directory for your job, containing your
+# input file with name ending in .nw
+# Modify to add other necessary input files (structures, etc.)
+# Copy input files to scratch directory and go there.
+cd \$PBS_O_WORKDIR
+export SCRATCH_DIR=\$PBS_TMPDIR
+
+# Execute a parallel job. No user modifications should be made here.
+#------------------------------------
+# 1. Create the machine file for dual-processor nodes on Lester
+cat \$PBS_NODEFILE > mpd.hosts
+# 2. Start the process manager.
+#    ncpus=number of processors on the master node (2 for Lester)
+#    totalnum is the total number of nodes.
+mpd --ncpus=2 --daemon
+mpdtrace -l
+mpdboot --totalnum=$NODES --ncpus=2 --file=mpd.hosts
+# 3. Execute the job
+mpiexec -machinefile mpd.hosts -np \$PBS_NPROCS \$EXEC $NWC_JOB_NW > $NWC_JOB.out
+mpdallexit
+#------------------------------------
+
+exit
+EOF
+fi
